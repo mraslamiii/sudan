@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../constants/api_constants.dart';
 import '../../data/data_sources/remote/api/api_client.dart';
 import '../../data/data_sources/local/preferences/preferences_service.dart';
+import '../../data/data_sources/local/dashboard/dashboard_settings_service.dart';
 import '../../data/data_sources/remote/socket/socket_service.dart';
 import '../../data/repositories/implementations/home_repository_impl.dart';
 import '../../data/repositories/implementations/socket_repository_impl.dart';
@@ -45,6 +46,10 @@ Future<void> initDependencies() async {
 
   getIt.registerLazySingleton<PreferencesService>(
     () => PreferencesService(getIt<SharedPreferences>()),
+  );
+
+  getIt.registerLazySingleton<DashboardSettingsService>(
+    () => DashboardSettingsService(getIt<PreferencesService>()),
   );
 
   // Socket Service (Singleton)

@@ -28,6 +28,9 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+        
+        // Tablet and kiosk mode optimizations
+        resConfigs("en", "fa")
     }
 
     buildTypes {

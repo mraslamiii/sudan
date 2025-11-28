@@ -32,5 +32,54 @@ class AppTheme {
   static Color getIconColor(bool isDark) {
     return isDark ? ThemeColors.iconColorDark : ThemeColors.iconColorLight;
   }
+
+  // Dashboard specific color getters
+  static Color getPrimaryBlue(bool isDark) {
+    return isDark ? ThemeColors.primaryBlueDark : ThemeColors.primaryBlueLight;
+  }
+
+  static Color getSecondaryGray(bool isDark) {
+    return isDark ? ThemeColors.secondaryGrayDark : ThemeColors.secondaryGrayLight;
+  }
+
+  static Color getLightGray(bool isDark) {
+    return isDark ? ThemeColors.lightGrayDark : ThemeColors.lightGrayLight;
+  }
+
+  static Color getBorderGray(bool isDark) {
+    return isDark ? ThemeColors.borderGrayDark : ThemeColors.borderGrayLight;
+  }
+
+  static Color getSectionBackground(bool isDark) {
+    return isDark ? ThemeColors.sectionBackgroundDark : ThemeColors.sectionBackgroundLight;
+  }
+
+  static Color getShadowColor(bool isDark, {bool isHovered = false}) {
+    if (isDark) {
+      return isHovered ? ThemeColors.shadowColorHoverDark : ThemeColors.shadowColorDark;
+    } else {
+      return isHovered ? ThemeColors.shadowColorHoverLight : ThemeColors.shadowColorLight;
+    }
+  }
+
+  static Color getInactiveGray(bool isDark) {
+    return isDark ? ThemeColors.inactiveGrayDark : ThemeColors.inactiveGrayLight;
+  }
+
+  static Color getCardBorder(bool isDark) {
+    return isDark ? ThemeColors.cardBorderDark : ThemeColors.cardBorderLight;
+  }
+
+  static Color getSelectedBackground(bool isDark) {
+    return isDark ? ThemeColors.selectedBackgroundDark : ThemeColors.selectedBackgroundLight;
+  }
+
+  static Color getIconBackground(bool isDark) {
+    return isDark ? ThemeColors.iconBackgroundDark : ThemeColors.iconBackgroundLight;
+  }
+
+  static Color getAvatarBackground(bool isDark) {
+    return isDark ? ThemeColors.avatarBackgroundDark : ThemeColors.avatarBackgroundLight;
+  }
 }
 
