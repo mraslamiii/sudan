@@ -81,5 +81,87 @@ class AppTheme {
   static Color getAvatarBackground(bool isDark) {
     return isDark ? ThemeColors.avatarBackgroundDark : ThemeColors.avatarBackgroundLight;
   }
+
+  static LinearGradient getDashboardBackgroundGradient(bool isDark) {
+    return LinearGradient(
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+      colors: isDark
+          ? [
+              ThemeColors.backgroundGradientStartDark,
+              ThemeColors.backgroundGradientMidDark,
+              ThemeColors.backgroundGradientEndDark,
+            ]
+          : [
+              ThemeColors.backgroundGradientStartLight,
+              ThemeColors.backgroundGradientMidLight,
+              ThemeColors.backgroundGradientEndLight,
+            ],
+    );
+  }
+
+  static LinearGradient getSectionGradient(bool isDark) {
+    return LinearGradient(
+      begin: Alignment.topCenter,
+      end: Alignment.bottomCenter,
+      colors: isDark
+          ? [
+              ThemeColors.surfaceGradientStartDark,
+              ThemeColors.surfaceGradientEndDark,
+            ]
+          : [
+              ThemeColors.surfaceGradientStartLight,
+              ThemeColors.surfaceGradientEndLight,
+            ],
+    );
+  }
+
+  static Color getSectionBorderColor(bool isDark) {
+    return isDark ? ThemeColors.surfaceBorderDark : ThemeColors.surfaceBorderLight;
+  }
+
+  static List<BoxShadow> getSectionShadows(bool isDark, {bool elevated = false}) {
+    final baseColor = getShadowColor(isDark, isHovered: elevated);
+    return [
+      BoxShadow(
+        color: baseColor,
+        blurRadius: elevated ? 36 : 28,
+        spreadRadius: elevated ? 2 : 0,
+        offset: elevated ? const Offset(0, 18) : const Offset(0, 12),
+      ),
+    ];
+  }
+
+  static LinearGradient getPrimaryButtonGradient(bool isDark) {
+    return LinearGradient(
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+      colors: isDark
+          ? [
+              ThemeColors.primaryBlueDark,
+              ThemeColors.accentTealDark,
+            ]
+          : [
+              ThemeColors.primaryBlueLight,
+              ThemeColors.accentTealLight,
+            ],
+    );
+  }
+
+  static Color getAccentTeal(bool isDark) {
+    return isDark ? ThemeColors.accentTealDark : ThemeColors.accentTealLight;
+  }
+
+  static Color getAccentAmber(bool isDark) {
+    return isDark ? ThemeColors.accentAmberDark : ThemeColors.accentAmberLight;
+  }
+
+  static Color getAccentRose(bool isDark) {
+    return isDark ? ThemeColors.accentRoseDark : ThemeColors.accentRoseLight;
+  }
+
+  static Color getSoftButtonBackground(bool isDark) {
+    return isDark ? Colors.white.withOpacity(0.06) : Colors.black.withOpacity(0.05);
+  }
 }
 

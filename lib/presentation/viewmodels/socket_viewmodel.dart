@@ -134,6 +134,76 @@ class SocketViewModel extends BaseViewModel {
     }
   }
 
+  /// Send socket charge command
+  /// Starts charging the tablet/device connected to the socket
+  void sendSocketChargeCommand(String deviceId) {
+    try {
+      _sendSocketCommandUseCase.sendSocketChargeCommand(deviceId);
+    } catch (e) {
+      setError('Failed to send socket charge command: ${e.toString()}');
+    }
+  }
+
+  /// Send socket discharge command
+  /// Stops charging (discharges) the tablet/device connected to the socket
+  void sendSocketDischargeCommand(String deviceId) {
+    try {
+      _sendSocketCommandUseCase.sendSocketDischargeCommand(deviceId);
+    } catch (e) {
+      setError('Failed to send socket discharge command: ${e.toString()}');
+    }
+  }
+
+  /// Send socket on/off command
+  /// Controls the socket power state
+  void sendSocketCommand(String deviceId, bool isOn) {
+    try {
+      _sendSocketCommandUseCase.sendSocketCommand(deviceId, isOn);
+    } catch (e) {
+      setError('Failed to send socket command: ${e.toString()}');
+    }
+  }
+
+  /// Send socket command with action
+  /// Supports: 'charge', 'discharge', 'on', 'off'
+  void sendSocketActionCommand(String deviceId, String action) {
+    try {
+      _sendSocketCommandUseCase.sendSocketActionCommand(deviceId, action);
+    } catch (e) {
+      setError('Failed to send socket action command: ${e.toString()}');
+    }
+  }
+
+  /// Send elevator call command
+  /// Calls the elevator to the specified floor
+  void sendElevatorCall(String deviceId, int targetFloor) {
+    try {
+      _sendSocketCommandUseCase.sendElevatorCallCommand(deviceId, targetFloor);
+    } catch (e) {
+      setError('Failed to send elevator call command: ${e.toString()}');
+    }
+  }
+
+  /// Send door lock command
+  /// Controls the door lock state (true = locked, false = unlocked)
+  void sendDoorLockCommand(String deviceId, bool isLocked) {
+    try {
+      _sendSocketCommandUseCase.sendDoorLockCommand(deviceId, isLocked);
+    } catch (e) {
+      setError('Failed to send door lock command: ${e.toString()}');
+    }
+  }
+
+  /// Send door lock command with action
+  /// Supports: 'lock' or 'unlock'
+  void sendDoorLockActionCommand(String deviceId, String action) {
+    try {
+      _sendSocketCommandUseCase.sendDoorLockActionCommand(deviceId, action);
+    } catch (e) {
+      setError('Failed to send door lock action command: ${e.toString()}');
+    }
+  }
+
   @override
   void dispose() {
     _dataSubscription?.cancel();

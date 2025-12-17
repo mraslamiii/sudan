@@ -3,6 +3,7 @@ import 'package:sudan/data/models/dashboard_card_model.dart';
 import '../base_dashboard_card.dart';
 import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/theme_colors.dart';
+import '../../../../core/localization/app_localizations.dart';
 
 class DeviceCard extends StatefulWidget {
   final DashboardCardModel card;
@@ -36,7 +37,7 @@ class _DeviceCardState extends State<DeviceCard> with SingleTickerProviderStateM
 
   String get _name => widget.card.data['name'] as String? ?? _getDefaultName();
   bool get _isOn => widget.card.data['isOn'] as bool? ?? false;
-  String get _status => widget.card.data['status'] as String? ?? (_isOn ? 'On' : 'Off');
+  String _status(BuildContext context) => widget.card.data['status'] as String? ?? (_isOn ? AppLocalizations.of(context)!.on : AppLocalizations.of(context)!.off);
 
   @override
   void initState() {
@@ -145,8 +146,20 @@ class _DeviceCardState extends State<DeviceCard> with SingleTickerProviderStateM
         return 'Fan';
       case CardType.camera:
         return 'Camera';
-      default:
-        return 'Device';
+      case CardType.elevator:
+        return 'Elevator';
+      case CardType.doorLock:
+        return 'Door Lock';
+      case CardType.door:
+        return 'Smart Lock';
+      case CardType.window:
+        return 'Window';
+      case CardType.airConditioner:
+        return 'Air Conditioner';
+      case CardType.humidifier:
+        return 'Humidifier';
+      case CardType.iphone:
+        return 'آیفون درب';
     }
   }
 
@@ -168,8 +181,20 @@ class _DeviceCardState extends State<DeviceCard> with SingleTickerProviderStateM
         return Icons.toys_rounded;
       case CardType.camera:
         return Icons.videocam_rounded;
-      default:
-        return Icons.devices_rounded;
+      case CardType.elevator:
+        return Icons.elevator_rounded;
+      case CardType.doorLock:
+        return Icons.lock_rounded;
+      case CardType.door:
+        return Icons.lock_rounded;
+      case CardType.window:
+        return Icons.window_rounded;
+      case CardType.airConditioner:
+        return Icons.ac_unit_rounded;
+      case CardType.humidifier:
+        return Icons.water_drop_rounded;
+      case CardType.iphone:
+        return Icons.doorbell_rounded;
     }
   }
 
@@ -218,7 +243,7 @@ class _DeviceCardState extends State<DeviceCard> with SingleTickerProviderStateM
           return AnimatedContainer(
             duration: const Duration(milliseconds: 400),
             curve: Curves.easeOutCubic,
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(18),
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topLeft,
@@ -237,8 +262,17 @@ class _DeviceCardState extends State<DeviceCard> with SingleTickerProviderStateM
                   activeBorderColor,
                   _glowAnimation.value,
                 ) ?? (isDark ? Colors.white.withOpacity(0.08) : Colors.black.withOpacity(0.06)),
-                width: 1,
+                width: 1.2,
               ),
+              boxShadow: _isOn ? [
+                BoxShadow(
+                  color: (isDark ? Colors.white : ThemeColors.primaryBlueLight)
+                      .withOpacity((isDark ? 0.15 : 0.2) * _glowAnimation.value),
+                  blurRadius: 20 * _glowAnimation.value,
+                  spreadRadius: 2 * _glowAnimation.value,
+                  offset: const Offset(0, 4),
+                ),
+              ] : null,
             ),
             child: LayoutBuilder(
               builder: (context, constraints) {
@@ -258,7 +292,8 @@ class _DeviceCardState extends State<DeviceCard> with SingleTickerProviderStateM
                           child: Transform.scale(
                             scale: 0.95 + (0.05 * _glowAnimation.value),
                             child: Container(
-                              padding: EdgeInsets.all(isCompact ? 8 : 10),
+                              padding: EdgeInsets.all(isCompact ? 9 : 11),
+                              alignment: Alignment.center,
                   decoration: BoxDecoration(
                                 color: _isOn
                                     ? Color.lerp(
@@ -274,8 +309,8 @@ class _DeviceCardState extends State<DeviceCard> with SingleTickerProviderStateM
                                     ? [
                                         BoxShadow(
                                           color: (isDark ? Colors.white : ThemeColors.primaryBlueLight)
-                                              .withOpacity((isDark ? 0.2 : 0.15) * _glowAnimation.value),
-                                          blurRadius: 12 * _glowAnimation.value,
+                                              .withOpacity((isDark ? 0.25 : 0.2) * _glowAnimation.value),
+                                          blurRadius: 16 * _glowAnimation.value,
                                           spreadRadius: 2 * _glowAnimation.value,
                                         ),
                                       ]
@@ -283,7 +318,7 @@ class _DeviceCardState extends State<DeviceCard> with SingleTickerProviderStateM
                   ),
                   child: Icon(
                     _getIcon(),
-                                size: isCompact ? 18 : 22,
+                                size: isCompact ? 20 : 24,
                                 color: Color.lerp(
                                   _iconColorAnimation.value ?? AppTheme.getSecondaryGray(isDark),
                                   activeIconColor,
@@ -297,19 +332,29 @@ class _DeviceCardState extends State<DeviceCard> with SingleTickerProviderStateM
                 const Spacer(),
                           if (!widget.isEditMode)
                   Transform.scale(
-                              scale: 0.7,
-                    child: Switch(
+                              scale: 0.75,
+                    child: Builder(
+                      builder: (context) {
+                        final isDark = Theme.of(context).brightness == Brightness.dark;
+                        final offTrackColor = isDark
+                            ? Colors.white.withOpacity(0.12)
+                            : Colors.black.withOpacity(0.08);
+                        final offThumbColor = isDark
+                            ? Colors.white.withOpacity(0.85)
+                            : Colors.white;
+                        return Switch(
                       value: _isOn,
                       onChanged: (value) {
                                   widget.onDataUpdate?.call({'isOn': value});
                       },
                                 activeColor: ThemeColors.successGreen,
                                 activeTrackColor: ThemeColors.successGreen.withOpacity(0.3),
-                                inactiveThumbColor: Theme.of(context).cardColor,
-                                inactiveTrackColor: AppTheme.getBorderGray(
-                                    Theme.of(context).brightness == Brightness.dark),
+                                inactiveThumbColor: offThumbColor,
+                                inactiveTrackColor: offTrackColor,
                                 materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                              ),
+                              );
+                      },
+                    ),
                             ),
                         ] else if (!widget.isEditMode) ...[
                           const SizedBox(width: 8),
@@ -321,24 +366,28 @@ class _DeviceCardState extends State<DeviceCard> with SingleTickerProviderStateM
                               builder: (context) {
                                 final isDark = Theme.of(context).brightness == Brightness.dark;
                                 return Container(
-                                  width: 32,
-                                  height: 18,
+                                  width: 34,
+                                  height: 20,
                                   decoration: BoxDecoration(
                                     color: _isOn
                                         ? ThemeColors.successGreen
-                                        : AppTheme.getBorderGray(isDark),
-                                    borderRadius: BorderRadius.circular(9),
+                                        : (isDark
+                                            ? Colors.white.withOpacity(0.12)
+                                            : Colors.black.withOpacity(0.08)),
+                                    borderRadius: BorderRadius.circular(10),
                                   ),
                                   child: AnimatedAlign(
                                     duration: const Duration(milliseconds: 300),
                                     curve: Curves.easeOutCubic,
                                     alignment: _isOn ? Alignment.centerRight : Alignment.centerLeft,
                                     child: Container(
-                                      width: 14,
-                                      height: 14,
+                                      width: 16,
+                                      height: 16,
                                       margin: const EdgeInsets.all(2),
                                       decoration: BoxDecoration(
-                                        color: AppTheme.getSectionBackground(isDark),
+                                        color: _isOn
+                                            ? AppTheme.getSectionBackground(isDark)
+                                            : Colors.white,
                                         shape: BoxShape.circle,
                                         boxShadow: [
                                           BoxShadow(
@@ -364,14 +413,14 @@ class _DeviceCardState extends State<DeviceCard> with SingleTickerProviderStateM
                         duration: const Duration(milliseconds: 300),
                         curve: Curves.easeOutCubic,
                         style: TextStyle(
-                          fontSize: isCompact ? 13 : 17,
+                          fontSize: isCompact ? 14 : 18,
                           fontWeight: FontWeight.w600,
                           color: Color.lerp(
                             AppTheme.getTextColor1(isDark),
                             activeTextColor,
                             _glowAnimation.value,
                           ),
-                          letterSpacing: -0.3,
+                          letterSpacing: -0.4,
                           height: 1.2,
                         ),
                         child: Text(
@@ -383,7 +432,7 @@ class _DeviceCardState extends State<DeviceCard> with SingleTickerProviderStateM
                       ),
                     ),
                     if (!isCompact) ...[
-                      const SizedBox(height: 6),
+                      const SizedBox(height: 8),
                       Flexible(
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
@@ -391,8 +440,8 @@ class _DeviceCardState extends State<DeviceCard> with SingleTickerProviderStateM
                             AnimatedContainer(
                               duration: const Duration(milliseconds: 300),
                               curve: Curves.easeOutCubic,
-                              width: 6,
-                              height: 6,
+                              width: 7,
+                              height: 7,
                               decoration: BoxDecoration(
                                 color: Color.lerp(
                                   AppTheme.getInactiveGray(isDark),
@@ -404,22 +453,22 @@ class _DeviceCardState extends State<DeviceCard> with SingleTickerProviderStateM
                                     ? [
                                         BoxShadow(
                                           color: (isDark ? Colors.white : ThemeColors.primaryBlueLight)
-                                              .withOpacity((isDark ? 0.6 : 0.4) * _glowAnimation.value),
-                                          blurRadius: 4 * _glowAnimation.value,
+                                              .withOpacity((isDark ? 0.7 : 0.5) * _glowAnimation.value),
+                                          blurRadius: 6 * _glowAnimation.value,
                                           spreadRadius: 1 * _glowAnimation.value,
                                         ),
                                       ]
                                     : null,
                               ),
                             ),
-                            const SizedBox(width: 6),
+                            const SizedBox(width: 7),
             Flexible(
                               child: AnimatedDefaultTextStyle(
                                 duration: const Duration(milliseconds: 300),
                                 curve: Curves.easeOutCubic,
                                 style: TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w400,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
                                   color: Color.lerp(
                                     AppTheme.getSecondaryGray(isDark),
                                     activeStatusColor,
@@ -427,7 +476,7 @@ class _DeviceCardState extends State<DeviceCard> with SingleTickerProviderStateM
                                   ),
                                 ),
               child: Text(
-                _status,
+                _status(context),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                                 ),

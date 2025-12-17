@@ -1,361 +1,339 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../../core/localization/app_localizations.dart';
+import '../../../domain/entities/scenario_entity.dart';
+import '../../viewmodels/scenario_viewmodel.dart';
+import '../../viewmodels/device_viewmodel.dart';
+import '../../viewmodels/room_viewmodel.dart';
+import '../scenario/scenario_card.dart';
+import '../common/premium_empty_state.dart';
+import '../../views/setup/module_setup_page.dart';
+import '../../views/setup/scenario_setup_flow.dart';
 
+/// Scenarios Section - Fully Responsive
 class ScenariosSection extends StatelessWidget {
-  final List<ScenarioItem> scenarios;
-  final Function(ScenarioItem)? onScenarioTap;
-
-  const ScenariosSection({
-    super.key,
-    this.scenarios = const [],
-    this.onScenarioTap,
-  });
+  const ScenariosSection({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final defaultScenarios = scenarios.isEmpty
-        ? [
-            ScenarioItem(
-              id: '1',
-              name: 'Good Morning',
-              icon: Icons.wb_sunny_rounded,
-              color: const Color(0xFFFFB84D),
-            ),
-            ScenarioItem(
-              id: '2',
-              name: 'Movie Night',
-              icon: Icons.movie_rounded,
-              color: const Color(0xFF5B8DEF),
-            ),
-            ScenarioItem(
-              id: '3',
-              name: 'Sleep',
-              icon: Icons.bedtime_rounded,
-              color: const Color(0xFF7B68EE),
-            ),
-            ScenarioItem(
-              id: '4',
-              name: 'Away',
-              icon: Icons.home_rounded,
-              color: const Color(0xFF68F0C4),
-            ),
-          ]
-        : scenarios;
+    return Consumer2<ScenarioViewModel, RoomViewModel>(
+      builder: (context, scenarioVM, roomVM, _) {
+        final currentRoomId = roomVM.selectedRoomId;
+        print('🟣 [SCENARIOS_SECTION] build called');
+        print('   - Current RoomId: $currentRoomId');
+        print('   - Total scenarios in VM: ${scenarioVM.scenarios.length}');
+        for (var s in scenarioVM.scenarios) {
+          print('     * ${s.name} (RoomId: ${s.roomId})');
+        }
+        
+        // Filter scenarios by current room
+        final scenarios = scenarioVM.scenarios
+            .where((s) => s.roomId == currentRoomId)
+            .toList();
+        print('   - Filtered scenarios for room: ${scenarios.length}');
+        for (var s in scenarios) {
+          print('     * ${s.name} (ID: ${s.id})');
+        }
 
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            // Header با اندازه بزرگتر
-            Padding(
-              padding: const EdgeInsets.only(left: 4, bottom: 16),
-              child: Row(
-                children: [
-                  Builder(
-                    builder: (context) {
-                      final isDark = Theme.of(context).brightness == Brightness.dark;
-                      return Container(
-                        padding: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          color: AppTheme.getIconBackground(isDark),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Icon(
-                          Icons.auto_awesome_rounded,
-                          size: 24,
-                          color: AppTheme.getPrimaryBlue(isDark),
-                        ),
-                      );
-                    },
-                  ),
-                  const SizedBox(width: 12),
-                  Builder(
-                    builder: (context) {
-                      final isDark = Theme.of(context).brightness == Brightness.dark;
-                      return Text(
-                        'Scenarios',
-                        style: TextStyle(
-                          fontSize: 26,
-                          fontWeight: FontWeight.w600,
-                          color: AppTheme.getTextColor1(isDark),
-                          letterSpacing: -0.5,
-                        ),
-                      );
-                    },
-                  ),
-                ],
-              ),
-            ),
-            // کارت‌ها که از فضای باقیمانده استفاده می‌کنند
-            Expanded(
-              child: LayoutBuilder(
-                builder: (context, cardConstraints) {
-                  final availableHeight = cardConstraints.maxHeight;
-                  return ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    shrinkWrap: false,
-                    physics: const BouncingScrollPhysics(),
-                    padding: const EdgeInsets.symmetric(horizontal: 4),
-                    itemCount: defaultScenarios.length,
-                    itemBuilder: (context, index) {
-                      final scenario = defaultScenarios[index];
-                      return Padding(
-                        padding: EdgeInsets.only(
-                          right: index < defaultScenarios.length - 1 ? 14.0 : 0,
-                        ),
-                        child: _ScenarioCard(
-                          scenario: scenario,
-                          availableHeight: availableHeight,
-                          onTap: () => onScenarioTap?.call(scenario),
-                        ),
-                      );
-                    },
-                  );
-                },
-              ),
-            ),
-          ],
+        return LayoutBuilder(
+          builder: (context, constraints) {
+            final isCompact = constraints.maxHeight < 200;
+            
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildHeader(context, scenarioVM, isCompact),
+                SizedBox(height: isCompact ? 6 : 8),
+                Expanded(
+                  child: scenarios.isEmpty
+                      ? _buildEmptyState(context, isCompact)
+                      : _buildScenariosList(context, scenarioVM, scenarios, isCompact),
+                ),
+              ],
+            );
+          },
         );
       },
     );
   }
-}
 
-class ScenarioItem {
-  final String id;
-  final String name;
-  final IconData icon;
-  final Color color;
-
-  const ScenarioItem({
-    required this.id,
-    required this.name,
-    required this.icon,
-    required this.color,
-  });
-}
-
-class _ScenarioCard extends StatefulWidget {
-  final ScenarioItem scenario;
-  final double availableHeight;
-  final VoidCallback? onTap;
-
-  const _ScenarioCard({
-    required this.scenario,
-    required this.availableHeight,
-    this.onTap,
-  });
-
-  @override
-  State<_ScenarioCard> createState() => _ScenarioCardState();
-}
-
-class _ScenarioCardState extends State<_ScenarioCard>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 200),
+  Widget _buildHeader(BuildContext context, ScenarioViewModel scenarioVM, bool isCompact) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    
+    return Row(
+      children: [
+        Container(
+          padding: EdgeInsets.all(isCompact ? 6 : 8),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                AppTheme.getAccentAmber(isDark).withOpacity(0.85),
+                AppTheme.getAccentRose(isDark).withOpacity(0.85),
+              ],
+            ),
+            borderRadius: BorderRadius.circular(12),
+            boxShadow: AppTheme.getSectionShadows(isDark, elevated: true),
+          ),
+          child: Icon(
+            Icons.auto_awesome_rounded,
+            size: isCompact ? 14 : 16,
+            color: Colors.white,
+          ),
+        ),
+        SizedBox(width: isCompact ? 8 : 10),
+        Expanded(
+          child: Text(
+            AppLocalizations.of(context)!.scenarios,
+            style: TextStyle(
+              fontSize: isCompact ? 14 : 16,
+              fontWeight: FontWeight.w600,
+              color: AppTheme.getTextColor1(isDark),
+            ),
+          ),
+        ),
+        GestureDetector(
+          onTap: () => _showCreateScenarioDialog(context, scenarioVM),
+          child: Container(
+            padding: EdgeInsets.symmetric(
+              horizontal: isCompact ? 8 : 10,
+              vertical: isCompact ? 4 : 6,
+            ),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  AppTheme.getAccentAmber(isDark),
+                  AppTheme.getAccentRose(isDark),
+                ],
+              ),
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: AppTheme.getAccentAmber(isDark).withOpacity(0.35),
+                  blurRadius: 8,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(Icons.add_rounded, size: isCompact ? 12 : 14, color: Colors.white.withOpacity(0.95)),
+                SizedBox(width: isCompact ? 2 : 4),
+                Text(
+                  AppLocalizations.of(context)!.add,
+                  style: TextStyle(
+                    fontSize: isCompact ? 10 : 11,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
+  Widget _buildEmptyState(BuildContext context, bool isCompact) {
+    final l10n = AppLocalizations.of(context)!;
+    return PremiumEmptyState(
+      icon: Icons.auto_awesome_rounded,
+      title: l10n.noScenariosYet,
+      message: l10n.automateRoutine,
+      highlights: [
+        l10n.multiDeviceOrchestration,
+        l10n.schedulesAndQuickTriggers,
+        l10n.reusableRoomPresets,
+      ],
+      primaryActionLabel: l10n.openScenarioSetup,
+      onPrimaryAction: () => _openScenarioSetup(context),
+      isCompact: isCompact,
+    );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final gradientStart = isDark ? const Color(0xFF2A2A2E) : const Color(0xFFFFFFFF);
-    final gradientEnd = isDark ? const Color(0xFF1F1F23) : const Color(0xFFF8F8FA);
-    
-    // محاسبه دقیق اندازه‌ها بر اساس فضای موجود
-    final cardHeight = widget.availableHeight;
-    final horizontalPadding = 12.0;
-    
-    // اندازه‌های پایه (بزرگتر)
-    const baseIconSize = 24.0;
-    const baseIconPadding = 8.0;
-    const baseSpacing = 8.0;
-    const baseFontSize = 13.0;
-    const baseLineHeight = baseFontSize * 1.2; // 15.6px
-    const baseIconContainerSize = baseIconSize + (baseIconPadding * 2); // 40px
-    const baseContentHeight = baseIconContainerSize + baseSpacing + baseLineHeight; // 63.6px
-    
-    // حداقل padding (بیشتر)
-    const minPadding = 6.0;
-    
-    // محاسبه scale factor و padding
-    double scaleFactor = 1.0;
-    double topPadding = minPadding;
-    double bottomPadding = minPadding;
-    
-    // محاسبه فضای موجود برای محتوا
-    final availableForContent = cardHeight - (minPadding * 2);
-    
-    if (availableForContent < baseContentHeight) {
-      // اگر فضای کافی نیست، scale می‌کنیم
-      scaleFactor = (availableForContent / baseContentHeight).clamp(0.6, 1.0);
-      topPadding = minPadding;
-      bottomPadding = minPadding;
-    } else {
-      // اگر فضای اضافی داریم، padding را افزایش می‌دهیم
-      final extraSpace = availableForContent - baseContentHeight;
-      final extraPadding = (extraSpace / 2).clamp(0.0, 8.0);
-      topPadding = minPadding + extraPadding;
-      bottomPadding = minPadding + extraPadding;
-    }
-    
-    // محاسبه اندازه‌های نهایی
-    final iconSize = (baseIconSize * scaleFactor).clamp(12.0, baseIconSize);
-    final iconPadding = (baseIconPadding * scaleFactor).clamp(3.0, baseIconPadding);
-    final iconContainerSize = iconSize + (iconPadding * 2);
-    final spacing = (baseSpacing * scaleFactor).clamp(3.0, baseSpacing);
-    final fontSize = (baseFontSize * scaleFactor).clamp(8.0, baseFontSize);
-    final lineHeight = fontSize * 1.2;
-    
-    // محاسبه نهایی برای اطمینان از عدم overflow
-    final finalContentHeight = iconContainerSize + spacing + lineHeight;
-    final finalAvailableHeight = cardHeight - (topPadding + bottomPadding);
-    
-    // اگر هنوز overflow داریم، padding را کاهش می‌دهیم
-    if (finalContentHeight > finalAvailableHeight) {
-      final overflow = finalContentHeight - finalAvailableHeight;
-      topPadding = (topPadding - overflow / 2).clamp(2.0, topPadding);
-      bottomPadding = (bottomPadding - overflow / 2).clamp(2.0, bottomPadding);
-    }
-    
-    return MouseRegion(
-      onEnter: (_) {
-        _controller.forward();
+  void _openScenarioSetup(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final content = ModuleSetupContent(
+      icon: Icons.auto_awesome_rounded,
+      title: l10n.scenarioSetup,
+      subtitle: l10n.automateMomentsThatMatter,
+      description: l10n.scenariosDescription,
+      highlights: [
+        l10n.roomAwareConditions,
+        l10n.stackableTriggers,
+        l10n.visualTimelineEditor,
+      ],
+      steps: [
+        l10n.scenarioStep1,
+        l10n.scenarioStep2,
+        l10n.scenarioStep3,
+      ],
+      primaryActionLabel: l10n.createScenario,
+      onPrimaryAction: (ctx) => _showCreateScenarioDialog(ctx, ctx.read<ScenarioViewModel>()),
+      secondaryActionLabel: l10n.viewQuickTips,
+      onSecondaryAction: (ctx) async {
+        if (!ctx.mounted) return;
+        ScaffoldMessenger.of(ctx).showSnackBar(
+          SnackBar(
+            content: Text(l10n.tipCombineDevices),
+            duration: const Duration(seconds: 3),
+          ),
+        );
       },
-      onExit: (_) {
-        _controller.reverse();
-      },
-      child: GestureDetector(
-        onTap: widget.onTap,
-        child: AnimatedBuilder(
-          animation: _controller,
-          builder: (context, child) {
-            final hoverValue = _controller.value;
-            final activeGradientStart = Color.lerp(
-              gradientStart,
-              widget.scenario.color.withOpacity(isDark ? 0.2 : 0.1),
-              hoverValue * 0.5,
-            ) ?? gradientStart;
-            final activeGradientEnd = Color.lerp(
-              gradientEnd,
-              widget.scenario.color.withOpacity(isDark ? 0.15 : 0.08),
-              hoverValue * 0.5,
-            ) ?? gradientEnd;
-            
-            return Transform.scale(
-              scale: 1.0 + (hoverValue * 0.02),
-              child: Container(
-                width: 110,
-                height: cardHeight,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [activeGradientStart, activeGradientEnd],
-                  ),
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(
-                    color: Color.lerp(
-                      isDark 
-                          ? Colors.white.withOpacity(0.08) 
-                          : Colors.black.withOpacity(0.06),
-                      widget.scenario.color.withOpacity(0.4),
-                      hoverValue,
-                    ) ?? (isDark ? Colors.white.withOpacity(0.08) : Colors.black.withOpacity(0.06)),
-                    width: 1,
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: isDark 
-                          ? Colors.black.withOpacity(0.3 + (hoverValue * 0.2))
-                          : Colors.black.withOpacity(0.06 + (hoverValue * 0.06)),
-                      blurRadius: 8 + (hoverValue * 8),
-                      offset: Offset(0, 2 + (hoverValue * 2)),
-                      spreadRadius: 0,
-                    ),
-                  ],
-                ),
-                child: Padding(
-                  padding: EdgeInsets.only(
-                    left: horizontalPadding,
-                    right: horizontalPadding,
-                    top: topPadding,
-                    bottom: bottomPadding,
-                  ),
-                  child: SizedBox(
-                    height: cardHeight - (topPadding + bottomPadding),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Container(
-                          padding: EdgeInsets.all(iconPadding),
-                          decoration: BoxDecoration(
-                            gradient: RadialGradient(
-                              colors: [
-                                widget.scenario.color.withOpacity(0.2),
-                                widget.scenario.color.withOpacity(0.1),
-                              ],
-                            ),
-                            shape: BoxShape.circle,
-                            boxShadow: [
-                              BoxShadow(
-                                color: widget.scenario.color.withOpacity(0.2 * hoverValue),
-                                blurRadius: 8 * hoverValue,
-                                spreadRadius: 1 * hoverValue,
-                              ),
-                            ],
-                          ),
-                          child: Icon(
-                            widget.scenario.icon,
-                            size: iconSize,
-                            color: widget.scenario.color,
-                          ),
-                        ),
-                        SizedBox(height: spacing),
-                        Flexible(
-                          fit: FlexFit.loose,
-                          child: Text(
-                            widget.scenario.name,
-                            style: TextStyle(
-                              fontSize: fontSize,
-                              fontWeight: FontWeight.w600,
-                              color: AppTheme.getTextColor1(isDark),
-                              letterSpacing: -0.2,
-                              height: 1.2,
-                            ),
-                            textAlign: TextAlign.center,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            softWrap: false,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
+    );
+
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (_) => ModuleSetupPage(content: content)),
+    );
+  }
+
+  Widget _buildScenariosList(
+    BuildContext context,
+    ScenarioViewModel scenarioVM,
+    List<ScenarioEntity> scenarios,
+    bool isCompact,
+  ) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return ListView.separated(
+          scrollDirection: Axis.horizontal,
+          physics: const BouncingScrollPhysics(),
+          clipBehavior: Clip.none,
+          padding: EdgeInsets.zero,
+          itemCount: scenarios.length,
+          separatorBuilder: (context, index) => SizedBox(width: isCompact ? 6 : 8),
+          itemBuilder: (context, index) {
+            final scenario = scenarios[index];
+            return ScenarioCard(
+              scenario: scenario,
+              availableHeight: constraints.maxHeight,
+              onTap: () => _executeScenario(context, scenarioVM, scenario),
+              onEdit: () => _showEditScenarioDialog(context, scenarioVM, scenario),
+              onDelete: () => _deleteScenario(context, scenarioVM, scenario),
+              isExecuting: scenarioVM.isExecuting(scenario.id),
             );
           },
+        );
+      },
+    );
+  }
+
+  Future<void> _showCreateScenarioDialog(
+    BuildContext context,
+    ScenarioViewModel scenarioVM,
+  ) async {
+    print('🟣 [SCENARIOS_SECTION] _showCreateScenarioDialog called');
+    final roomVM = context.read<RoomViewModel>();
+    final roomId = roomVM.selectedRoomId;
+    print('   - RoomId: $roomId');
+    
+    final result = await Navigator.of(context).push<bool>(
+      MaterialPageRoute(
+        builder: (context) => ScenarioSetupFlow(
+          roomId: roomId,
         ),
       ),
     );
+
+    print('🟣 [SCENARIOS_SECTION] Dialog returned: $result');
+    if (result == true && context.mounted) {
+      print('🟣 [SCENARIOS_SECTION] Scenario created/updated successfully');
+      print('   - Current scenarios count: ${scenarioVM.scenarios.length}');
+      // Scenario was created/updated successfully
+      // The success message is already shown in the flow
+    }
+  }
+
+  Future<void> _showEditScenarioDialog(
+    BuildContext context,
+    ScenarioViewModel scenarioVM,
+    ScenarioEntity scenario,
+  ) async {
+    final result = await Navigator.of(context).push<bool>(
+      MaterialPageRoute(
+        builder: (context) => ScenarioSetupFlow(
+          existingScenario: scenario,
+          roomId: scenario.roomId,
+        ),
+      ),
+    );
+
+    if (result == true && context.mounted) {
+      // Scenario was updated successfully
+      // The success message is already shown in the flow
+    }
+  }
+
+  Future<void> _executeScenario(
+    BuildContext context,
+    ScenarioViewModel scenarioVM,
+    ScenarioEntity scenario,
+  ) async {
+    final deviceVM = context.read<DeviceViewModel>();
+    try {
+      await scenarioVM.executeScenario(scenario.id);
+      await deviceVM.refresh();
+      if (context.mounted) {
+        final l10n = AppLocalizations.of(context)!;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(l10n.scenarioExecuted(scenario.name)), backgroundColor: Colors.green, duration: const Duration(seconds: 2)),
+        );
+      }
+    } catch (e) {
+      if (context.mounted) {
+        final l10n = AppLocalizations.of(context)!;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('${l10n.failedToExecuteScenario}: $e'), backgroundColor: Colors.red),
+        );
+      }
+    }
+  }
+
+  Future<void> _deleteScenario(
+    BuildContext context,
+    ScenarioViewModel scenarioVM,
+    ScenarioEntity scenario,
+  ) async {
+    final l10n = AppLocalizations.of(context)!;
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(l10n.deleteScenario),
+        content: Text(l10n.deleteScenarioConfirm(scenario.name)),
+        actions: [
+          TextButton(onPressed: () => Navigator.of(context).pop(false), child: Text(l10n.cancel)),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            style: TextButton.styleFrom(foregroundColor: Colors.red),
+            child: Text(l10n.delete),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed == true && context.mounted) {
+      try {
+        await scenarioVM.deleteScenario(scenario.id);
+        
+        // Scenarios section will remain visible and show empty state
+        // No need to remove it from dashboard
+        
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(l10n.scenarioDeleted(scenario.name)), backgroundColor: Colors.orange),
+          );
+        }
+      } catch (e) {
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('${l10n.failedToDeleteScenario}: $e'), backgroundColor: Colors.red),
+          );
+        }
+      }
+    }
   }
 }
-

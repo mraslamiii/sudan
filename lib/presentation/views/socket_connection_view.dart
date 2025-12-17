@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../viewmodels/socket_viewmodel.dart';
 import '../../core/di/injection_container.dart';
 import '../../core/constants/socket_constants.dart';
+import '../../core/localization/app_localizations.dart';
 
 class SocketConnectionView extends StatelessWidget {
   const SocketConnectionView({super.key});
@@ -41,10 +42,11 @@ class _SocketConnectionViewContentState extends State<_SocketConnectionViewConte
   @override
   Widget build(BuildContext context) {
     final viewModel = context.watch<SocketViewModel>();
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Socket Connection'),
+        title: Text(l10n.socketConnection),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -65,7 +67,7 @@ class _SocketConnectionViewContentState extends State<_SocketConnectionViewConte
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      viewModel.isConnected ? 'Connected' : 'Disconnected',
+                      viewModel.isConnected ? l10n.connected : l10n.disconnected,
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 18,
@@ -73,7 +75,7 @@ class _SocketConnectionViewContentState extends State<_SocketConnectionViewConte
                       ),
                     ),
                     Text(
-                      'Status: ${viewModel.connectionStatus}',
+                      '${l10n.status} ${viewModel.connectionStatus}',
                       style: const TextStyle(color: Colors.white70),
                     ),
                   ],
@@ -85,18 +87,18 @@ class _SocketConnectionViewContentState extends State<_SocketConnectionViewConte
             // IP and Port Input
             TextField(
               controller: _ipController,
-              decoration: const InputDecoration(
-                labelText: 'IP Address',
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                labelText: l10n.ipAddress,
+                border: const OutlineInputBorder(),
               ),
               enabled: !viewModel.isConnected,
             ),
             const SizedBox(height: 8),
             TextField(
               controller: _portController,
-              decoration: const InputDecoration(
-                labelText: 'Port',
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                labelText: l10n.port,
+                border: const OutlineInputBorder(),
               ),
               keyboardType: TextInputType.number,
               enabled: !viewModel.isConnected,
@@ -115,7 +117,7 @@ class _SocketConnectionViewContentState extends State<_SocketConnectionViewConte
                           await viewModel.connect(ip: ip, port: port);
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Please enter valid IP and Port')),
+                            SnackBar(content: Text(l10n.pleaseEnterValidIpPort)),
                           );
                         }
                       },
@@ -126,7 +128,7 @@ class _SocketConnectionViewContentState extends State<_SocketConnectionViewConte
                         child: CircularProgressIndicator(strokeWidth: 2),
                       )
                     : const Icon(Icons.link),
-                label: const Text('Connect'),
+                label: Text(l10n.connect),
               )
             else
               Row(
@@ -135,7 +137,7 @@ class _SocketConnectionViewContentState extends State<_SocketConnectionViewConte
                     child: OutlinedButton.icon(
                       onPressed: () => viewModel.disconnect(),
                       icon: const Icon(Icons.link_off),
-                      label: const Text('Disconnect'),
+                      label: Text(l10n.disconnect),
                     ),
                   ),
                   const SizedBox(width: 8),
@@ -143,7 +145,7 @@ class _SocketConnectionViewContentState extends State<_SocketConnectionViewConte
                     child: OutlinedButton.icon(
                       onPressed: () => viewModel.reconnect(),
                       icon: const Icon(Icons.refresh),
-                      label: const Text('Reconnect'),
+                      label: Text(l10n.reconnect),
                     ),
                   ),
                 ],
@@ -161,7 +163,7 @@ class _SocketConnectionViewContentState extends State<_SocketConnectionViewConte
                       const SizedBox(width: 8),
                       Expanded(
                         child: Text(
-                          viewModel.errorMessage ?? 'Unknown error',
+                          viewModel.errorMessage ?? l10n.unknownError,
                           style: const TextStyle(color: Colors.red),
                         ),
                       ),
@@ -176,9 +178,9 @@ class _SocketConnectionViewContentState extends State<_SocketConnectionViewConte
             const SizedBox(height: 16),
 
             // Command Section
-            const Text(
-              'Commands',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            Text(
+              l10n.commands,
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
 
@@ -188,7 +190,7 @@ class _SocketConnectionViewContentState extends State<_SocketConnectionViewConte
                   ? () => viewModel.requestIpConfig()
                   : null,
               icon: const Icon(Icons.settings_ethernet),
-              label: const Text('Request IP Config'),
+              label: Text(l10n.requestIpConfig),
             ),
             const SizedBox(height: 8),
 
@@ -198,7 +200,7 @@ class _SocketConnectionViewContentState extends State<_SocketConnectionViewConte
                   ? () => viewModel.requestFloorsCount()
                   : null,
               icon: const Icon(Icons.layers),
-              label: const Text('Request Floors Count'),
+              label: Text(l10n.requestFloorsCount),
             ),
             const SizedBox(height: 8),
 
@@ -208,7 +210,7 @@ class _SocketConnectionViewContentState extends State<_SocketConnectionViewConte
                   ? () => viewModel.sendLightCommand('1', true)
                   : null,
               icon: const Icon(Icons.lightbulb),
-              label: const Text('Turn On Light (Device 1)'),
+              label: Text(l10n.turnOnLightDevice),
             ),
             const SizedBox(height: 8),
 
@@ -218,7 +220,37 @@ class _SocketConnectionViewContentState extends State<_SocketConnectionViewConte
                   ? () => viewModel.sendCurtainCommand('1', 'open')
                   : null,
               icon: const Icon(Icons.curtains),
-              label: const Text('Open Curtain (Device 1)'),
+              label: Text(l10n.openCurtainDevice),
+            ),
+            const SizedBox(height: 8),
+
+            // Test Socket Charge Command
+            ElevatedButton.icon(
+              onPressed: viewModel.isConnected
+                  ? () => viewModel.sendSocketChargeCommand('1')
+                  : null,
+              icon: const Icon(Icons.battery_charging_full),
+              label: Text(l10n.chargeTabletDevice),
+            ),
+            const SizedBox(height: 8),
+
+            // Test Socket Discharge Command
+            ElevatedButton.icon(
+              onPressed: viewModel.isConnected
+                  ? () => viewModel.sendSocketDischargeCommand('1')
+                  : null,
+              icon: const Icon(Icons.battery_std),
+              label: Text(l10n.dischargeTabletDevice),
+            ),
+            const SizedBox(height: 8),
+
+            // Test Socket On/Off Command
+            ElevatedButton.icon(
+              onPressed: viewModel.isConnected
+                  ? () => viewModel.sendSocketCommand('1', true)
+                  : null,
+              icon: const Icon(Icons.power),
+              label: Text(l10n.socketOnDevice),
             ),
 
             // Last Received Data
@@ -226,9 +258,9 @@ class _SocketConnectionViewContentState extends State<_SocketConnectionViewConte
               const SizedBox(height: 24),
               const Divider(),
               const SizedBox(height: 16),
-              const Text(
-                'Last Received Data',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              Text(
+                l10n.lastReceivedData,
+                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 8),
               Card(

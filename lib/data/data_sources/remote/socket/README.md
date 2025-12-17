@@ -61,6 +61,22 @@ socketViewModel.requestFloor(1);
 socketViewModel.sendScenarioCommand('1', 'general');
 socketViewModel.sendScenarioCommand('1', 'floor');
 socketViewModel.sendScenarioCommand('1', 'place');
+
+// ارسال دستور شارژ تبلت
+socketViewModel.sendSocketChargeCommand('1'); // شروع شارژ
+
+// ارسال دستور دی‌شارژ تبلت
+socketViewModel.sendSocketDischargeCommand('1'); // توقف شارژ (دی‌شارژ)
+
+// ارسال دستور روشن/خاموش پریز
+socketViewModel.sendSocketCommand('1', true); // روشن
+socketViewModel.sendSocketCommand('1', false); // خاموش
+
+// ارسال دستور پریز با action
+socketViewModel.sendSocketActionCommand('1', 'charge'); // شارژ
+socketViewModel.sendSocketActionCommand('1', 'discharge'); // دی‌شارژ
+socketViewModel.sendSocketActionCommand('1', 'on'); // روشن
+socketViewModel.sendSocketActionCommand('1', 'off'); // خاموش
 ```
 
 ### دریافت داده
@@ -96,6 +112,7 @@ socketViewModel.connectionStatusStream.listen((status) {
 - `X` - Scenarios
 - `X1` - Burglar Alarm
 - `X2` - Cameras
+- `Y` - Socket/Charger
 
 ### دستورات پرده
 
@@ -108,6 +125,14 @@ socketViewModel.connectionStatusStream.listen((status) {
 - `!&` - General Scenario
 - `!^` - Floor Scenario
 - `!~` - Place Scenario
+
+### دستورات پریز/شارژر
+
+- `C` - Charge (شارژ)
+- `D` - Discharge (دی‌شارژ)
+- `O` - Off (خاموش)
+- `1` - On (روشن)
+- `0` - Off (خاموش)
 
 ## مثال کامل
 

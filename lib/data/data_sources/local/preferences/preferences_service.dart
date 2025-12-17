@@ -56,5 +56,10 @@ class PreferencesService {
   Future<bool> clear() async {
     return await _prefs.clear();
   }
+
+  /// Get all keys from SharedPreferences
+  Set<String> getAllKeys() {
+    return _prefs.getKeys();
+  }
 }
 

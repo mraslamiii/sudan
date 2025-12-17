@@ -1,0 +1,913 @@
+Resolving dependencies...
+Downloading packages...
+  _fe_analyzer_shared 67.0.0 (92.0.0 available)
+  analyzer 6.4.1 (9.0.0 available)
+  bloc 8.1.4 (9.1.0 available)
+  build 2.4.1 (4.0.3 available)
+  build_config 1.1.2 (1.2.0 available)
+  build_resolvers 2.4.2 (3.0.4 available)
+  build_runner 2.4.13 (2.10.4 available)
+  build_runner_core 7.3.2 (9.3.2 available)
+  built_value 8.12.0 (8.12.1 available)
+  characters 1.4.0 (1.4.1 available)
+  connectivity_plus 5.0.2 (7.0.0 available)
+  connectivity_plus_platform_interface 1.2.4 (2.0.1 available)
+  dart_style 2.3.6 (3.1.3 available)
+  device_info_plus 9.1.2 (12.3.0 available)
+  flutter_bloc 8.1.6 (9.1.1 available)
+  flutter_lints 5.0.0 (6.0.0 available)
+  get_it 7.7.0 (9.1.1 available)
+  hydrated_bloc 9.1.5 (10.1.1 available)
+  js 0.6.7 (0.7.2 available)
+  lints 5.1.1 (6.0.0 available)
+  matcher 0.12.17 (0.12.18 available)
+  material_color_utilities 0.11.1 (0.13.0 available)
+  meta 1.16.0 (1.17.0 available)
+  shared_preferences_android 2.4.15 (2.4.17 available)
+  shared_preferences_foundation 2.5.5 (2.5.6 available)
+  shelf_web_socket 2.0.1 (3.0.0 available)
+  source_gen 1.5.0 (4.1.1 available)
+  sqflite_common_ffi 2.3.6 (2.4.0 available)
+  sqflite_common_ffi_web 0.4.5+4 (1.1.0 available)
+  sqlite3 2.9.4 (3.1.0 available)
+  sqlparser 0.34.1 (0.42.0 available)
+  strings 3.2.0 (4.0.1 available)
+  test_api 0.7.6 (0.7.8 available)
+  win32_registry 1.1.5 (2.1.0 available)
+Got dependencies!
+34 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Launching lib/main.dart on SM X115 in debug mode...
+✓ Built build/app/outputs/flutter-apk/app-debug.apk
+D/FlutterJNI(26661): Beginning load of flutter...
+D/FlutterJNI(26661): flutter (null) was loaded normally!
+I/flutter (26661): [IMPORTANT:flutter/shell/platform/android/android_context_vk_impeller.cc(62)] Using the Impeller rendering backend (Vulkan).
+D/FlutterJNI(26856): Beginning load of flutter...
+D/FlutterJNI(26856): flutter (null) was loaded normally!
+I/flutter (26856): [IMPORTANT:flutter/shell/platform/android/android_context_vk_impeller.cc(62)] Using the Impeller rendering backend (Vulkan).
+I/flutter (26856): 🧹 [DASHBOARD_DS] Cleared 1 dashboard card keys
+I/flutter (26856): 🧹 [MAIN] Cleared all dashboard cards cache
+Connecting to VM Service at ws://127.0.0.1:60906/0o-4lvueKio=/ws
+Connected to the VM Service.
+I/m.example.sudan(26856): Compiler allocated 7576KB to compile void android.view.ViewRootImpl.performTraversals()
+I/Choreographer(26856): Skipped 66 frames!  The application may be doing too much work on its main thread.
+W/libc    (26856): Access denied finding property "persist.vendor.debug.gpud.init"
+I/gralloc4(26856): @set_metadata: update dataspace from GM (0x08010000 -> 0x00000000)
+I/BLASTBufferQueue(26856): [SurfaceView[com.example.sudan/com.example.sudan.MainActivity]@0#1](f:0,a:0,s:0) onFrameAvailable the first frame is available
+W/libc    (26856): Access denied finding property "ro.vendor.mtk.gpu.sw3d"
+I/GrallocExtra(26856): gralloc_extra_query:is_SW3D 0
+I/BLASTBufferQueue(26856): [SurfaceView[com.example.sudan/com.example.sudan.MainActivity]@0#1](f:0,a:1,s:0) acquireNextBufferLocked size=1340x800 mFrameNumber=1 applyTransaction=true mTimestamp=41952183787422(auto) mPendingTransactions.size=0 graphicBufferId=115345641701390 transform=0
+D/m.example.sudan(26856): Can't load libmbrainSDK
+I/SurfaceView(26856): 249477271 finishedDrawing
+I/Choreographer(26856): Skipped 39 frames!  The application may be doing too much work on its main thread.
+D/VRI[MainActivity]@ab56323(26856): Setup new sync=wmsSync-VRI[MainActivity]@ab56323#1
+I/VRI[MainActivity]@ab56323(26856): Creating new active sync group VRI[MainActivity]@ab56323#2
+D/VRI[MainActivity]@ab56323(26856): Draw frame after cancel
+D/VRI[MainActivity]@ab56323(26856): registerCallbacksForSync syncBuffer=false
+D/SurfaceView(26856): 249477271 updateSurfacePosition RenderWorker, frameNr = 1, position = [0, 0, 1340, 800] surfaceSize = 1340x800
+I/SurfaceView@edeb897(26856): uSP: rtp = Rect(0, 0 - 1340, 800) rtsw = 1340 rtsh = 800
+I/SurfaceView@edeb897(26856): onSSPAndSRT: pl = 0 pt = 0 sx = 1.0 sy = 1.0
+I/SurfaceView@edeb897(26856): aOrMT: VRI[MainActivity]@ab56323 t = android.view.SurfaceControl$Transaction@d229b44 fN = 1 android.view.SurfaceView.-$$Nest$mapplyOrMergeTransaction:0 android.view.SurfaceView$SurfaceViewPositionUpdateListener.positionChanged:1792 android.graphics.RenderNode$CompositePositionUpdateListener.positionChanged:398
+I/VRI[MainActivity]@ab56323(26856): mWNT: t=0xb4000078889ed400 mBlastBufferQueue=0xb400007950405c00 fn= 1 HdrRenderState mRenderHdrSdrRatio=1.0 caller= android.view.SurfaceView.applyOrMergeTransaction:1723 android.view.SurfaceView.-$$Nest$mapplyOrMergeTransaction:0 android.view.SurfaceView$SurfaceViewPositionUpdateListener.positionChanged:1792
+D/VRI[MainActivity]@ab56323(26856): Received frameDrawingCallback syncResult=0 frameNum=1.
+I/VRI[MainActivity]@ab56323(26856): mWNT: t=0xb4000076ee112b80 mBlastBufferQueue=0xb400007950405c00 fn= 1 HdrRenderState mRenderHdrSdrRatio=1.0 caller= android.view.ViewRootImpl$11.onFrameDraw:15016 android.view.ThreadedRenderer$1.onFrameDraw:761 <bottom of call stack>
+I/VRI[MainActivity]@ab56323(26856): Setting up sync and frameCommitCallback
+I/gralloc4(26856): @set_metadata: update dataspace from GM (0x08010000 -> 0x00000000)
+I/BLASTBufferQueue(26856): [VRI[MainActivity]@ab56323#0](f:0,a:0,s:0) onFrameAvailable the first frame is available
+I/BLASTBufferQueue(26856): [VRI[MainActivity]@ab56323#0](f:0,a:1,s:0) acquireNextBufferLocked size=1340x800 mFrameNumber=1 applyTransaction=true mTimestamp=41952260480115(auto) mPendingTransactions.size=0 graphicBufferId=115345641701395 transform=7
+I/VRI[MainActivity]@ab56323(26856): Received frameCommittedCallback lastAttemptedDrawFrameNum=1 didProduceBuffer=true
+D/HWUI    (26856): CFMS:: SetUp Pid : 26856    Tid : 26919
+D/VRI[MainActivity]@ab56323(26856): reportDrawFinished seqId=0
+I/gralloc4(26856): @set_metadata: update dataspace from GM (0x08010000 -> 0x00000000)
+D/PhoneWindow(26856): forceLight changed to false [com.example.sudan/com.example.sudan.MainActivity] from com.android.internal.policy.PhoneWindow.updateForceLightNavigationBar:4536 com.android.internal.policy.PhoneWindow.setNavigationBarColor:4227 io.flutter.plugin.platform.PlatformPlugin.setSystemChromeSystemUIOverlayStyle:503 io.flutter.plugin.platform.PlatformPlugin.access$700:36 io.flutter.plugin.platform.PlatformPlugin$1.setSystemUiOverlayStyle:123
+D/VRI[MainActivity]@ab56323(26856): mThreadedRenderer.initializeIfNeeded()#2 mSurface={isValid=true 0xb400007888c21000}
+D/InputMethodManagerUtils(26856): startInputInner - Id : 0
+I/InputMethodManager(26856): startInputInner - IInputMethodManagerGlobalInvoker.startInputOrWindowGainedFocus
+I/BLASTBufferQueue_Java(26856): update, w= 1340 h= 800 mName = VRI[MainActivity]@ab56323 mNativeObject= 0xb400007950405c00 sc.mNativeObject= 0xb400007888af8b40 format= -3 caller= android.view.ViewRootImpl.updateBlastSurfaceIfNeeded:3386 android.view.ViewRootImpl.relayoutWindow:11361 android.view.ViewRootImpl.performTraversals:4544 android.view.ViewRootImpl.doTraversal:3708 android.view.ViewRootImpl$TraversalRunnable.run:12542 android.view.Choreographer$CallbackRecord.run:1751
+I/VRI[MainActivity]@ab56323(26856): Relayout returned: old=(0,0,1340,800) new=(0,0,1340,800) relayoutAsync=true req=(1340,800)0 dur=0 res=0x0 s={true 0xb400007888c21000} ch=false seqId=0
+I/VRI[MainActivity]@ab56323(26856): updateBoundsLayer: t=android.view.SurfaceControl$Transaction@b9ddb75 sc=Surface(name=Bounds for - com.example.sudan/com.example.sudan.MainActivity@0)/@0xc92470a frame=2
+I/VRI[MainActivity]@ab56323(26856): registerCallbackForPendingTransactions
+I/VRI[MainActivity]@ab56323(26856): mWNT: t=0xb4000076ec5db780 mBlastBufferQueue=0xb400007950405c00 fn= 2 HdrRenderState mRenderHdrSdrRatio=1.0 caller= android.view.ViewRootImpl$9.onFrameDraw:6276 android.view.ViewRootImpl$3.onFrameDraw:2440 android.view.ThreadedRenderer$1.onFrameDraw:761
+I/gralloc4(26856): @set_metadata: update dataspace from GM (0x08010000 -> 0x00000000)
+D/InputTransport(26856): Input channel constructed: 'ClientS', fd=186
+I/gralloc4(26856): @set_metadata: update dataspace from GM (0x08010000 -> 0x00000000)
+I/InsetsSourceConsumer(26856): applyRequestedVisibilityToControl: visible=false, type=ime, host=com.example.sudan/com.example.sudan.MainActivity
+I/gralloc4(26856): @set_metadata: update dataspace from GM (0x08010000 -> 0x00000000)
+I/gralloc4(26856): @set_metadata: update dataspace from GM (0x08010000 -> 0x00000000)
+I/VRI[MainActivity]@ab56323(26856): call setFrameRateCategory for touch hint category=high hint, reason=touch, vri=VRI[MainActivity]@ab56323
+D/ProfileInstaller(26856): Installing profile for com.example.sudan
+W/WindowOnBackDispatcher(26856): OnBackInvokedCallback is not enabled for the application.
+W/WindowOnBackDispatcher(26856): Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.
+I/InputMethodManager_LC(26856): showSoftInput(View,I)
+I/ImeTracker(26856): com.example.sudan:e84ee900: onRequestShow at ORIGIN_CLIENT reason SHOW_SOFT_INPUT fromUser false
+I/InputMethodManager_LC(26856): ssi(): flags=0 view=com.example.sudan reason=SHOW_SOFT_INPUT
+I/InputMethodManager_LC(26856): ssi() view is not EditText
+D/InputMethodManagerUtils(26856): startInputInner - Id : 0
+I/InputMethodManager(26856): startInputInner - IInputMethodManagerGlobalInvoker.startInputOrWindowGainedFocus
+D/InputMethodManager(26856): showSoftInput() view=io.flutter.embedding.android.FlutterView{42f3312 VFE...... .F....ID 0,0-1340,800 #1 aid=1073741824} flags=0 reason=SHOW_SOFT_INPUT
+D/InputTransport(26856): Input channel constructed: 'ClientS', fd=177
+I/InputMethodManager_LC(26856): showSoftInput(View,I)
+I/ImeTracker(26856): com.example.sudan:17500d58: onRequestShow at ORIGIN_CLIENT reason SHOW_SOFT_INPUT fromUser false
+I/InputMethodManager_LC(26856): ssi(): flags=0 view=com.example.sudan reason=SHOW_SOFT_INPUT
+I/InputMethodManager_LC(26856): ssi() view is not EditText
+D/InputMethodManager(26856): showSoftInput() view=io.flutter.embedding.android.FlutterView{42f3312 VFE...... .F....ID 0,0-1340,800 #1 aid=1073741824} flags=0 reason=SHOW_SOFT_INPUT
+D/InputConnectionAdaptor(26856): The input method toggled cursor monitoring on
+I/InsetsController(26856): onStateChanged: host=com.example.sudan/com.example.sudan.MainActivity, from=android.view.ViewRootImpl.handleResized:2789, state=InsetsState: {mDisplayFrame=Rect(0, 0 - 1340, 800), mDisplayCutout=DisplayCutout{insets=Rect(0, 0 - 0, 0) waterfall=Insets{left=0, top=0, right=0, bottom=0} boundingRect={Bounds=[Rect(0, 0 - 0, 0), Rect(0, 0 - 0, 0), Rect(0, 0 - 0, 0), Rect(0, 0 - 0, 0)]} cutoutPathParserInfo={CutoutPathParserInfo{displayWidth=0 displayHeight=0 physicalDisplayWidth=0 physicalDisplayHeight=0 density={0.0} cutoutSpec={} rotation={0} scale={0.0} physicalPixelDisplaySizeRatio={0.0}}} sideOverrides=null}, mRoundedCorners=RoundedCorners{[RoundedCorner{position=TopLeft, radius=9, center=Point(9, 9)}, RoundedCorner{position=TopRight, radius=9, center=Point(1331, 9)}, RoundedCorner{position=BottomRight, radius=9, center=Point(1331, 791)}, RoundedCorner{position=BottomLeft, radius=9, center=Point(9, 791)}]}  mRoundedCornerFrame=Rect(0, 0 - 1340, 800), mPrivacyIndicatorBounds=PrivacyIndicatorBounds {static bounds=Rect(1282, 0 - 1340, 32) rotation=1}, mDisplayShape=DisplayShape{ spec=-311912193 displayWidth=800 displayHeight=1340 physicalPixelDisplaySizeRatio=1.0 rotation=1 offsetX=0 offsetY=0 scale=1.0}, mSources= { InsetsSource: {a98a0000 mType=statusBars mFrame=[0,0][1340,32] mVisible=false mFlags= mSideHint=TOP mBoundingRects=null}, InsetsSource: {a98a0005 mType=mandatorySystemGestures mFrame=[0,0][1340,32] mVisible=true mFlags= mSideHint=TOP mBoundingRects=null}, InsetsSource: {a98a0006 mType=tappableElement mFrame=[0,0][1340,32] mVisible=true mFlags= mSideHint=TOP mBoundingRects=null}, InsetsSource: {3 mType=ime mFrame=[0,398][1340,800] mVisible=false mFlags= mSideHint=BOTTOM mBoundingRects=null}, InsetsSource: {70270001 mType=navigationBars mFrame=[0,736][1340,800] mVisible=false mFlags= mSideHint=BOTTOM mBoundingRects=null}, InsetsSource: {70270004 mType=systemGestures mFrame=[0,0][0,0] mVisible=true mFlags= mSideHint=NONE mBoundingRects=null}, InsetsSource: {70270005 mType=mandatorySystemGestures mFrame=[0,736][1340,800] mVisible=true mFlags= mSideHint=BOTTOM mBoundingRects=null}, InsetsSource: {70270006 mType=tappableElement mFrame=[0,736][1340,800] mVisible=true mFlags= mSideHint=BOTTOM mBoundingRects=null}, InsetsSource: {70270024 mType=systemGestures mFrame=[0,0][0,0] mVisible=true mFlags= mSideHint=NONE mBoundingRects=null} }
+I/VRI[MainActivity]@ab56323(26856): handleResized, frames=ClientWindowFrames{frame=[0,0][1340,800] display=[0,0][1340,800] parentFrame=[0,0][0,0]} displayId=0 dragResizing=false compatScale=1.0 frameChanged=false attachedFrameChanged=false configChanged=false displayChanged=false compatScaleChanged=false dragResizingChanged=false
+D/InsetsController(26856): show(ime(), fromIme=true)
+I/InsetsController(26856): setRequestedVisibleTypes: visible=true, mask=ime, host=com.example.sudan/com.example.sudan.MainActivity, from=android.view.InsetsController.controlAnimationUnchecked:1498 android.view.InsetsController.applyAnimation:2228 android.view.InsetsController.applyAnimation:2159 android.view.InsetsController.show:1340 android.view.ViewRootImpl$ViewRootHandler.handleMessageImpl:8056 android.view.ViewRootImpl$ViewRootHandler.handleMessage:7991 android.os.Handler.dispatchMessage:107 android.os.Looper.loopOnce:257 android.os.Looper.loop:342 android.app.ActivityThread.main:9634
+I/InsetsController(26856): controlAnimationUncheckedInner: Added types=ime, animType=0, host=com.example.sudan/com.example.sudan.MainActivity, from=android.view.InsetsController.controlAnimationUnchecked:1502 android.view.InsetsController.applyAnimation:2228 android.view.InsetsController.applyAnimation:2159
+W/InteractionJankMonitor(26856): Initializing without READ_DEVICE_CONFIG permission. enabled=false, interval=1, missedFrameThreshold=3, frameTimeThreshold=64, package=com.example.sudan
+I/VRI[MainActivity]@ab56323(26856): mWNT: t=0xb400007888bb8400 mBlastBufferQueue=0xb400007950405c00 fn= 4 HdrRenderState mRenderHdrSdrRatio=1.0 caller= android.view.SyncRtSurfaceTransactionApplier.applyTransaction:96 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0:69 android.view.SyncRtSurfaceTransactionApplier.$r8$lambda$afI4fXg3U3-nBZQEDQMiNy-B06s:0
+I/InsetsController(26856): onStateChanged: host=com.example.sudan/com.example.sudan.MainActivity, from=android.view.ViewRootImpl.handleResized:2789, state=InsetsState: {mDisplayFrame=Rect(0, 0 - 1340, 800), mDisplayCutout=DisplayCutout{insets=Rect(0, 0 - 0, 0) waterfall=Insets{left=0, top=0, right=0, bottom=0} boundingRect={Bounds=[Rect(0, 0 - 0, 0), Rect(0, 0 - 0, 0), Rect(0, 0 - 0, 0), Rect(0, 0 - 0, 0)]} cutoutPathParserInfo={CutoutPathParserInfo{displayWidth=0 displayHeight=0 physicalDisplayWidth=0 physicalDisplayHeight=0 density={0.0} cutoutSpec={} rotation={0} scale={0.0} physicalPixelDisplaySizeRatio={0.0}}} sideOverrides=null}, mRoundedCorners=RoundedCorners{[RoundedCorner{position=TopLeft, radius=9, center=Point(9, 9)}, RoundedCorner{position=TopRight, radius=9, center=Point(1331, 9)}, RoundedCorner{position=BottomRight, radius=9, center=Point(1331, 791)}, RoundedCorner{position=BottomLeft, radius=9, center=Point(9, 791)}]}  mRoundedCornerFrame=Rect(0, 0 - 1340, 800), mPrivacyIndicatorBounds=PrivacyIndicatorBounds {static bounds=Rect(1282, 0 - 1340, 32) rotation=1}, mDisplayShape=DisplayShape{ spec=-311912193 displayWidth=800 displayHeight=1340 physicalPixelDisplaySizeRatio=1.0 rotation=1 offsetX=0 offsetY=0 scale=1.0}, mSources= { InsetsSource: {a98a0000 mType=statusBars mFrame=[0,0][1340,32] mVisible=false mFlags= mSideHint=TOP mBoundingRects=null}, InsetsSource: {a98a0005 mType=mandatorySystemGestures mFrame=[0,0][1340,32] mVisible=true mFlags= mSideHint=TOP mBoundingRects=null}, InsetsSource: {a98a0006 mType=tappableElement mFrame=[0,0][1340,32] mVisible=true mFlags= mSideHint=TOP mBoundingRects=null}, InsetsSource: {3 mType=ime mFrame=[0,398][1340,800] mVisible=true mFlags= mSideHint=BOTTOM mBoundingRects=null}, InsetsSource: {70270001 mType=navigationBars mFrame=[0,736][1340,800] mVisible=false mFlags= mSideHint=BOTTOM mBoundingRects=null}, InsetsSource: {70270004 mType=systemGestures mFrame=[0,0][0,0] mVisible=true mFlags= mSideHint=NONE mBoundingRects=null}, InsetsSource: {70270005 mType=mandatorySystemGestures mFrame=[0,736][1340,800] mVisible=true mFlags= mSideHint=BOTTOM mBoundingRects=null}, InsetsSource: {70270006 mType=tappableElement mFrame=[0,736][1340,800] mVisible=true mFlags= mSideHint=BOTTOM mBoundingRects=null}, InsetsSource: {70270024 mType=systemGestures mFrame=[0,0][0,0] mVisible=true mFlags= mSideHint=NONE mBoundingRects=null} }
+I/VRI[MainActivity]@ab56323(26856): handleResized, frames=ClientWindowFrames{frame=[0,0][1340,800] display=[0,0][1340,800] parentFrame=[0,0][0,0]} displayId=0 dragResizing=false compatScale=1.0 frameChanged=false attachedFrameChanged=false configChanged=false displayChanged=false compatScaleChanged=false dragResizingChanged=false
+I/VRI[MainActivity]@ab56323(26856): mWNT: t=0xb400007888bb6900 mBlastBufferQueue=0xb400007950405c00 fn= 5 HdrRenderState mRenderHdrSdrRatio=1.0 caller= android.view.SyncRtSurfaceTransactionApplier.applyTransaction:96 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0:69 android.view.SyncRtSurfaceTransactionApplier.$r8$lambda$afI4fXg3U3-nBZQEDQMiNy-B06s:0
+I/gralloc4(26856): @set_metadata: update dataspace from GM (0x08010000 -> 0x00000000)
+I/InsetsController(26856): onStateChanged: host=com.example.sudan/com.example.sudan.MainActivity, from=android.view.ViewRootImpl.handleResized:2789, state=InsetsState: {mDisplayFrame=Rect(0, 0 - 1340, 800), mDisplayCutout=DisplayCutout{insets=Rect(0, 0 - 0, 0) waterfall=Insets{left=0, top=0, right=0, bottom=0} boundingRect={Bounds=[Rect(0, 0 - 0, 0), Rect(0, 0 - 0, 0), Rect(0, 0 - 0, 0), Rect(0, 0 - 0, 0)]} cutoutPathParserInfo={CutoutPathParserInfo{displayWidth=0 displayHeight=0 physicalDisplayWidth=0 physicalDisplayHeight=0 density={0.0} cutoutSpec={} rotation={0} scale={0.0} physicalPixelDisplaySizeRatio={0.0}}} sideOverrides=null}, mRoundedCorners=RoundedCorners{[RoundedCorner{position=TopLeft, radius=9, center=Point(9, 9)}, RoundedCorner{position=TopRight, radius=9, center=Point(1331, 9)}, RoundedCorner{position=BottomRight, radius=9, center=Point(1331, 791)}, RoundedCorner{position=BottomLeft, radius=9, center=Point(9, 791)}]}  mRoundedCornerFrame=Rect(0, 0 - 1340, 800), mPrivacyIndicatorBounds=PrivacyIndicatorBounds {static bounds=Rect(1282, 0 - 1340, 32) rotation=1}, mDisplayShape=DisplayShape{ spec=-311912193 displayWidth=800 displayHeight=1340 physicalPixelDisplaySizeRatio=1.0 rotation=1 offsetX=0 offsetY=0 scale=1.0}, mSources= { InsetsSource: {a98a0000 mType=statusBars mFrame=[0,0][1340,32] mVisible=false mFlags= mSideHint=TOP mBoundingRects=null}, InsetsSource: {a98a0005 mType=mandatorySystemGestures mFrame=[0,0][1340,32] mVisible=true mFlags= mSideHint=TOP mBoundingRects=null}, InsetsSource: {a98a0006 mType=tappableElement mFrame=[0,0][1340,32] mVisible=true mFlags= mSideHint=TOP mBoundingRects=null}, InsetsSource: {3 mType=ime mFrame=[0,398][1340,800] mVisible=true mFlags= mSideHint=BOTTOM mBoundingRects=null}, InsetsSource: {70270001 mType=navigationBars mFrame=[0,736][1340,800] mVisible=true mFlags= mSideHint=BOTTOM mBoundingRects=null}, InsetsSource: {70270004 mType=systemGestures mFrame=[0,0][0,0] mVisible=true mFlags= mSideHint=NONE mBoundingRects=null}, InsetsSource: {70270005 mType=mandatorySystemGestures mFrame=[0,736][1340,800] mVisible=true mFlags= mSideHint=BOTTOM mBoundingRects=null}, InsetsSource: {70270006 mType=tappableElement mFrame=[0,736][1340,800] mVisible=true mFlags= mSideHint=BOTTOM mBoundingRects=null}, InsetsSource: {70270024 mType=systemGestures mFrame=[0,0][0,0] mVisible=true mFlags= mSideHint=NONE mBoundingRects=null} }
+I/VRI[MainActivity]@ab56323(26856): handleResized, frames=ClientWindowFrames{frame=[0,0][1340,800] display=[0,0][1340,800] parentFrame=[0,0][0,0]} displayId=0 dragResizing=false compatScale=1.0 frameChanged=false attachedFrameChanged=false configChanged=false displayChanged=false compatScaleChanged=false dragResizingChanged=false
+D/InputConnectionAdaptor(26856): The input method toggled text monitoring on
+I/VRI[MainActivity]@ab56323(26856): mWNT: t=0xb400007888bb8880 mBlastBufferQueue=0xb400007950405c00 fn= 6 HdrRenderState mRenderHdrSdrRatio=1.0 caller= android.view.SyncRtSurfaceTransactionApplier.applyTransaction:96 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0:69 android.view.SyncRtSurfaceTransactionApplier.$r8$lambda$afI4fXg3U3-nBZQEDQMiNy-B06s:0
+I/VRI[MainActivity]@ab56323(26856): mWNT: t=0xb400007888bb8a00 mBlastBufferQueue=0xb400007950405c00 fn= 7 HdrRenderState mRenderHdrSdrRatio=1.0 caller= android.view.SyncRtSurfaceTransactionApplier.applyTransaction:96 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0:69 android.view.SyncRtSurfaceTransactionApplier.$r8$lambda$afI4fXg3U3-nBZQEDQMiNy-B06s:0
+I/gralloc4(26856): @set_metadata: update dataspace from GM (0x08010000 -> 0x00000000)
+D/InsetsController(26856): show(ime(), fromIme=true)
+I/ImeTracker(26856): com.example.sudan:17500d58: onCancelled at PHASE_CLIENT_APPLY_ANIMATION
+I/VRI[MainActivity]@ab56323(26856): mWNT: t=0xb400007888bb8d00 mBlastBufferQueue=0xb400007950405c00 fn= 8 HdrRenderState mRenderHdrSdrRatio=1.0 caller= android.view.SyncRtSurfaceTransactionApplier.applyTransaction:96 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0:69 android.view.SyncRtSurfaceTransactionApplier.$r8$lambda$afI4fXg3U3-nBZQEDQMiNy-B06s:0
+I/VRI[MainActivity]@ab56323(26856): mWNT: t=0xb400007888bb8e80 mBlastBufferQueue=0xb400007950405c00 fn= 9 HdrRenderState mRenderHdrSdrRatio=1.0 caller= android.view.SyncRtSurfaceTransactionApplier.applyTransaction:96 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0:69 android.view.SyncRtSurfaceTransactionApplier.$r8$lambda$afI4fXg3U3-nBZQEDQMiNy-B06s:0
+I/VRI[MainActivity]@ab56323(26856): mWNT: t=0xb4000076ee111f80 mBlastBufferQueue=0xb400007950405c00 fn= 10 HdrRenderState mRenderHdrSdrRatio=1.0 caller= android.view.SyncRtSurfaceTransactionApplier.applyTransaction:96 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0:69 android.view.SyncRtSurfaceTransactionApplier.$r8$lambda$afI4fXg3U3-nBZQEDQMiNy-B06s:0
+I/InsetsController(26856): cancelAnimation: types=ime, animType=0, host=com.example.sudan/com.example.sudan.MainActivity, from=android.view.InsetsController.notifyFinished:1890 android.view.InsetsAnimationControlImpl.applyChangeInsets:307 android.view.InsetsController.lambda$new$3:932
+I/ImeTracker(26856): com.example.sudan:e84ee900: onShown
+I/VRI[MainActivity]@ab56323(26856): mWNT: t=0xb4000076ec5db900 mBlastBufferQueue=0xb400007950405c00 fn= 11 HdrRenderState mRenderHdrSdrRatio=1.0 caller= android.view.SyncRtSurfaceTransactionApplier.applyTransaction:96 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0:69 android.view.SyncRtSurfaceTransactionApplier.$r8$lambda$afI4fXg3U3-nBZQEDQMiNy-B06s:0
+
+════════ Exception caught by rendering library ═════════════════════════════════
+The following assertion was thrown during layout:
+A RenderFlex overflowed by 112 pixels on the bottom.
+
+The relevant error-causing widget was:
+    Column Column:file:///Users/hamidaslami/sudan/lib/presentation/widgets/floor/add_floor_dialog.dart:89:20
+
+: To inspect this widget in Flutter DevTools, visit: http://127.0.0.1:9100/#/inspector?uri=http%3A%2F%2F127.0.0.1%3A60906%2F0o-4lvueKio%3D%2F&inspectorRef=inspector-0
+
+The overflowing RenderFlex has an orientation of Axis.vertical.
+The edge of the RenderFlex that is overflowing has been marked in the rendering with a yellow and black striped pattern. This is usually caused by the contents being too big for the RenderFlex.
+Consider applying a flex factor (e.g. using an Expanded widget) to force the children of the RenderFlex to fit within the available space instead of being sized to their natural size.
+This is considered an error condition because it indicates that there is content that cannot be seen. If the content is legitimately bigger than the available space, consider clipping it with a ClipRect widget before putting it in the flex, or using a scrollable container rather than a Flex, like a ListView.
+The specific RenderFlex in question is: RenderFlex#9f19a relayoutBoundary=up10 OVERFLOWING
+    needs compositing
+    parentData: offset=Offset(32.0, 32.0) (can use size)
+    constraints: BoxConstraints(213.6<=w<=413.6, 0.0<=h<=267.8)
+    size: Size(413.6, 267.8)
+    direction: vertical
+    mainAxisAlignment: start
+    mainAxisSize: min
+    crossAxisAlignment: start
+    textDirection: ltr
+    verticalDirection: down
+    spacing: 0.0
+    child 1: RenderFlex#67414 relayoutBoundary=up11
+        parentData: offset=Offset(0.0, 0.0); flex=null; fit=null (can use size)
+        constraints: BoxConstraints(0.0<=w<=413.6, 0.0<=h<=Infinity)
+        size: Size(413.6, 54.0)
+        direction: horizontal
+        mainAxisAlignment: start
+        mainAxisSize: max
+        crossAxisAlignment: center
+        textDirection: ltr
+        verticalDirection: down
+        spacing: 0.0
+        child 1: RenderDecoratedBox#985b3 relayoutBoundary=up12
+            parentData: offset=Offset(0.0, 7.0); flex=null; fit=null (can use size)
+            constraints: BoxConstraints(unconstrained)
+            size: Size(40.0, 40.0)
+            decoration: BoxDecoration
+                borderRadius: BorderRadius.circular(14.0)
+                boxShadow: BoxShadow(Color(alpha: 0.3020, red: 0.0000, green: 0.0000, blue: 0.0000, colorSpace: ColorSpace.sRGB), Offset(0.0, 18.0), 36.0, 2.0, BlurStyle.normal)
+                gradient: LinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight, colors: [Color(alpha: 1.0000, red: 0.5059, green: 0.5294, blue: 1.0000, colorSpace: ColorSpace.sRGB), Color(alpha: 1.0000, red: 0.0784, green: 0.7216, blue: 0.6510, colorSpace: ColorSpace.sRGB)], tileMode: TileMode.clamp)
+            configuration: ImageConfiguration(bundle: PlatformAssetBundle#172e8(), devicePixelRatio: 1.3, locale: en_US, textDirection: TextDirection.ltr, platform: android)
+            child: RenderPadding#cbe89 relayoutBoundary=up13
+                parentData: <none> (can use size)
+                constraints: BoxConstraints(unconstrained)
+                size: Size(40.0, 40.0)
+                padding: EdgeInsets.all(10.0)
+                textDirection: ltr
+                child: RenderSemanticsAnnotations#2918f relayoutBoundary=up14
+                    parentData: offset=Offset(10.0, 10.0) (can use size)
+                    constraints: BoxConstraints(unconstrained)
+                    size: Size(20.0, 20.0)
+        child 2: RenderConstrainedBox#f1e7a relayoutBoundary=up12
+            parentData: offset=Offset(40.0, 27.0); flex=null; fit=null (can use size)
+            constraints: BoxConstraints(unconstrained)
+            size: Size(16.0, 0.0)
+            additionalConstraints: BoxConstraints(w=16.0, 0.0<=h<=Infinity)
+        child 3: RenderFlex#f7e63 relayoutBoundary=up12
+            parentData: offset=Offset(56.0, 0.0); flex=1; fit=FlexFit.tight (can use size)
+            constraints: BoxConstraints(w=357.6, 0.0<=h<=Infinity)
+            size: Size(357.6, 54.0)
+            direction: vertical
+            mainAxisAlignment: start
+            mainAxisSize: max
+            crossAxisAlignment: start
+            textDirection: ltr
+            verticalDirection: down
+            spacing: 0.0
+            child 1: RenderParagraph#44cf5 relayoutBoundary=up13
+                parentData: offset=Offset(0.0, 0.0); flex=null; fit=null (can use size)
+                constraints: BoxConstraints(0.0<=w<=357.6, 0.0<=h<=Infinity)
+                size: Size(141.2, 31.0)
+                textAlign: start
+                textDirection: ltr
+                softWrap: wrapping at box width
+                overflow: clip
+                locale: en_US
+                maxLines: unlimited
+                text: TextSpan
+                    debugLabel: ((englishLike bodyMedium 2021).merge((((whiteMountainView bodyMedium).apply).apply).merge(unknown))).merge(unknown)
+                    inherit: false
+                    color: Color(alpha: 1.0000, red: 0.9608, green: 0.9608, blue: 0.9608, colorSpace: ColorSpace.sRGB)
+                    family: IRANYekan
+                    size: 22.0
+                    weight: 700
+                    letterSpacing: -0.5
+                    baseline: alphabetic
+                    height: 1.4x
+                    leadingDistribution: even
+                    decoration: Color(alpha: 1.0000, red: 0.8941, green: 0.8824, blue: 0.9137, colorSpace: ColorSpace.sRGB) TextDecoration.none
+                    "Add New Floor"
+            child 2: RenderConstrainedBox#639f9 relayoutBoundary=up13
+                parentData: offset=Offset(0.0, 31.0); flex=null; fit=null (can use size)
+                constraints: BoxConstraints(0.0<=w<=357.6, 0.0<=h<=Infinity)
+                size: Size(0.0, 4.0)
+                additionalConstraints: BoxConstraints(0.0<=w<=Infinity, h=4.0)
+            child 3: RenderParagraph#b9f0b relayoutBoundary=up13
+                parentData: offset=Offset(0.0, 35.0); flex=null; fit=null (can use size)
+                constraints: BoxConstraints(0.0<=w<=357.6, 0.0<=h<=Infinity)
+                size: Size(202.8, 19.0)
+                textAlign: start
+                textDirection: ltr
+                softWrap: wrapping at box width
+                overflow: clip
+                locale: en_US
+                maxLines: unlimited
+                text: TextSpan
+                    debugLabel: ((englishLike bodyMedium 2021).merge((((whiteMountainView bodyMedium).apply).apply).merge(unknown))).merge(unknown)
+                    inherit: false
+                    color: Color(alpha: 1.0000, red: 0.5569, green: 0.5569, blue: 0.5569, colorSpace: ColorSpace.sRGB)
+                    family: IRANYekan
+                    size: 13.0
+                    weight: 400
+                    letterSpacing: 0.3
+                    baseline: alphabetic
+                    height: 1.4x
+                    leadingDistribution: even
+                    decoration: Color(alpha: 1.0000, red: 0.8941, green: 0.8824, blue: 0.9137, colorSpace: ColorSpace.sRGB) TextDecoration.none
+                    "Create a new floor for your home"
+    child 2: RenderConstrainedBox#f674e relayoutBoundary=up11
+        parentData: offset=Offset(0.0, 54.0); flex=null; fit=null (can use size)
+        constraints: BoxConstraints(0.0<=w<=413.6, 0.0<=h<=Infinity)
+        size: Size(0.0, 32.0)
+        additionalConstraints: BoxConstraints(0.0<=w<=Infinity, h=32.0)
+    child 3: RenderParagraph#4b5d4 relayoutBoundary=up11
+        parentData: offset=Offset(0.0, 86.0); flex=null; fit=null (can use size)
+        constraints: BoxConstraints(0.0<=w<=413.6, 0.0<=h<=Infinity)
+        size: Size(71.0, 19.0)
+        textAlign: start
+        textDirection: ltr
+        softWrap: wrapping at box width
+        overflow: clip
+        locale: en_US
+        maxLines: unlimited
+        text: TextSpan
+            debugLabel: ((englishLike bodyMedium 2021).merge((((whiteMountainView bodyMedium).apply).apply).merge(unknown))).merge(unknown)
+            inherit: false
+            color: Color(alpha: 1.0000, red: 0.9608, green: 0.9608, blue: 0.9608, colorSpace: ColorSpace.sRGB)
+            family: IRANYekan
+            size: 13.0
+            weight: 600
+            letterSpacing: 0.3
+            baseline: alphabetic
+            height: 1.4x
+            leadingDistribution: even
+            decoration: Color(alpha: 1.0000, red: 0.8941, green: 0.8824, blue: 0.9137, colorSpace: ColorSpace.sRGB) TextDecoration.none
+            "Floor Name"
+    child 4: RenderConstrainedBox#37d64 relayoutBoundary=up11
+        parentData: offset=Offset(0.0, 105.0); flex=null; fit=null (can use size)
+        constraints: BoxConstraints(0.0<=w<=413.6, 0.0<=h<=Infinity)
+        size: Size(0.0, 10.0)
+        additionalConstraints: BoxConstraints(0.0<=w<=Infinity, h=10.0)
+    child 5: RenderMouseRegion#64aac relayoutBoundary=up11
+        needs compositing
+        parentData: offset=Offset(0.0, 115.0); flex=null; fit=null (can use size)
+        constraints: BoxConstraints(0.0<=w<=413.6, 0.0<=h<=Infinity)
+        size: Size(413.6, 56.0)
+        behavior: opaque
+        listeners: enter, exit
+        cursor: SystemMouseCursor(text)
+        child: RenderTapRegion#771b4 relayoutBoundary=up12
+            needs compositing
+            parentData: <none> (can use size)
+            constraints: BoxConstraints(0.0<=w<=413.6, 0.0<=h<=Infinity)
+            size: Size(413.6, 56.0)
+            behavior: deferToChild
+            groupId: EditableText
+            child: RenderIgnorePointer#17fc2 relayoutBoundary=up13
+                needs compositing
+                parentData: <none> (can use size)
+                constraints: BoxConstraints(0.0<=w<=413.6, 0.0<=h<=Infinity)
+                size: Size(413.6, 56.0)
+                ignoring: false
+                ignoringSemantics: null
+                child: RenderSemanticsAnnotations#352aa relayoutBoundary=up14
+                    needs compositing
+                    parentData: <none> (can use size)
+                    constraints: BoxConstraints(0.0<=w<=413.6, 0.0<=h<=Infinity)
+                    size: Size(413.6, 56.0)
+    child 6: RenderConstrainedBox#4773d relayoutBoundary=up11
+        parentData: offset=Offset(0.0, 171.0); flex=null; fit=null (can use size)
+        constraints: BoxConstraints(0.0<=w<=413.6, 0.0<=h<=Infinity)
+        size: Size(0.0, 24.0)
+        additionalConstraints: BoxConstraints(0.0<=w<=Infinity, h=24.0)
+    child 7: RenderParagraph#129c9 relayoutBoundary=up11
+        parentData: offset=Offset(0.0, 195.0); flex=null; fit=null (can use size)
+        constraints: BoxConstraints(0.0<=w<=413.6, 0.0<=h<=Infinity)
+        size: Size(26.1, 19.0)
+        textAlign: start
+        textDirection: ltr
+        softWrap: wrapping at box width
+        overflow: clip
+        locale: en_US
+        maxLines: unlimited
+        text: TextSpan
+            debugLabel: ((englishLike bodyMedium 2021).merge((((whiteMountainView bodyMedium).apply).apply).merge(unknown))).merge(unknown)
+            inherit: false
+            color: Color(alpha: 1.0000, red: 0.9608, green: 0.9608, blue: 0.9608, colorSpace: ColorSpace.sRGB)
+            family: IRANYekan
+            size: 13.0
+            weight: 600
+            letterSpacing: 0.3
+            baseline: alphabetic
+            height: 1.4x
+            leadingDistribution: even
+            decoration: Color(alpha: 1.0000, red: 0.8941, green: 0.8824, blue: 0.9137, colorSpace: ColorSpace.sRGB) TextDecoration.none
+            "Icon"
+    child 8: RenderConstrainedBox#0a1e6 relayoutBoundary=up11
+        parentData: offset=Offset(0.0, 214.0); flex=null; fit=null (can use size)
+        constraints: BoxConstraints(0.0<=w<=413.6, 0.0<=h<=Infinity)
+        size: Size(0.0, 10.0)
+        additionalConstraints: BoxConstraints(0.0<=w<=Infinity, h=10.0)
+    child 9: RenderWrap#3c41f relayoutBoundary=up11
+        parentData: offset=Offset(0.0, 224.0); flex=null; fit=null (can use size)
+        constraints: BoxConstraints(0.0<=w<=413.6, 0.0<=h<=Infinity)
+        size: Size(396.0, 56.0)
+        direction: horizontal
+        alignment: start
+        spacing: 12.0
+        runAlignment: start
+        runSpacing: 12.0
+        crossAxisAlignment: 12.0
+        textDirection: ltr
+        child 1: RenderSemanticsGestureHandler#dfb33 relayoutBoundary=up12
+            parentData: offset=Offset(0.0, 0.0) (can use size)
+            constraints: BoxConstraints(0.0<=w<=413.6, 0.0<=h<=Infinity)
+            size: Size(56.0, 56.0)
+            behavior: deferToChild
+            gestures: tap
+            child: RenderPointerListener#c602d relayoutBoundary=up13
+                parentData: <none> (can use size)
+                constraints: BoxConstraints(0.0<=w<=413.6, 0.0<=h<=Infinity)
+                size: Size(56.0, 56.0)
+                behavior: deferToChild
+                listeners: down, panZoomStart
+                child: RenderConstrainedBox#12a9c relayoutBoundary=up14
+                    parentData: <none> (can use size)
+                    constraints: BoxConstraints(0.0<=w<=413.6, 0.0<=h<=Infinity)
+                    size: Size(56.0, 56.0)
+                    additionalConstraints: BoxConstraints(w=56.0, h=56.0)
+        child 2: RenderSemanticsGestureHandler#4e4fa relayoutBoundary=up12
+            parentData: offset=Offset(68.0, 0.0) (can use size)
+            constraints: BoxConstraints(0.0<=w<=413.6, 0.0<=h<=Infinity)
+            size: Size(56.0, 56.0)
+            behavior: deferToChild
+            gestures: tap
+            child: RenderPointerListener#b73e8 relayoutBoundary=up13
+                parentData: <none> (can use size)
+                constraints: BoxConstraints(0.0<=w<=413.6, 0.0<=h<=Infinity)
+                size: Size(56.0, 56.0)
+                behavior: deferToChild
+                listeners: down, panZoomStart
+                child: RenderConstrainedBox#d7702 relayoutBoundary=up14
+                    parentData: <none> (can use size)
+                    constraints: BoxConstraints(0.0<=w<=413.6, 0.0<=h<=Infinity)
+                    size: Size(56.0, 56.0)
+                    additionalConstraints: BoxConstraints(w=56.0, h=56.0)
+        child 3: RenderSemanticsGestureHandler#4c248 relayoutBoundary=up12
+            parentData: offset=Offset(136.0, 0.0) (can use size)
+            constraints: BoxConstraints(0.0<=w<=413.6, 0.0<=h<=Infinity)
+            size: Size(56.0, 56.0)
+            behavior: deferToChild
+            gestures: tap
+            child: RenderPointerListener#45dcd relayoutBoundary=up13
+                parentData: <none> (can use size)
+                constraints: BoxConstraints(0.0<=w<=413.6, 0.0<=h<=Infinity)
+                size: Size(56.0, 56.0)
+                behavior: deferToChild
+                listeners: down, panZoomStart
+                child: RenderConstrainedBox#556e9 relayoutBoundary=up14
+                    parentData: <none> (can use size)
+                    constraints: BoxConstraints(0.0<=w<=413.6, 0.0<=h<=Infinity)
+                    size: Size(56.0, 56.0)
+                    additionalConstraints: BoxConstraints(w=56.0, h=56.0)
+        child 4: RenderSemanticsGestureHandler#9690e relayoutBoundary=up12
+            parentData: offset=Offset(204.0, 0.0) (can use size)
+            constraints: BoxConstraints(0.0<=w<=413.6, 0.0<=h<=Infinity)
+            size: Size(56.0, 56.0)
+            behavior: deferToChild
+            gestures: tap
+            child: RenderPointerListener#3c7a8 relayoutBoundary=up13
+                parentData: <none> (can use size)
+                constraints: BoxConstraints(0.0<=w<=413.6, 0.0<=h<=Infinity)
+                size: Size(56.0, 56.0)
+                behavior: deferToChild
+                listeners: down, panZoomStart
+                child: RenderConstrainedBox#b1e21 relayoutBoundary=up14
+                    parentData: <none> (can use size)
+                    constraints: BoxConstraints(0.0<=w<=413.6, 0.0<=h<=Infinity)
+                    size: Size(56.0, 56.0)
+                    additionalConstraints: BoxConstraints(w=56.0, h=56.0)
+        child 5: RenderSemanticsGestureHandler#fc70a relayoutBoundary=up12
+            parentData: offset=Offset(272.0, 0.0) (can use size)
+            constraints: BoxConstraints(0.0<=w<=413.6, 0.0<=h<=Infinity)
+            size: Size(56.0, 56.0)
+            behavior: deferToChild
+            gestures: tap
+            child: RenderPointerListener#83d81 relayoutBoundary=up13
+                parentData: <none> (can use size)
+                constraints: BoxConstraints(0.0<=w<=413.6, 0.0<=h<=Infinity)
+                size: Size(56.0, 56.0)
+                behavior: deferToChild
+                listeners: down, panZoomStart
+                child: RenderConstrainedBox#e2052 relayoutBoundary=up14
+                    parentData: <none> (can use size)
+                    constraints: BoxConstraints(0.0<=w<=413.6, 0.0<=h<=Infinity)
+                    size: Size(56.0, 56.0)
+                    additionalConstraints: BoxConstraints(w=56.0, h=56.0)
+        child 6: RenderSemanticsGestureHandler#dbecb relayoutBoundary=up12
+            parentData: offset=Offset(340.0, 0.0) (can use size)
+            constraints: BoxConstraints(0.0<=w<=413.6, 0.0<=h<=Infinity)
+            size: Size(56.0, 56.0)
+            behavior: deferToChild
+            gestures: tap
+            child: RenderPointerListener#20461 relayoutBoundary=up13
+                parentData: <none> (can use size)
+                constraints: BoxConstraints(0.0<=w<=413.6, 0.0<=h<=Infinity)
+                size: Size(56.0, 56.0)
+                behavior: deferToChild
+                listeners: down, panZoomStart
+                child: RenderConstrainedBox#e0c10 relayoutBoundary=up14
+                    parentData: <none> (can use size)
+                    constraints: BoxConstraints(0.0<=w<=413.6, 0.0<=h<=Infinity)
+                    size: Size(56.0, 56.0)
+                    additionalConstraints: BoxConstraints(w=56.0, h=56.0)
+    child 10: RenderConstrainedBox#c3249 relayoutBoundary=up11
+        parentData: offset=Offset(0.0, 280.0); flex=null; fit=null (can use size)
+        constraints: BoxConstraints(0.0<=w<=413.6, 0.0<=h<=Infinity)
+        size: Size(0.0, 32.0)
+        additionalConstraints: BoxConstraints(0.0<=w<=Infinity, h=32.0)
+    child 11: RenderFlex#7df2a relayoutBoundary=up11
+        parentData: offset=Offset(0.0, 312.0); flex=null; fit=null (can use size)
+        constraints: BoxConstraints(0.0<=w<=413.6, 0.0<=h<=Infinity)
+        size: Size(413.6, 68.0)
+        direction: horizontal
+        mainAxisAlignment: end
+        mainAxisSize: max
+        crossAxisAlignment: center
+        textDirection: ltr
+        verticalDirection: down
+        spacing: 0.0
+        child 1: RenderSemanticsAnnotations#5c0df relayoutBoundary=up12
+            parentData: offset=Offset(180.2, 10.0); flex=null; fit=null (can use size)
+            constraints: BoxConstraints(unconstrained)
+            semantic boundary
+            size: Size(83.5, 48.0)
+            child: _RenderInputPadding#8c7e8 relayoutBoundary=up13
+                parentData: <none> (can use size)
+                constraints: BoxConstraints(unconstrained)
+                size: Size(83.5, 48.0)
+                child: RenderConstrainedBox#ea804 relayoutBoundary=up14
+                    parentData: offset=Offset(0.0, 2.0) (can use size)
+                    constraints: BoxConstraints(unconstrained)
+                    size: Size(83.5, 44.0)
+                    additionalConstraints: BoxConstraints(64.0<=w<=Infinity, 40.0<=h<=Infinity)
+        child 2: RenderConstrainedBox#e73ae relayoutBoundary=up12
+            parentData: offset=Offset(263.7, 34.0); flex=null; fit=null (can use size)
+            constraints: BoxConstraints(unconstrained)
+            size: Size(12.0, 0.0)
+            additionalConstraints: BoxConstraints(w=12.0, 0.0<=h<=Infinity)
+        child 3: RenderSemanticsAnnotations#45f28 relayoutBoundary=up12
+            parentData: offset=Offset(275.7, 0.0); flex=null; fit=null (can use size)
+            constraints: BoxConstraints(unconstrained)
+            semantic boundary
+            size: Size(137.9, 68.0)
+            child: _RenderInputPadding#0b92c relayoutBoundary=up13
+                parentData: <none> (can use size)
+                constraints: BoxConstraints(unconstrained)
+                size: Size(137.9, 68.0)
+                child: RenderConstrainedBox#b192b relayoutBoundary=up14
+                    parentData: offset=Offset(0.0, 0.0) (can use size)
+                    constraints: BoxConstraints(unconstrained)
+                    size: Size(137.9, 68.0)
+                    additionalConstraints: BoxConstraints(64.0<=w<=Infinity, 40.0<=h<=Infinity)
+◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤◢◤
+════════════════════════════════════════════════════════════════════════════════
+I/VRI[MainActivity]@ab56323(26856): The input has been finished in ImeInputStage.
+I/VRI[MainActivity]@ab56323(26856): The input has been finished in ImeInputStage.
+D/InsetsController(26856): hide(ime(), fromIme=true)
+I/InsetsController(26856): setRequestedVisibleTypes: visible=false, mask=ime, host=com.example.sudan/com.example.sudan.MainActivity, from=android.view.InsetsController.controlAnimationUnchecked:1498 android.view.InsetsController.applyAnimation:2228 android.view.InsetsController.applyAnimation:2159 android.view.InsetsController.hide:1452 android.view.ViewRootImpl$ViewRootHandler.handleMessageImpl:8063 android.view.ViewRootImpl$ViewRootHandler.handleMessage:7991 android.os.Handler.dispatchMessage:107 android.os.Looper.loopOnce:257 android.os.Looper.loop:342 android.app.ActivityThread.main:9634
+I/InsetsController(26856): controlAnimationUncheckedInner: Added types=ime, animType=1, host=com.example.sudan/com.example.sudan.MainActivity, from=android.view.InsetsController.controlAnimationUnchecked:1502 android.view.InsetsController.applyAnimation:2228 android.view.InsetsController.applyAnimation:2159
+D/InputConnectionAdaptor(26856): The input method toggled cursor monitoring off
+I/VRI[MainActivity]@ab56323(26856): mWNT: t=0xb4000076ec5dc980 mBlastBufferQueue=0xb400007950405c00 fn= 12 HdrRenderState mRenderHdrSdrRatio=1.0 caller= android.view.SyncRtSurfaceTransactionApplier.applyTransaction:96 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0:69 android.view.SyncRtSurfaceTransactionApplier.$r8$lambda$afI4fXg3U3-nBZQEDQMiNy-B06s:0
+D/InputConnectionAdaptor(26856): The input method toggled text monitoring off
+I/InsetsController(26856): onStateChanged: host=com.example.sudan/com.example.sudan.MainActivity, from=android.view.ViewRootImpl.handleResized:2789, state=InsetsState: {mDisplayFrame=Rect(0, 0 - 1340, 800), mDisplayCutout=DisplayCutout{insets=Rect(0, 0 - 0, 0) waterfall=Insets{left=0, top=0, right=0, bottom=0} boundingRect={Bounds=[Rect(0, 0 - 0, 0), Rect(0, 0 - 0, 0), Rect(0, 0 - 0, 0), Rect(0, 0 - 0, 0)]} cutoutPathParserInfo={CutoutPathParserInfo{displayWidth=0 displayHeight=0 physicalDisplayWidth=0 physicalDisplayHeight=0 density={0.0} cutoutSpec={} rotation={0} scale={0.0} physicalPixelDisplaySizeRatio={0.0}}} sideOverrides=null}, mRoundedCorners=RoundedCorners{[RoundedCorner{position=TopLeft, radius=9, center=Point(9, 9)}, RoundedCorner{position=TopRight, radius=9, center=Point(1331, 9)}, RoundedCorner{position=BottomRight, radius=9, center=Point(1331, 791)}, RoundedCorner{position=BottomLeft, radius=9, center=Point(9, 791)}]}  mRoundedCornerFrame=Rect(0, 0 - 1340, 800), mPrivacyIndicatorBounds=PrivacyIndicatorBounds {static bounds=Rect(1282, 0 - 1340, 32) rotation=1}, mDisplayShape=DisplayShape{ spec=-311912193 displayWidth=800 displayHeight=1340 physicalPixelDisplaySizeRatio=1.0 rotation=1 offsetX=0 offsetY=0 scale=1.0}, mSources= { InsetsSource: {a98a0000 mType=statusBars mFrame=[0,0][1340,32] mVisible=false mFlags= mSideHint=TOP mBoundingRects=null}, InsetsSource: {a98a0005 mType=mandatorySystemGestures mFrame=[0,0][1340,32] mVisible=true mFlags= mSideHint=TOP mBoundingRects=null}, InsetsSource: {a98a0006 mType=tappableElement mFrame=[0,0][1340,32] mVisible=true mFlags= mSideHint=TOP mBoundingRects=null}, InsetsSource: {3 mType=ime mFrame=[0,398][1340,800] mVisible=false mFlags= mSideHint=BOTTOM mBoundingRects=null}, InsetsSource: {70270001 mType=navigationBars mFrame=[0,736][1340,800] mVisible=true mFlags= mSideHint=BOTTOM mBoundingRects=null}, InsetsSource: {70270004 mType=systemGestures mFrame=[0,0][0,0] mVisible=true mFlags= mSideHint=NONE mBoundingRects=null}, InsetsSource: {70270005 mType=mandatorySystemGestures mFrame=[0,736][1340,800] mVisible=true mFlags= mSideHint=BOTTOM mBoundingRects=null}, InsetsSource: {70270006 mType=tappableElement mFrame=[0,736][1340,800] mVisible=true mFlags= mSideHint=BOTTOM mBoundingRects=null}, InsetsSource: {70270024 mType=systemGestures mFrame=[0,0][0,0] mVisible=true mFlags= mSideHint=NONE mBoundingRects=null} }
+I/VRI[MainActivity]@ab56323(26856): handleResized, frames=ClientWindowFrames{frame=[0,0][1340,800] display=[0,0][1340,800] parentFrame=[0,0][0,0]} displayId=0 dragResizing=false compatScale=1.0 frameChanged=false attachedFrameChanged=false configChanged=false displayChanged=false compatScaleChanged=false dragResizingChanged=false
+I/VRI[MainActivity]@ab56323(26856): mWNT: t=0xb400007888bb8700 mBlastBufferQueue=0xb400007950405c00 fn= 13 HdrRenderState mRenderHdrSdrRatio=1.0 caller= android.view.SyncRtSurfaceTransactionApplier.applyTransaction:96 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0:69 android.view.SyncRtSurfaceTransactionApplier.$r8$lambda$afI4fXg3U3-nBZQEDQMiNy-B06s:0
+I/InsetsController(26856): controlAnimationUncheckedInner: Added types=navigationBars, animType=1, host=com.example.sudan/com.example.sudan.MainActivity, from=android.view.InsetsController.controlAnimationUnchecked:1502 android.view.InsetsController.applyAnimation:2228 android.view.InsetsController.applyAnimation:2159
+I/InsetsController(26856): onStateChanged: host=com.example.sudan/com.example.sudan.MainActivity, from=android.view.ViewRootImpl.handleResized:2789, state=InsetsState: {mDisplayFrame=Rect(0, 0 - 1340, 800), mDisplayCutout=DisplayCutout{insets=Rect(0, 0 - 0, 0) waterfall=Insets{left=0, top=0, right=0, bottom=0} boundingRect={Bounds=[Rect(0, 0 - 0, 0), Rect(0, 0 - 0, 0), Rect(0, 0 - 0, 0), Rect(0, 0 - 0, 0)]} cutoutPathParserInfo={CutoutPathParserInfo{displayWidth=0 displayHeight=0 physicalDisplayWidth=0 physicalDisplayHeight=0 density={0.0} cutoutSpec={} rotation={0} scale={0.0} physicalPixelDisplaySizeRatio={0.0}}} sideOverrides=null}, mRoundedCorners=RoundedCorners{[RoundedCorner{position=TopLeft, radius=9, center=Point(9, 9)}, RoundedCorner{position=TopRight, radius=9, center=Point(1331, 9)}, RoundedCorner{position=BottomRight, radius=9, center=Point(1331, 791)}, RoundedCorner{position=BottomLeft, radius=9, center=Point(9, 791)}]}  mRoundedCornerFrame=Rect(0, 0 - 1340, 800), mPrivacyIndicatorBounds=PrivacyIndicatorBounds {static bounds=Rect(1282, 0 - 1340, 32) rotation=1}, mDisplayShape=DisplayShape{ spec=-311912193 displayWidth=800 displayHeight=1340 physicalPixelDisplaySizeRatio=1.0 rotation=1 offsetX=0 offsetY=0 scale=1.0}, mSources= { InsetsSource: {a98a0000 mType=statusBars mFrame=[0,0][1340,32] mVisible=false mFlags= mSideHint=TOP mBoundingRects=null}, InsetsSource: {a98a0005 mType=mandatorySystemGestures mFrame=[0,0][1340,32] mVisible=true mFlags= mSideHint=TOP mBoundingRects=null}, InsetsSource: {a98a0006 mType=tappableElement mFrame=[0,0][1340,32] mVisible=true mFlags= mSideHint=TOP mBoundingRects=null}, InsetsSource: {3 mType=ime mFrame=[0,398][1340,800] mVisible=false mFlags= mSideHint=BOTTOM mBoundingRects=null}, InsetsSource: {70270001 mType=navigationBars mFrame=[0,736][1340,800] mVisible=false mFlags= mSideHint=BOTTOM mBoundingRects=null}, InsetsSource: {70270004 mType=systemGestures mFrame=[0,0][0,0] mVisible=true mFlags= mSideHint=NONE mBoundingRects=null}, InsetsSource: {70270005 mType=mandatorySystemGestures mFrame=[0,736][1340,800] mVisible=true mFlags= mSideHint=BOTTOM mBoundingRects=null}, InsetsSource: {70270006 mType=tappableElement mFrame=[0,736][1340,800] mVisible=true mFlags= mSideHint=BOTTOM mBoundingRects=null}, InsetsSource: {70270024 mType=systemGestures mFrame=[0,0][0,0] mVisible=true mFlags= mSideHint=NONE mBoundingRects=null} }
+I/VRI[MainActivity]@ab56323(26856): handleResized, frames=ClientWindowFrames{frame=[0,0][1340,800] display=[0,0][1340,800] parentFrame=[0,0][0,0]} displayId=0 dragResizing=false compatScale=1.0 frameChanged=false attachedFrameChanged=false configChanged=false displayChanged=false compatScaleChanged=false dragResizingChanged=false
+I/VRI[MainActivity]@ab56323(26856): mWNT: t=0xb4000076ee111c80 mBlastBufferQueue=0xb400007950405c00 fn= 14 HdrRenderState mRenderHdrSdrRatio=1.0 caller= android.view.SyncRtSurfaceTransactionApplier.applyTransaction:96 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0:69 android.view.SyncRtSurfaceTransactionApplier.$r8$lambda$afI4fXg3U3-nBZQEDQMiNy-B06s:0
+I/VRI[MainActivity]@ab56323(26856): mWNT: t=0xb4000076ee112100 mBlastBufferQueue=0xb400007950405c00 fn= 14 HdrRenderState mRenderHdrSdrRatio=1.0 caller= android.view.SyncRtSurfaceTransactionApplier.applyTransaction:96 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0:69 android.view.SyncRtSurfaceTransactionApplier.$r8$lambda$afI4fXg3U3-nBZQEDQMiNy-B06s:0
+I/VRI[MainActivity]@ab56323(26856): mWNT: t=0xb4000076ec5dbc00 mBlastBufferQueue=0xb400007950405c00 fn= 14 HdrRenderState mRenderHdrSdrRatio=1.0 caller= android.view.SyncRtSurfaceTransactionApplier.applyTransaction:96 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0:69 android.view.SyncRtSurfaceTransactionApplier.$r8$lambda$afI4fXg3U3-nBZQEDQMiNy-B06s:0
+I/VRI[MainActivity]@ab56323(26856): mWNT: t=0xb4000076ec5dcb00 mBlastBufferQueue=0xb400007950405c00 fn= 14 HdrRenderState mRenderHdrSdrRatio=1.0 caller= android.view.SyncRtSurfaceTransactionApplier.applyTransaction:96 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0:69 android.view.SyncRtSurfaceTransactionApplier.$r8$lambda$afI4fXg3U3-nBZQEDQMiNy-B06s:0
+I/VRI[MainActivity]@ab56323(26856): mWNT: t=0xb40000791204b600 mBlastBufferQueue=0xb400007950405c00 fn= 15 HdrRenderState mRenderHdrSdrRatio=1.0 caller= android.view.SyncRtSurfaceTransactionApplier.applyTransaction:96 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0:69 android.view.SyncRtSurfaceTransactionApplier.$r8$lambda$afI4fXg3U3-nBZQEDQMiNy-B06s:0
+I/VRI[MainActivity]@ab56323(26856): mWNT: t=0xb400007888bb8400 mBlastBufferQueue=0xb400007950405c00 fn= 15 HdrRenderState mRenderHdrSdrRatio=1.0 caller= android.view.SyncRtSurfaceTransactionApplier.applyTransaction:96 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0:69 android.view.SyncRtSurfaceTransactionApplier.$r8$lambda$afI4fXg3U3-nBZQEDQMiNy-B06s:0
+I/VRI[MainActivity]@ab56323(26856): mWNT: t=0xb400007888bb8880 mBlastBufferQueue=0xb400007950405c00 fn= 16 HdrRenderState mRenderHdrSdrRatio=1.0 caller= android.view.SyncRtSurfaceTransactionApplier.applyTransaction:96 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0:69 android.view.SyncRtSurfaceTransactionApplier.$r8$lambda$afI4fXg3U3-nBZQEDQMiNy-B06s:0
+I/VRI[MainActivity]@ab56323(26856): mWNT: t=0xb400007888bb8d00 mBlastBufferQueue=0xb400007950405c00 fn= 16 HdrRenderState mRenderHdrSdrRatio=1.0 caller= android.view.SyncRtSurfaceTransactionApplier.applyTransaction:96 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0:69 android.view.SyncRtSurfaceTransactionApplier.$r8$lambda$afI4fXg3U3-nBZQEDQMiNy-B06s:0
+I/VRI[MainActivity]@ab56323(26856): mWNT: t=0xb4000076ec5dcf80 mBlastBufferQueue=0xb400007950405c00 fn= 17 HdrRenderState mRenderHdrSdrRatio=1.0 caller= android.view.SyncRtSurfaceTransactionApplier.applyTransaction:96 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0:69 android.view.SyncRtSurfaceTransactionApplier.$r8$lambda$afI4fXg3U3-nBZQEDQMiNy-B06s:0
+I/VRI[MainActivity]@ab56323(26856): mWNT: t=0xb4000076ec5dd400 mBlastBufferQueue=0xb400007950405c00 fn= 17 HdrRenderState mRenderHdrSdrRatio=1.0 caller= android.view.SyncRtSurfaceTransactionApplier.applyTransaction:96 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0:69 android.view.SyncRtSurfaceTransactionApplier.$r8$lambda$afI4fXg3U3-nBZQEDQMiNy-B06s:0
+I/VRI[MainActivity]@ab56323(26856): mWNT: t=0xb400007888bb6900 mBlastBufferQueue=0xb400007950405c00 fn= 18 HdrRenderState mRenderHdrSdrRatio=1.0 caller= android.view.SyncRtSurfaceTransactionApplier.applyTransaction:96 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0:69 android.view.SyncRtSurfaceTransactionApplier.$r8$lambda$afI4fXg3U3-nBZQEDQMiNy-B06s:0
+I/VRI[MainActivity]@ab56323(26856): mWNT: t=0xb400007888bb8a00 mBlastBufferQueue=0xb400007950405c00 fn= 18 HdrRenderState mRenderHdrSdrRatio=1.0 caller= android.view.SyncRtSurfaceTransactionApplier.applyTransaction:96 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0:69 android.view.SyncRtSurfaceTransactionApplier.$r8$lambda$afI4fXg3U3-nBZQEDQMiNy-B06s:0
+I/VRI[MainActivity]@ab56323(26856): mWNT: t=0xb400007888bb8e80 mBlastBufferQueue=0xb400007950405c00 fn= 19 HdrRenderState mRenderHdrSdrRatio=1.0 caller= android.view.SyncRtSurfaceTransactionApplier.applyTransaction:96 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0:69 android.view.SyncRtSurfaceTransactionApplier.$r8$lambda$afI4fXg3U3-nBZQEDQMiNy-B06s:0
+I/VRI[MainActivity]@ab56323(26856): mWNT: t=0xb4000076ee111f80 mBlastBufferQueue=0xb400007950405c00 fn= 19 HdrRenderState mRenderHdrSdrRatio=1.0 caller= android.view.SyncRtSurfaceTransactionApplier.applyTransaction:96 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0:69 android.view.SyncRtSurfaceTransactionApplier.$r8$lambda$afI4fXg3U3-nBZQEDQMiNy-B06s:0
+I/VRI[MainActivity]@ab56323(26856): mWNT: t=0xb4000076ec5dc980 mBlastBufferQueue=0xb400007950405c00 fn= 20 HdrRenderState mRenderHdrSdrRatio=1.0 caller= android.view.SyncRtSurfaceTransactionApplier.applyTransaction:96 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0:69 android.view.SyncRtSurfaceTransactionApplier.$r8$lambda$afI4fXg3U3-nBZQEDQMiNy-B06s:0
+I/VRI[MainActivity]@ab56323(26856): mWNT: t=0xb4000076eb68e780 mBlastBufferQueue=0xb400007950405c00 fn= 20 HdrRenderState mRenderHdrSdrRatio=1.0 caller= android.view.SyncRtSurfaceTransactionApplier.applyTransaction:96 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0:69 android.view.SyncRtSurfaceTransactionApplier.$r8$lambda$afI4fXg3U3-nBZQEDQMiNy-B06s:0
+I/VRI[MainActivity]@ab56323(26856): mWNT: t=0xb4000076eb68e900 mBlastBufferQueue=0xb400007950405c00 fn= 21 HdrRenderState mRenderHdrSdrRatio=1.0 caller= android.view.SyncRtSurfaceTransactionApplier.applyTransaction:96 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0:69 android.view.SyncRtSurfaceTransactionApplier.$r8$lambda$afI4fXg3U3-nBZQEDQMiNy-B06s:0
+I/VRI[MainActivity]@ab56323(26856): mWNT: t=0xb4000076eb68ed80 mBlastBufferQueue=0xb400007950405c00 fn= 21 HdrRenderState mRenderHdrSdrRatio=1.0 caller= android.view.SyncRtSurfaceTransactionApplier.applyTransaction:96 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0:69 android.view.SyncRtSurfaceTransactionApplier.$r8$lambda$afI4fXg3U3-nBZQEDQMiNy-B06s:0
+I/VRI[MainActivity]@ab56323(26856): mWNT: t=0xb4000076eb68f080 mBlastBufferQueue=0xb400007950405c00 fn= 22 HdrRenderState mRenderHdrSdrRatio=1.0 caller= android.view.SyncRtSurfaceTransactionApplier.applyTransaction:96 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0:69 android.view.SyncRtSurfaceTransactionApplier.$r8$lambda$afI4fXg3U3-nBZQEDQMiNy-B06s:0
+I/VRI[MainActivity]@ab56323(26856): mWNT: t=0xb4000076eb68f200 mBlastBufferQueue=0xb400007950405c00 fn= 22 HdrRenderState mRenderHdrSdrRatio=1.0 caller= android.view.SyncRtSurfaceTransactionApplier.applyTransaction:96 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0:69 android.view.SyncRtSurfaceTransactionApplier.$r8$lambda$afI4fXg3U3-nBZQEDQMiNy-B06s:0
+I/VRI[MainActivity]@ab56323(26856): mWNT: t=0xb4000076eb68f380 mBlastBufferQueue=0xb400007950405c00 fn= 23 HdrRenderState mRenderHdrSdrRatio=1.0 caller= android.view.SyncRtSurfaceTransactionApplier.applyTransaction:96 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0:69 android.view.SyncRtSurfaceTransactionApplier.$r8$lambda$afI4fXg3U3-nBZQEDQMiNy-B06s:0
+I/VRI[MainActivity]@ab56323(26856): mWNT: t=0xb400007888bb8400 mBlastBufferQueue=0xb400007950405c00 fn= 23 HdrRenderState mRenderHdrSdrRatio=1.0 caller= android.view.SyncRtSurfaceTransactionApplier.applyTransaction:96 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0:69 android.view.SyncRtSurfaceTransactionApplier.$r8$lambda$afI4fXg3U3-nBZQEDQMiNy-B06s:0
+I/VRI[MainActivity]@ab56323(26856): mWNT: t=0xb400007888bb8700 mBlastBufferQueue=0xb400007950405c00 fn= 24 HdrRenderState mRenderHdrSdrRatio=1.0 caller= android.view.SyncRtSurfaceTransactionApplier.applyTransaction:96 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0:69 android.view.SyncRtSurfaceTransactionApplier.$r8$lambda$afI4fXg3U3-nBZQEDQMiNy-B06s:0
+I/VRI[MainActivity]@ab56323(26856): mWNT: t=0xb400007888bb8880 mBlastBufferQueue=0xb400007950405c00 fn= 24 HdrRenderState mRenderHdrSdrRatio=1.0 caller= android.view.SyncRtSurfaceTransactionApplier.applyTransaction:96 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0:69 android.view.SyncRtSurfaceTransactionApplier.$r8$lambda$afI4fXg3U3-nBZQEDQMiNy-B06s:0
+I/VRI[MainActivity]@ab56323(26856): mWNT: t=0xb400007888bb8d00 mBlastBufferQueue=0xb400007950405c00 fn= 25 HdrRenderState mRenderHdrSdrRatio=1.0 caller= android.view.SyncRtSurfaceTransactionApplier.applyTransaction:96 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0:69 android.view.SyncRtSurfaceTransactionApplier.$r8$lambda$afI4fXg3U3-nBZQEDQMiNy-B06s:0
+I/VRI[MainActivity]@ab56323(26856): mWNT: t=0xb4000076ec5dcb00 mBlastBufferQueue=0xb400007950405c00 fn= 25 HdrRenderState mRenderHdrSdrRatio=1.0 caller= android.view.SyncRtSurfaceTransactionApplier.applyTransaction:96 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0:69 android.view.SyncRtSurfaceTransactionApplier.$r8$lambda$afI4fXg3U3-nBZQEDQMiNy-B06s:0
+I/VRI[MainActivity]@ab56323(26856): mWNT: t=0xb4000076ec5dcf80 mBlastBufferQueue=0xb400007950405c00 fn= 26 HdrRenderState mRenderHdrSdrRatio=1.0 caller= android.view.SyncRtSurfaceTransactionApplier.applyTransaction:96 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0:69 android.view.SyncRtSurfaceTransactionApplier.$r8$lambda$afI4fXg3U3-nBZQEDQMiNy-B06s:0
+I/VRI[MainActivity]@ab56323(26856): mWNT: t=0xb400007888bb6000 mBlastBufferQueue=0xb400007950405c00 fn= 26 HdrRenderState mRenderHdrSdrRatio=1.0 caller= android.view.SyncRtSurfaceTransactionApplier.applyTransaction:96 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0:69 android.view.SyncRtSurfaceTransactionApplier.$r8$lambda$afI4fXg3U3-nBZQEDQMiNy-B06s:0
+I/InsetsController(26856): cancelAnimation: types=ime, animType=1, host=com.example.sudan/com.example.sudan.MainActivity, from=android.view.InsetsController.notifyFinished:1890 android.view.InsetsAnimationControlImpl.applyChangeInsets:307 android.view.InsetsController.lambda$new$3:932
+I/ImeTracker(26856): com.example.sudan:44a4db5c: onRequestHide at ORIGIN_CLIENT reason HIDE_SOFT_INPUT_ON_ANIMATION_STATE_CHANGED fromUser false
+I/InputMethodManager_LC(26856): notifyImeHidden: IInputMethodManagerGlobalInvoker.hideSoftInput
+I/ImeTracker(26856): com.samsung.android.honeyboard:a5255347: onHidden
+I/VRI[MainActivity]@ab56323(26856): mWNT: t=0xb400007888bb6180 mBlastBufferQueue=0xb400007950405c00 fn= 27 HdrRenderState mRenderHdrSdrRatio=1.0 caller= android.view.SyncRtSurfaceTransactionApplier.applyTransaction:96 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0:69 android.view.SyncRtSurfaceTransactionApplier.$r8$lambda$afI4fXg3U3-nBZQEDQMiNy-B06s:0
+I/VRI[MainActivity]@ab56323(26856): mWNT: t=0xb400007888bb6780 mBlastBufferQueue=0xb400007950405c00 fn= 27 HdrRenderState mRenderHdrSdrRatio=1.0 caller= android.view.SyncRtSurfaceTransactionApplier.applyTransaction:96 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0:69 android.view.SyncRtSurfaceTransactionApplier.$r8$lambda$afI4fXg3U3-nBZQEDQMiNy-B06s:0
+I/InsetsController(26856): onStateChanged: host=com.example.sudan/com.example.sudan.MainActivity, from=android.view.ViewRootImpl.handleResized:2789, state=InsetsState: {mDisplayFrame=Rect(0, 0 - 1340, 800), mDisplayCutout=DisplayCutout{insets=Rect(0, 0 - 0, 0) waterfall=Insets{left=0, top=0, right=0, bottom=0} boundingRect={Bounds=[Rect(0, 0 - 0, 0), Rect(0, 0 - 0, 0), Rect(0, 0 - 0, 0), Rect(0, 0 - 0, 0)]} cutoutPathParserInfo={CutoutPathParserInfo{displayWidth=0 displayHeight=0 physicalDisplayWidth=0 physicalDisplayHeight=0 density={0.0} cutoutSpec={} rotation={0} scale={0.0} physicalPixelDisplaySizeRatio={0.0}}} sideOverrides=null}, mRoundedCorners=RoundedCorners{[RoundedCorner{position=TopLeft, radius=9, center=Point(9, 9)}, RoundedCorner{position=TopRight, radius=9, center=Point(1331, 9)}, RoundedCorner{position=BottomRight, radius=9, center=Point(1331, 791)}, RoundedCorner{position=BottomLeft, radius=9, center=Point(9, 791)}]}  mRoundedCornerFrame=Rect(0, 0 - 1340, 800), mPrivacyIndicatorBounds=PrivacyIndicatorBounds {static bounds=Rect(1282, 0 - 1340, 32) rotation=1}, mDisplayShape=DisplayShape{ spec=-311912193 displayWidth=800 displayHeight=1340 physicalPixelDisplaySizeRatio=1.0 rotation=1 offsetX=0 offsetY=0 scale=1.0}, mSources= { InsetsSource: {a98a0000 mType=statusBars mFrame=[0,0][1340,32] mVisible=false mFlags= mSideHint=TOP mBoundingRects=null}, InsetsSource: {a98a0005 mType=mandatorySystemGestures mFrame=[0,0][1340,32] mVisible=true mFlags= mSideHint=TOP mBoundingRects=null}, InsetsSource: {a98a0006 mType=tappableElement mFrame=[0,0][1340,32] mVisible=true mFlags= mSideHint=TOP mBoundingRects=null}, InsetsSource: {3 mType=ime mFrame=[0,0][0,0] mVisible=false mFlags= mSideHint=NONE mBoundingRects=null}, InsetsSource: {70270001 mType=navigationBars mFrame=[0,736][1340,800] mVisible=false mFlags= mSideHint=BOTTOM mBoundingRects=null}, InsetsSource: {70270004 mType=systemGestures mFrame=[0,0][0,0] mVisible=true mFlags= mSideHint=NONE mBoundingRects=null}, InsetsSource: {70270005 mType=mandatorySystemGestures mFrame=[0,736][1340,800] mVisible=true mFlags= mSideHint=BOTTOM mBoundingRects=null}, InsetsSource: {70270006 mType=tappableElement mFrame=[0,736][1340,800] mVisible=true mFlags= mSideHint=BOTTOM mBoundingRects=null}, InsetsSource: {70270024 mType=systemGestures mFrame=[0,0][0,0] mVisible=true mFlags= mSideHint=NONE mBoundingRects=null} }
+I/VRI[MainActivity]@ab56323(26856): handleResized, frames=ClientWindowFrames{frame=[0,0][1340,800] display=[0,0][1340,800] parentFrame=[0,0][0,0]} displayId=0 dragResizing=false compatScale=1.0 frameChanged=false attachedFrameChanged=false configChanged=false displayChanged=false compatScaleChanged=false dragResizingChanged=false
+I/VRI[MainActivity]@ab56323(26856): mWNT: t=0xb400007888bb6900 mBlastBufferQueue=0xb400007950405c00 fn= 28 HdrRenderState mRenderHdrSdrRatio=1.0 caller= android.view.SyncRtSurfaceTransactionApplier.applyTransaction:96 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0:69 android.view.SyncRtSurfaceTransactionApplier.$r8$lambda$afI4fXg3U3-nBZQEDQMiNy-B06s:0
+I/VRI[MainActivity]@ab56323(26856): mWNT: t=0xb400007888bb8e80 mBlastBufferQueue=0xb400007950405c00 fn= 29 HdrRenderState mRenderHdrSdrRatio=1.0 caller= android.view.SyncRtSurfaceTransactionApplier.applyTransaction:96 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0:69 android.view.SyncRtSurfaceTransactionApplier.$r8$lambda$afI4fXg3U3-nBZQEDQMiNy-B06s:0
+I/InsetsController(26856): cancelAnimation: types=navigationBars, animType=1, host=com.example.sudan/com.example.sudan.MainActivity, from=android.view.InsetsController.notifyFinished:1890 android.view.InsetsAnimationControlImpl.applyChangeInsets:307 android.view.InsetsController.lambda$new$3:932
+I/VRI[MainActivity]@ab56323(26856): mWNT: t=0xb400007888bb6480 mBlastBufferQueue=0xb400007950405c00 fn= 30 HdrRenderState mRenderHdrSdrRatio=1.0 caller= android.view.SyncRtSurfaceTransactionApplier.applyTransaction:96 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0:69 android.view.SyncRtSurfaceTransactionApplier.$r8$lambda$afI4fXg3U3-nBZQEDQMiNy-B06s:0
+I/VRI[MainActivity]@ab56323(26856): call setFrameRateCategory for touch hint category=no preference, reason=boost timeout, vri=VRI[MainActivity]@ab56323
+I/VRI[MainActivity]@ab56323(26856): call setFrameRateCategory for touch hint category=high hint, reason=touch, vri=VRI[MainActivity]@ab56323
+I/ImeTracker(26856): com.example.sudan:3bfcf24a: onRequestHide at ORIGIN_CLIENT reason HIDE_SOFT_INPUT fromUser false
+I/InputMethodManager_LC(26856): hsifw() - flag : 0
+I/InputMethodManager_LC(26856): hsifw() - mService.hideSoftInput
+I/flutter (26856): 🟡 [ROOM_VM] loadRooms called with floorId: null
+I/flutter (26856): 🟢 [SCENARIO_VM] loadScenarios called
+I/flutter (26856): 🟡 [SCENARIO_REPO] getAllScenarios called
+I/flutter (26856): 🟠 [SCENARIO_DS] getCachedScenarios called
+I/flutter (26856): 🟠 [SCENARIO_DS] Found cached scenarios JSON (length: 3015)
+I/flutter (26856): 🟠 [SCENARIO_DS] Parsed 4 scenarios from cache
+I/flutter (26856):    - Good Morning (ID: scenario_good_morning, RoomId: null)
+I/flutter (26856):    - Movie Night (ID: scenario_movie_night, RoomId: null)
+I/flutter (26856):    - Sleep (ID: scenario_sleep, RoomId: null)
+I/flutter (26856):    - Away (ID: scenario_away, RoomId: null)
+I/flutter (26856): 🟡 [ROOM_VM] loadRooms called with floorId: floor_1764507306527
+I/flutter (26856): 🟡 [ROOM_VM] Loaded 4 total rooms
+I/flutter (26856):    - Living Room (ID: room_living, FloorId: floor_1)
+I/flutter (26856):    - Bed Room (ID: room_bedroom, FloorId: floor_2)
+I/flutter (26856):    - Kitchen (ID: room_kitchen, FloorId: floor_1)
+I/flutter (26856):    - Bathroom (ID: room_bathroom, FloorId: floor_1)
+I/flutter (26856): 🟡 [ROOM_VM] No floorId provided, showing only rooms without floor (0 rooms)
+I/flutter (26856): 🟡 [ROOM_VM] Final state:
+I/flutter (26856):    - Total rooms: 4
+I/flutter (26856):    - Filtered rooms: 0
+I/flutter (26856):    - Selected room: null (null)
+I/flutter (26856): 🟡 [SCENARIO_REPO] Retrieved 4 scenarios from cache
+I/flutter (26856):    - Good Morning (ID: scenario_good_morning, RoomId: null)
+I/flutter (26856):    - Movie Night (ID: scenario_movie_night, RoomId: null)
+I/flutter (26856):    - Sleep (ID: scenario_sleep, RoomId: null)
+I/flutter (26856):    - Away (ID: scenario_away, RoomId: null)
+I/flutter (26856): 🟢 [SCENARIO_VM] Loaded 4 scenarios
+I/flutter (26856):    - Good Morning (ID: scenario_good_morning, RoomId: null)
+I/flutter (26856):    - Movie Night (ID: scenario_movie_night, RoomId: null)
+I/flutter (26856):    - Sleep (ID: scenario_sleep, RoomId: null)
+I/flutter (26856):    - Away (ID: scenario_away, RoomId: null)
+I/flutter (26856): 🟡 [ROOM_VM] Loaded 4 total rooms
+I/flutter (26856):    - Living Room (ID: room_living, FloorId: floor_1)
+I/flutter (26856):    - Bed Room (ID: room_bedroom, FloorId: floor_2)
+I/flutter (26856):    - Kitchen (ID: room_kitchen, FloorId: floor_1)
+I/flutter (26856):    - Bathroom (ID: room_bathroom, FloorId: floor_1)
+I/flutter (26856): 🟡 [ROOM_VM] Filtering rooms for floor: floor_1764507306527
+I/flutter (26856): 🟡 [ROOM_VM] Filtered 0 rooms for floor floor_1764507306527
+I/flutter (26856): 🟡 [ROOM_VM] Final state:
+I/flutter (26856):    - Total rooms: 4
+I/flutter (26856):    - Filtered rooms: 0
+I/flutter (26856):    - Selected room: null (null)
+I/flutter (26856): 🔵 [DASHBOARD_VM] loadDashboard called with roomId: floor_floor_1764507306527_empty
+I/flutter (26856): 🔵 [DASHBOARD_VM] Loaded 0 cards
+I/flutter (26856): 🔵 [DASHBOARD_VM] Loaded layout
+I/flutter (26856): 🔵 [DASHBOARD_VM] Normalized layout
+I/flutter (26856): 🔵 [DASHBOARD_VM] Syncing cards with devices for room: floor_floor_1764507306527_empty
+I/flutter (26856): 🔵 [DASHBOARD_VM] syncCardsWithDevices called for room: floor_floor_1764507306527_empty
+I/flutter (26856): 🔵 [DASHBOARD_VM] Current cards before sync: 0
+I/flutter (26856): 🔵 [DASHBOARD_VM] Found 0 devices in room
+I/flutter (26856): 🔵 [DASHBOARD_VM] Checking scenarios for room: floor_floor_1764507306527_empty
+I/flutter (26856): 🟡 [SCENARIO_REPO] getAllScenarios called
+I/flutter (26856): 🟠 [SCENARIO_DS] getCachedScenarios called
+I/flutter (26856): 🟠 [SCENARIO_DS] Found cached scenarios JSON (length: 3015)
+I/flutter (26856): 🟠 [SCENARIO_DS] Parsed 4 scenarios from cache
+I/flutter (26856):    - Good Morning (ID: scenario_good_morning, RoomId: null)
+I/flutter (26856):    - Movie Night (ID: scenario_movie_night, RoomId: null)
+I/flutter (26856):    - Sleep (ID: scenario_sleep, RoomId: null)
+I/flutter (26856):    - Away (ID: scenario_away, RoomId: null)
+I/flutter (26856): 🟡 [SCENARIO_REPO] Retrieved 4 scenarios from cache
+I/flutter (26856):    - Good Morning (ID: scenario_good_morning, RoomId: null)
+I/flutter (26856):    - Movie Night (ID: scenario_movie_night, RoomId: null)
+I/flutter (26856):    - Sleep (ID: scenario_sleep, RoomId: null)
+I/flutter (26856):    - Away (ID: scenario_away, RoomId: null)
+I/flutter (26856): 🔵 [DASHBOARD_VM] Total scenarios: 4
+I/flutter (26856):    - Good Morning (RoomId: null)
+I/flutter (26856):    - Movie Night (RoomId: null)
+I/flutter (26856):    - Sleep (RoomId: null)
+I/flutter (26856):    - Away (RoomId: null)
+I/flutter (26856): 🔵 [DASHBOARD_VM] Scenarios for room floor_floor_1764507306527_empty: 0
+I/flutter (26856): 🔵 [DASHBOARD_VM] No scenarios for this room, not adding scenarios section
+W/WindowOnBackDispatcher(26856): OnBackInvokedCallback is not enabled for the application.
+W/WindowOnBackDispatcher(26856): Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.
+I/flutter (26856): 🔵 [DASHBOARD_VM] Final cards after sync: 0
+I/flutter (26856): 🔵 [DASHBOARD_VM] Notified listeners after sync
+I/flutter (26856): 🔵 [DASHBOARD_VM] Cards synced. Final count: 0
+I/flutter (26856): 🔵 [DASHBOARD_VM] Dashboard loaded and listeners notified
+W/WindowOnBackDispatcher(26856): OnBackInvokedCallback is not enabled for the application.
+W/WindowOnBackDispatcher(26856): Set 'android:enableOnBackInvokedCallback="true"' in the application manifest.
+D/InputMethodManagerUtils(26856): startInputInner - Id : 0
+I/InputMethodManager(26856): startInputInner - IInputMethodManagerGlobalInvoker.startInputOrWindowGainedFocus
+I/InputMethodManager_LC(26856): showSoftInput(View,I)
+D/InputTransport(26856): Input channel constructed: 'ClientS', fd=191
+I/ImeTracker(26856): com.example.sudan:f8992cac: onRequestShow at ORIGIN_CLIENT reason SHOW_SOFT_INPUT fromUser false
+I/InputMethodManager_LC(26856): ssi(): flags=0 view=com.example.sudan reason=SHOW_SOFT_INPUT
+I/InputMethodManager_LC(26856): ssi() view is not EditText
+D/InputMethodManager(26856): showSoftInput() view=io.flutter.embedding.android.FlutterView{42f3312 VFE...... .F...... 0,0-1340,800 #1 aid=1073741824} flags=0 reason=SHOW_SOFT_INPUT
+I/InputMethodManager_LC(26856): showSoftInput(View,I)
+I/ImeTracker(26856): com.example.sudan:d24e3d49: onRequestShow at ORIGIN_CLIENT reason SHOW_SOFT_INPUT fromUser false
+I/InputMethodManager_LC(26856): ssi(): flags=0 view=com.example.sudan reason=SHOW_SOFT_INPUT
+I/InputMethodManager_LC(26856): ssi() view is not EditText
+D/InputMethodManager(26856): showSoftInput() view=io.flutter.embedding.android.FlutterView{42f3312 VFE...... .F...... 0,0-1340,800 #1 aid=1073741824} flags=0 reason=SHOW_SOFT_INPUT
+D/InputConnectionAdaptor(26856): The input method toggled cursor monitoring on
+I/InsetsController(26856): onStateChanged: host=com.example.sudan/com.example.sudan.MainActivity, from=android.view.ViewRootImpl.handleResized:2789, state=InsetsState: {mDisplayFrame=Rect(0, 0 - 1340, 800), mDisplayCutout=DisplayCutout{insets=Rect(0, 0 - 0, 0) waterfall=Insets{left=0, top=0, right=0, bottom=0} boundingRect={Bounds=[Rect(0, 0 - 0, 0), Rect(0, 0 - 0, 0), Rect(0, 0 - 0, 0), Rect(0, 0 - 0, 0)]} cutoutPathParserInfo={CutoutPathParserInfo{displayWidth=0 displayHeight=0 physicalDisplayWidth=0 physicalDisplayHeight=0 density={0.0} cutoutSpec={} rotation={0} scale={0.0} physicalPixelDisplaySizeRatio={0.0}}} sideOverrides=null}, mRoundedCorners=RoundedCorners{[RoundedCorner{position=TopLeft, radius=9, center=Point(9, 9)}, RoundedCorner{position=TopRight, radius=9, center=Point(1331, 9)}, RoundedCorner{position=BottomRight, radius=9, center=Point(1331, 791)}, RoundedCorner{position=BottomLeft, radius=9, center=Point(9, 791)}]}  mRoundedCornerFrame=Rect(0, 0 - 1340, 800), mPrivacyIndicatorBounds=PrivacyIndicatorBounds {static bounds=Rect(1282, 0 - 1340, 32) rotation=1}, mDisplayShape=DisplayShape{ spec=-311912193 displayWidth=800 displayHeight=1340 physicalPixelDisplaySizeRatio=1.0 rotation=1 offsetX=0 offsetY=0 scale=1.0}, mSources= { InsetsSource: {a98a0000 mType=statusBars mFrame=[0,0][1340,32] mVisible=false mFlags= mSideHint=TOP mBoundingRects=null}, InsetsSource: {a98a0005 mType=mandatorySystemGestures mFrame=[0,0][1340,32] mVisible=true mFlags= mSideHint=TOP mBoundingRects=null}, InsetsSource: {a98a0006 mType=tappableElement mFrame=[0,0][1340,32] mVisible=true mFlags= mSideHint=TOP mBoundingRects=null}, InsetsSource: {3 mType=ime mFrame=[0,398][1340,800] mVisible=false mFlags= mSideHint=BOTTOM mBoundingRects=null}, InsetsSource: {70270001 mType=navigationBars mFrame=[0,736][1340,800] mVisible=false mFlags= mSideHint=BOTTOM mBoundingRects=null}, InsetsSource: {70270004 mType=systemGestures mFrame=[0,0][0,0] mVisible=true mFlags= mSideHint=NONE mBoundingRects=null}, InsetsSource: {70270005 mType=mandatorySystemGestures mFrame=[0,736][1340,800] mVisible=true mFlags= mSideHint=BOTTOM mBoundingRects=null}, InsetsSource: {70270006 mType=tappableElement mFrame=[0,736][1340,800] mVisible=true mFlags= mSideHint=BOTTOM mBoundingRects=null}, InsetsSource: {70270024 mType=systemGestures mFrame=[0,0][0,0] mVisible=true mFlags= mSideHint=NONE mBoundingRects=null} }
+I/VRI[MainActivity]@ab56323(26856): handleResized, frames=ClientWindowFrames{frame=[0,0][1340,800] display=[0,0][1340,800] parentFrame=[0,0][0,0]} displayId=0 dragResizing=false compatScale=1.0 frameChanged=false attachedFrameChanged=false configChanged=false displayChanged=false compatScaleChanged=false dragResizingChanged=false
+D/InsetsController(26856): show(ime(), fromIme=true)
+I/InsetsController(26856): setRequestedVisibleTypes: visible=true, mask=ime, host=com.example.sudan/com.example.sudan.MainActivity, from=android.view.InsetsController.controlAnimationUnchecked:1498 android.view.InsetsController.applyAnimation:2228 android.view.InsetsController.applyAnimation:2159 android.view.InsetsController.show:1340 android.view.ViewRootImpl$ViewRootHandler.handleMessageImpl:8056 android.view.ViewRootImpl$ViewRootHandler.handleMessage:7991 android.os.Handler.dispatchMessage:107 android.os.Looper.loopOnce:257 android.os.Looper.loop:342 android.app.ActivityThread.main:9634
+I/InsetsController(26856): controlAnimationUncheckedInner: Added types=ime, animType=0, host=com.example.sudan/com.example.sudan.MainActivity, from=android.view.InsetsController.controlAnimationUnchecked:1502 android.view.InsetsController.applyAnimation:2228 android.view.InsetsController.applyAnimation:2159
+I/VRI[MainActivity]@ab56323(26856): mWNT: t=0xb4000076ec5ddd00 mBlastBufferQueue=0xb400007950405c00 fn= 31 HdrRenderState mRenderHdrSdrRatio=1.0 caller= android.view.SyncRtSurfaceTransactionApplier.applyTransaction:96 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0:69 android.view.SyncRtSurfaceTransactionApplier.$r8$lambda$afI4fXg3U3-nBZQEDQMiNy-B06s:0
+I/InsetsController(26856): onStateChanged: host=com.example.sudan/com.example.sudan.MainActivity, from=android.view.ViewRootImpl.handleResized:2789, state=InsetsState: {mDisplayFrame=Rect(0, 0 - 1340, 800), mDisplayCutout=DisplayCutout{insets=Rect(0, 0 - 0, 0) waterfall=Insets{left=0, top=0, right=0, bottom=0} boundingRect={Bounds=[Rect(0, 0 - 0, 0), Rect(0, 0 - 0, 0), Rect(0, 0 - 0, 0), Rect(0, 0 - 0, 0)]} cutoutPathParserInfo={CutoutPathParserInfo{displayWidth=0 displayHeight=0 physicalDisplayWidth=0 physicalDisplayHeight=0 density={0.0} cutoutSpec={} rotation={0} scale={0.0} physicalPixelDisplaySizeRatio={0.0}}} sideOverrides=null}, mRoundedCorners=RoundedCorners{[RoundedCorner{position=TopLeft, radius=9, center=Point(9, 9)}, RoundedCorner{position=TopRight, radius=9, center=Point(1331, 9)}, RoundedCorner{position=BottomRight, radius=9, center=Point(1331, 791)}, RoundedCorner{position=BottomLeft, radius=9, center=Point(9, 791)}]}  mRoundedCornerFrame=Rect(0, 0 - 1340, 800), mPrivacyIndicatorBounds=PrivacyIndicatorBounds {static bounds=Rect(1282, 0 - 1340, 32) rotation=1}, mDisplayShape=DisplayShape{ spec=-311912193 displayWidth=800 displayHeight=1340 physicalPixelDisplaySizeRatio=1.0 rotation=1 offsetX=0 offsetY=0 scale=1.0}, mSources= { InsetsSource: {a98a0000 mType=statusBars mFrame=[0,0][1340,32] mVisible=false mFlags= mSideHint=TOP mBoundingRects=null}, InsetsSource: {a98a0005 mType=mandatorySystemGestures mFrame=[0,0][1340,32] mVisible=true mFlags= mSideHint=TOP mBoundingRects=null}, InsetsSource: {a98a0006 mType=tappableElement mFrame=[0,0][1340,32] mVisible=true mFlags= mSideHint=TOP mBoundingRects=null}, InsetsSource: {3 mType=ime mFrame=[0,398][1340,800] mVisible=true mFlags= mSideHint=BOTTOM mBoundingRects=null}, InsetsSource: {70270001 mType=navigationBars mFrame=[0,736][1340,800] mVisible=false mFlags= mSideHint=BOTTOM mBoundingRects=null}, InsetsSource: {70270004 mType=systemGestures mFrame=[0,0][0,0] mVisible=true mFlags= mSideHint=NONE mBoundingRects=null}, InsetsSource: {70270005 mType=mandatorySystemGestures mFrame=[0,736][1340,800] mVisible=true mFlags= mSideHint=BOTTOM mBoundingRects=null}, InsetsSource: {70270006 mType=tappableElement mFrame=[0,736][1340,800] mVisible=true mFlags= mSideHint=BOTTOM mBoundingRects=null}, InsetsSource: {70270024 mType=systemGestures mFrame=[0,0][0,0] mVisible=true mFlags= mSideHint=NONE mBoundingRects=null} }
+I/VRI[MainActivity]@ab56323(26856): handleResized, frames=ClientWindowFrames{frame=[0,0][1340,800] display=[0,0][1340,800] parentFrame=[0,0][0,0]} displayId=0 dragResizing=false compatScale=1.0 frameChanged=false attachedFrameChanged=false configChanged=false displayChanged=false compatScaleChanged=false dragResizingChanged=false
+D/InputConnectionAdaptor(26856): The input method toggled text monitoring on
+I/VRI[MainActivity]@ab56323(26856): mWNT: t=0xb4000076eb68e300 mBlastBufferQueue=0xb400007950405c00 fn= 32 HdrRenderState mRenderHdrSdrRatio=1.0 caller= android.view.SyncRtSurfaceTransactionApplier.applyTransaction:96 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0:69 android.view.SyncRtSurfaceTransactionApplier.$r8$lambda$afI4fXg3U3-nBZQEDQMiNy-B06s:0
+I/InsetsController(26856): onStateChanged: host=com.example.sudan/com.example.sudan.MainActivity, from=android.view.ViewRootImpl.handleResized:2789, state=InsetsState: {mDisplayFrame=Rect(0, 0 - 1340, 800), mDisplayCutout=DisplayCutout{insets=Rect(0, 0 - 0, 0) waterfall=Insets{left=0, top=0, right=0, bottom=0} boundingRect={Bounds=[Rect(0, 0 - 0, 0), Rect(0, 0 - 0, 0), Rect(0, 0 - 0, 0), Rect(0, 0 - 0, 0)]} cutoutPathParserInfo={CutoutPathParserInfo{displayWidth=0 displayHeight=0 physicalDisplayWidth=0 physicalDisplayHeight=0 density={0.0} cutoutSpec={} rotation={0} scale={0.0} physicalPixelDisplaySizeRatio={0.0}}} sideOverrides=null}, mRoundedCorners=RoundedCorners{[RoundedCorner{position=TopLeft, radius=9, center=Point(9, 9)}, RoundedCorner{position=TopRight, radius=9, center=Point(1331, 9)}, RoundedCorner{position=BottomRight, radius=9, center=Point(1331, 791)}, RoundedCorner{position=BottomLeft, radius=9, center=Point(9, 791)}]}  mRoundedCornerFrame=Rect(0, 0 - 1340, 800), mPrivacyIndicatorBounds=PrivacyIndicatorBounds {static bounds=Rect(1282, 0 - 1340, 32) rotation=1}, mDisplayShape=DisplayShape{ spec=-311912193 displayWidth=800 displayHeight=1340 physicalPixelDisplaySizeRatio=1.0 rotation=1 offsetX=0 offsetY=0 scale=1.0}, mSources= { InsetsSource: {a98a0000 mType=statusBars mFrame=[0,0][1340,32] mVisible=false mFlags= mSideHint=TOP mBoundingRects=null}, InsetsSource: {a98a0005 mType=mandatorySystemGestures mFrame=[0,0][1340,32] mVisible=true mFlags= mSideHint=TOP mBoundingRects=null}, InsetsSource: {a98a0006 mType=tappableElement mFrame=[0,0][1340,32] mVisible=true mFlags= mSideHint=TOP mBoundingRects=null}, InsetsSource: {3 mType=ime mFrame=[0,398][1340,800] mVisible=true mFlags= mSideHint=BOTTOM mBoundingRects=null}, InsetsSource: {70270001 mType=navigationBars mFrame=[0,736][1340,800] mVisible=true mFlags= mSideHint=BOTTOM mBoundingRects=null}, InsetsSource: {70270004 mType=systemGestures mFrame=[0,0][0,0] mVisible=true mFlags= mSideHint=NONE mBoundingRects=null}, InsetsSource: {70270005 mType=mandatorySystemGestures mFrame=[0,736][1340,800] mVisible=true mFlags= mSideHint=BOTTOM mBoundingRects=null}, InsetsSource: {70270006 mType=tappableElement mFrame=[0,736][1340,800] mVisible=true mFlags= mSideHint=BOTTOM mBoundingRects=null}, InsetsSource: {70270024 mType=systemGestures mFrame=[0,0][0,0] mVisible=true mFlags= mSideHint=NONE mBoundingRects=null} }
+I/VRI[MainActivity]@ab56323(26856): handleResized, frames=ClientWindowFrames{frame=[0,0][1340,800] display=[0,0][1340,800] parentFrame=[0,0][0,0]} displayId=0 dragResizing=false compatScale=1.0 frameChanged=false attachedFrameChanged=false configChanged=false displayChanged=false compatScaleChanged=false dragResizingChanged=false
+D/InsetsController(26856): show(ime(), fromIme=true)
+I/ImeTracker(26856): com.example.sudan:d24e3d49: onCancelled at PHASE_CLIENT_APPLY_ANIMATION
+I/VRI[MainActivity]@ab56323(26856): mWNT: t=0xb4000076eb68e480 mBlastBufferQueue=0xb400007950405c00 fn= 33 HdrRenderState mRenderHdrSdrRatio=1.0 caller= android.view.SyncRtSurfaceTransactionApplier.applyTransaction:96 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0:69 android.view.SyncRtSurfaceTransactionApplier.$r8$lambda$afI4fXg3U3-nBZQEDQMiNy-B06s:0
+I/VRI[MainActivity]@ab56323(26856): mWNT: t=0xb4000076eb68e780 mBlastBufferQueue=0xb400007950405c00 fn= 34 HdrRenderState mRenderHdrSdrRatio=1.0 caller= android.view.SyncRtSurfaceTransactionApplier.applyTransaction:96 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0:69 android.view.SyncRtSurfaceTransactionApplier.$r8$lambda$afI4fXg3U3-nBZQEDQMiNy-B06s:0
+I/VRI[MainActivity]@ab56323(26856): mWNT: t=0xb4000078889ec680 mBlastBufferQueue=0xb400007950405c00 fn= 35 HdrRenderState mRenderHdrSdrRatio=1.0 caller= android.view.SyncRtSurfaceTransactionApplier.applyTransaction:96 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0:69 android.view.SyncRtSurfaceTransactionApplier.$r8$lambda$afI4fXg3U3-nBZQEDQMiNy-B06s:0
+I/VRI[MainActivity]@ab56323(26856): mWNT: t=0xb400007888bb6300 mBlastBufferQueue=0xb400007950405c00 fn= 36 HdrRenderState mRenderHdrSdrRatio=1.0 caller= android.view.SyncRtSurfaceTransactionApplier.applyTransaction:96 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0:69 android.view.SyncRtSurfaceTransactionApplier.$r8$lambda$afI4fXg3U3-nBZQEDQMiNy-B06s:0
+I/VRI[MainActivity]@ab56323(26856): mWNT: t=0xb400007888bb7380 mBlastBufferQueue=0xb400007950405c00 fn= 37 HdrRenderState mRenderHdrSdrRatio=1.0 caller= android.view.SyncRtSurfaceTransactionApplier.applyTransaction:96 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0:69 android.view.SyncRtSurfaceTransactionApplier.$r8$lambda$afI4fXg3U3-nBZQEDQMiNy-B06s:0
+I/VRI[MainActivity]@ab56323(26856): mWNT: t=0xb400007888bb7500 mBlastBufferQueue=0xb400007950405c00 fn= 38 HdrRenderState mRenderHdrSdrRatio=1.0 caller= android.view.SyncRtSurfaceTransactionApplier.applyTransaction:96 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0:69 android.view.SyncRtSurfaceTransactionApplier.$r8$lambda$afI4fXg3U3-nBZQEDQMiNy-B06s:0
+I/VRI[MainActivity]@ab56323(26856): mWNT: t=0xb400007888bb8400 mBlastBufferQueue=0xb400007950405c00 fn= 39 HdrRenderState mRenderHdrSdrRatio=1.0 caller= android.view.SyncRtSurfaceTransactionApplier.applyTransaction:96 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0:69 android.view.SyncRtSurfaceTransactionApplier.$r8$lambda$afI4fXg3U3-nBZQEDQMiNy-B06s:0
+I/InsetsController(26856): cancelAnimation: types=ime, animType=0, host=com.example.sudan/com.example.sudan.MainActivity, from=android.view.InsetsController.notifyFinished:1890 android.view.InsetsAnimationControlImpl.applyChangeInsets:307 android.view.InsetsController.lambda$new$3:932
+I/ImeTracker(26856): com.example.sudan:f8992cac: onShown
+I/VRI[MainActivity]@ab56323(26856): mWNT: t=0xb400007888bb8700 mBlastBufferQueue=0xb400007950405c00 fn= 40 HdrRenderState mRenderHdrSdrRatio=1.0 caller= android.view.SyncRtSurfaceTransactionApplier.applyTransaction:96 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0:69 android.view.SyncRtSurfaceTransactionApplier.$r8$lambda$afI4fXg3U3-nBZQEDQMiNy-B06s:0
+D/InputTransport(26856): Input channel destroyed: 'ClientS', fd=177
+D/InputTransport(26856): Input channel destroyed: 'ClientS', fd=191
+I/VRI[MainActivity]@ab56323(26856): The input has been finished in ImeInputStage.
+I/VRI[MainActivity]@ab56323(26856): The input has been finished in ImeInputStage.
+D/InputConnectionAdaptor(26856): The input method toggled cursor monitoring off
+D/InsetsController(26856): hide(ime(), fromIme=true)
+I/InsetsController(26856): setRequestedVisibleTypes: visible=false, mask=ime, host=com.example.sudan/com.example.sudan.MainActivity, from=android.view.InsetsController.controlAnimationUnchecked:1498 android.view.InsetsController.applyAnimation:2228 android.view.InsetsController.applyAnimation:2159 android.view.InsetsController.hide:1452 android.view.ViewRootImpl$ViewRootHandler.handleMessageImpl:8063 android.view.ViewRootImpl$ViewRootHandler.handleMessage:7991 android.os.Handler.dispatchMessage:107 android.os.Looper.loopOnce:257 android.os.Looper.loop:342 android.app.ActivityThread.main:9634
+I/InsetsController(26856): controlAnimationUncheckedInner: Added types=ime, animType=1, host=com.example.sudan/com.example.sudan.MainActivity, from=android.view.InsetsController.controlAnimationUnchecked:1502 android.view.InsetsController.applyAnimation:2228 android.view.InsetsController.applyAnimation:2159
+I/VRI[MainActivity]@ab56323(26856): mWNT: t=0xb400007888bb8880 mBlastBufferQueue=0xb400007950405c00 fn= 41 HdrRenderState mRenderHdrSdrRatio=1.0 caller= android.view.SyncRtSurfaceTransactionApplier.applyTransaction:96 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0:69 android.view.SyncRtSurfaceTransactionApplier.$r8$lambda$afI4fXg3U3-nBZQEDQMiNy-B06s:0
+I/InsetsController(26856): onStateChanged: host=com.example.sudan/com.example.sudan.MainActivity, from=android.view.ViewRootImpl.handleResized:2789, state=InsetsState: {mDisplayFrame=Rect(0, 0 - 1340, 800), mDisplayCutout=DisplayCutout{insets=Rect(0, 0 - 0, 0) waterfall=Insets{left=0, top=0, right=0, bottom=0} boundingRect={Bounds=[Rect(0, 0 - 0, 0), Rect(0, 0 - 0, 0), Rect(0, 0 - 0, 0), Rect(0, 0 - 0, 0)]} cutoutPathParserInfo={CutoutPathParserInfo{displayWidth=0 displayHeight=0 physicalDisplayWidth=0 physicalDisplayHeight=0 density={0.0} cutoutSpec={} rotation={0} scale={0.0} physicalPixelDisplaySizeRatio={0.0}}} sideOverrides=null}, mRoundedCorners=RoundedCorners{[RoundedCorner{position=TopLeft, radius=9, center=Point(9, 9)}, RoundedCorner{position=TopRight, radius=9, center=Point(1331, 9)}, RoundedCorner{position=BottomRight, radius=9, center=Point(1331, 791)}, RoundedCorner{position=BottomLeft, radius=9, center=Point(9, 791)}]}  mRoundedCornerFrame=Rect(0, 0 - 1340, 800), mPrivacyIndicatorBounds=PrivacyIndicatorBounds {static bounds=Rect(1282, 0 - 1340, 32) rotation=1}, mDisplayShape=DisplayShape{ spec=-311912193 displayWidth=800 displayHeight=1340 physicalPixelDisplaySizeRatio=1.0 rotation=1 offsetX=0 offsetY=0 scale=1.0}, mSources= { InsetsSource: {a98a0000 mType=statusBars mFrame=[0,0][1340,32] mVisible=false mFlags= mSideHint=TOP mBoundingRects=null}, InsetsSource: {a98a0005 mType=mandatorySystemGestures mFrame=[0,0][1340,32] mVisible=true mFlags= mSideHint=TOP mBoundingRects=null}, InsetsSource: {a98a0006 mType=tappableElement mFrame=[0,0][1340,32] mVisible=true mFlags= mSideHint=TOP mBoundingRects=null}, InsetsSource: {3 mType=ime mFrame=[0,398][1340,800] mVisible=false mFlags= mSideHint=BOTTOM mBoundingRects=null}, InsetsSource: {70270001 mType=navigationBars mFrame=[0,736][1340,800] mVisible=true mFlags= mSideHint=BOTTOM mBoundingRects=null}, InsetsSource: {70270004 mType=systemGestures mFrame=[0,0][0,0] mVisible=true mFlags= mSideHint=NONE mBoundingRects=null}, InsetsSource: {70270005 mType=mandatorySystemGestures mFrame=[0,736][1340,800] mVisible=true mFlags= mSideHint=BOTTOM mBoundingRects=null}, InsetsSource: {70270006 mType=tappableElement mFrame=[0,736][1340,800] mVisible=true mFlags= mSideHint=BOTTOM mBoundingRects=null}, InsetsSource: {70270024 mType=systemGestures mFrame=[0,0][0,0] mVisible=true mFlags= mSideHint=NONE mBoundingRects=null} }
+I/VRI[MainActivity]@ab56323(26856): handleResized, frames=ClientWindowFrames{frame=[0,0][1340,800] display=[0,0][1340,800] parentFrame=[0,0][0,0]} displayId=0 dragResizing=false compatScale=1.0 frameChanged=false attachedFrameChanged=false configChanged=false displayChanged=false compatScaleChanged=false dragResizingChanged=false
+I/VRI[MainActivity]@ab56323(26856): mWNT: t=0xb400007a0d936300 mBlastBufferQueue=0xb400007950405c00 fn= 42 HdrRenderState mRenderHdrSdrRatio=1.0 caller= android.view.SyncRtSurfaceTransactionApplier.applyTransaction:96 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0:69 android.view.SyncRtSurfaceTransactionApplier.$r8$lambda$afI4fXg3U3-nBZQEDQMiNy-B06s:0
+I/InsetsController(26856): controlAnimationUncheckedInner: Added types=navigationBars, animType=1, host=com.example.sudan/com.example.sudan.MainActivity, from=android.view.InsetsController.controlAnimationUnchecked:1502 android.view.InsetsController.applyAnimation:2228 android.view.InsetsController.applyAnimation:2159
+I/InsetsController(26856): onStateChanged: host=com.example.sudan/com.example.sudan.MainActivity, from=android.view.ViewRootImpl.handleResized:2789, state=InsetsState: {mDisplayFrame=Rect(0, 0 - 1340, 800), mDisplayCutout=DisplayCutout{insets=Rect(0, 0 - 0, 0) waterfall=Insets{left=0, top=0, right=0, bottom=0} boundingRect={Bounds=[Rect(0, 0 - 0, 0), Rect(0, 0 - 0, 0), Rect(0, 0 - 0, 0), Rect(0, 0 - 0, 0)]} cutoutPathParserInfo={CutoutPathParserInfo{displayWidth=0 displayHeight=0 physicalDisplayWidth=0 physicalDisplayHeight=0 density={0.0} cutoutSpec={} rotation={0} scale={0.0} physicalPixelDisplaySizeRatio={0.0}}} sideOverrides=null}, mRoundedCorners=RoundedCorners{[RoundedCorner{position=TopLeft, radius=9, center=Point(9, 9)}, RoundedCorner{position=TopRight, radius=9, center=Point(1331, 9)}, RoundedCorner{position=BottomRight, radius=9, center=Point(1331, 791)}, RoundedCorner{position=BottomLeft, radius=9, center=Point(9, 791)}]}  mRoundedCornerFrame=Rect(0, 0 - 1340, 800), mPrivacyIndicatorBounds=PrivacyIndicatorBounds {static bounds=Rect(1282, 0 - 1340, 32) rotation=1}, mDisplayShape=DisplayShape{ spec=-311912193 displayWidth=800 displayHeight=1340 physicalPixelDisplaySizeRatio=1.0 rotation=1 offsetX=0 offsetY=0 scale=1.0}, mSources= { InsetsSource: {a98a0000 mType=statusBars mFrame=[0,0][1340,32] mVisible=false mFlags= mSideHint=TOP mBoundingRects=null}, InsetsSource: {a98a0005 mType=mandatorySystemGestures mFrame=[0,0][1340,32] mVisible=true mFlags= mSideHint=TOP mBoundingRects=null}, InsetsSource: {a98a0006 mType=tappableElement mFrame=[0,0][1340,32] mVisible=true mFlags= mSideHint=TOP mBoundingRects=null}, InsetsSource: {3 mType=ime mFrame=[0,398][1340,800] mVisible=false mFlags= mSideHint=BOTTOM mBoundingRects=null}, InsetsSource: {70270001 mType=navigationBars mFrame=[0,736][1340,800] mVisible=false mFlags= mSideHint=BOTTOM mBoundingRects=null}, InsetsSource: {70270004 mType=systemGestures mFrame=[0,0][0,0] mVisible=true mFlags= mSideHint=NONE mBoundingRects=null}, InsetsSource: {70270005 mType=mandatorySystemGestures mFrame=[0,736][1340,800] mVisible=true mFlags= mSideHint=BOTTOM mBoundingRects=null}, InsetsSource: {70270006 mType=tappableElement mFrame=[0,736][1340,800] mVisible=true mFlags= mSideHint=BOTTOM mBoundingRects=null}, InsetsSource: {70270024 mType=systemGestures mFrame=[0,0][0,0] mVisible=true mFlags= mSideHint=NONE mBoundingRects=null} }
+I/VRI[MainActivity]@ab56323(26856): handleResized, frames=ClientWindowFrames{frame=[0,0][1340,800] display=[0,0][1340,800] parentFrame=[0,0][0,0]} displayId=0 dragResizing=false compatScale=1.0 frameChanged=false attachedFrameChanged=false configChanged=false displayChanged=false compatScaleChanged=false dragResizingChanged=false
+I/VRI[MainActivity]@ab56323(26856): mWNT: t=0xb400007a0d936780 mBlastBufferQueue=0xb400007950405c00 fn= 43 HdrRenderState mRenderHdrSdrRatio=1.0 caller= android.view.SyncRtSurfaceTransactionApplier.applyTransaction:96 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0:69 android.view.SyncRtSurfaceTransactionApplier.$r8$lambda$afI4fXg3U3-nBZQEDQMiNy-B06s:0
+I/VRI[MainActivity]@ab56323(26856): mWNT: t=0xb400007950293f00 mBlastBufferQueue=0xb400007950405c00 fn= 43 HdrRenderState mRenderHdrSdrRatio=1.0 caller= android.view.SyncRtSurfaceTransactionApplier.applyTransaction:96 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0:69 android.view.SyncRtSurfaceTransactionApplier.$r8$lambda$afI4fXg3U3-nBZQEDQMiNy-B06s:0
+I/VRI[MainActivity]@ab56323(26856): mWNT: t=0xb400007950294080 mBlastBufferQueue=0xb400007950405c00 fn= 43 HdrRenderState mRenderHdrSdrRatio=1.0 caller= android.view.SyncRtSurfaceTransactionApplier.applyTransaction:96 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0:69 android.view.SyncRtSurfaceTransactionApplier.$r8$lambda$afI4fXg3U3-nBZQEDQMiNy-B06s:0
+I/VRI[MainActivity]@ab56323(26856): mWNT: t=0xb4000078889ebf00 mBlastBufferQueue=0xb400007950405c00 fn= 43 HdrRenderState mRenderHdrSdrRatio=1.0 caller= android.view.SyncRtSurfaceTransactionApplier.applyTransaction:96 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0:69 android.view.SyncRtSurfaceTransactionApplier.$r8$lambda$afI4fXg3U3-nBZQEDQMiNy-B06s:0
+I/VRI[MainActivity]@ab56323(26856): mWNT: t=0xb4000078889ece00 mBlastBufferQueue=0xb400007950405c00 fn= 44 HdrRenderState mRenderHdrSdrRatio=1.0 caller= android.view.SyncRtSurfaceTransactionApplier.applyTransaction:96 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0:69 android.view.SyncRtSurfaceTransactionApplier.$r8$lambda$afI4fXg3U3-nBZQEDQMiNy-B06s:0
+I/VRI[MainActivity]@ab56323(26856): mWNT: t=0xb4000078889ec680 mBlastBufferQueue=0xb400007950405c00 fn= 44 HdrRenderState mRenderHdrSdrRatio=1.0 caller= android.view.SyncRtSurfaceTransactionApplier.applyTransaction:96 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0:69 android.view.SyncRtSurfaceTransactionApplier.$r8$lambda$afI4fXg3U3-nBZQEDQMiNy-B06s:0
+I/VRI[MainActivity]@ab56323(26856): mWNT: t=0xb4000078889ed100 mBlastBufferQueue=0xb400007950405c00 fn= 45 HdrRenderState mRenderHdrSdrRatio=1.0 caller= android.view.SyncRtSurfaceTransactionApplier.applyTransaction:96 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0:69 android.view.SyncRtSurfaceTransactionApplier.$r8$lambda$afI4fXg3U3-nBZQEDQMiNy-B06s:0
+I/VRI[MainActivity]@ab56323(26856): mWNT: t=0xb4000078889ed580 mBlastBufferQueue=0xb400007950405c00 fn= 45 HdrRenderState mRenderHdrSdrRatio=1.0 caller= android.view.SyncRtSurfaceTransactionApplier.applyTransaction:96 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0:69 android.view.SyncRtSurfaceTransactionApplier.$r8$lambda$afI4fXg3U3-nBZQEDQMiNy-B06s:0
+I/VRI[MainActivity]@ab56323(26856): mWNT: t=0xb400007888bb6000 mBlastBufferQueue=0xb400007950405c00 fn= 46 HdrRenderState mRenderHdrSdrRatio=1.0 caller= android.view.SyncRtSurfaceTransactionApplier.applyTransaction:96 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0:69 android.view.SyncRtSurfaceTransactionApplier.$r8$lambda$afI4fXg3U3-nBZQEDQMiNy-B06s:0
+I/VRI[MainActivity]@ab56323(26856): mWNT: t=0xb400007888bb6180 mBlastBufferQueue=0xb400007950405c00 fn= 46 HdrRenderState mRenderHdrSdrRatio=1.0 caller= android.view.SyncRtSurfaceTransactionApplier.applyTransaction:96 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0:69 android.view.SyncRtSurfaceTransactionApplier.$r8$lambda$afI4fXg3U3-nBZQEDQMiNy-B06s:0
+I/VRI[MainActivity]@ab56323(26856): mWNT: t=0xb400007888bb6480 mBlastBufferQueue=0xb400007950405c00 fn= 47 HdrRenderState mRenderHdrSdrRatio=1.0 caller= android.view.SyncRtSurfaceTransactionApplier.applyTransaction:96 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0:69 android.view.SyncRtSurfaceTransactionApplier.$r8$lambda$afI4fXg3U3-nBZQEDQMiNy-B06s:0
+I/VRI[MainActivity]@ab56323(26856): mWNT: t=0xb400007888bb6300 mBlastBufferQueue=0xb400007950405c00 fn= 47 HdrRenderState mRenderHdrSdrRatio=1.0 caller= android.view.SyncRtSurfaceTransactionApplier.applyTransaction:96 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0:69 android.view.SyncRtSurfaceTransactionApplier.$r8$lambda$afI4fXg3U3-nBZQEDQMiNy-B06s:0
+I/VRI[MainActivity]@ab56323(26856): mWNT: t=0xb400007888bb6780 mBlastBufferQueue=0xb400007950405c00 fn= 48 HdrRenderState mRenderHdrSdrRatio=1.0 caller= android.view.SyncRtSurfaceTransactionApplier.applyTransaction:96 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0:69 android.view.SyncRtSurfaceTransactionApplier.$r8$lambda$afI4fXg3U3-nBZQEDQMiNy-B06s:0
+I/VRI[MainActivity]@ab56323(26856): mWNT: t=0xb400007888bb6900 mBlastBufferQueue=0xb400007950405c00 fn= 48 HdrRenderState mRenderHdrSdrRatio=1.0 caller= android.view.SyncRtSurfaceTransactionApplier.applyTransaction:96 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0:69 android.view.SyncRtSurfaceTransactionApplier.$r8$lambda$afI4fXg3U3-nBZQEDQMiNy-B06s:0
+I/VRI[MainActivity]@ab56323(26856): call setFrameRateCategory for touch hint category=no preference, reason=boost timeout, vri=VRI[MainActivity]@ab56323
+I/VRI[MainActivity]@ab56323(26856): mWNT: t=0xb400007888bb7380 mBlastBufferQueue=0xb400007950405c00 fn= 49 HdrRenderState mRenderHdrSdrRatio=1.0 caller= android.view.SyncRtSurfaceTransactionApplier.applyTransaction:96 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0:69 android.view.SyncRtSurfaceTransactionApplier.$r8$lambda$afI4fXg3U3-nBZQEDQMiNy-B06s:0
+I/VRI[MainActivity]@ab56323(26856): mWNT: t=0xb400007a0d936780 mBlastBufferQueue=0xb400007950405c00 fn= 49 HdrRenderState mRenderHdrSdrRatio=1.0 caller= android.view.SyncRtSurfaceTransactionApplier.applyTransaction:96 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0:69 android.view.SyncRtSurfaceTransactionApplier.$r8$lambda$afI4fXg3U3-nBZQEDQMiNy-B06s:0
+I/VRI[MainActivity]@ab56323(26856): mWNT: t=0xb400007950293f00 mBlastBufferQueue=0xb400007950405c00 fn= 50 HdrRenderState mRenderHdrSdrRatio=1.0 caller= android.view.SyncRtSurfaceTransactionApplier.applyTransaction:96 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0:69 android.view.SyncRtSurfaceTransactionApplier.$r8$lambda$afI4fXg3U3-nBZQEDQMiNy-B06s:0
+I/VRI[MainActivity]@ab56323(26856): mWNT: t=0xb400007888bb7500 mBlastBufferQueue=0xb400007950405c00 fn= 50 HdrRenderState mRenderHdrSdrRatio=1.0 caller= android.view.SyncRtSurfaceTransactionApplier.applyTransaction:96 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0:69 android.view.SyncRtSurfaceTransactionApplier.$r8$lambda$afI4fXg3U3-nBZQEDQMiNy-B06s:0
+I/InsetsController(26856): cancelAnimation: types=ime, animType=1, host=com.example.sudan/com.example.sudan.MainActivity, from=android.view.InsetsController.notifyFinished:1890 android.view.InsetsAnimationControlImpl.applyChangeInsets:307 android.view.InsetsController.lambda$new$3:932
+I/ImeTracker(26856): com.example.sudan:9e1984c9: onRequestHide at ORIGIN_CLIENT reason HIDE_SOFT_INPUT_ON_ANIMATION_STATE_CHANGED fromUser false
+I/InputMethodManager_LC(26856): notifyImeHidden: IInputMethodManagerGlobalInvoker.hideSoftInput
+I/ImeTracker(26856): com.samsung.android.honeyboard:85757e43: onHidden
+I/VRI[MainActivity]@ab56323(26856): mWNT: t=0xb400007888bb7980 mBlastBufferQueue=0xb400007950405c00 fn= 51 HdrRenderState mRenderHdrSdrRatio=1.0 caller= android.view.SyncRtSurfaceTransactionApplier.applyTransaction:96 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0:69 android.view.SyncRtSurfaceTransactionApplier.$r8$lambda$afI4fXg3U3-nBZQEDQMiNy-B06s:0
+I/VRI[MainActivity]@ab56323(26856): mWNT: t=0xb400007a0d936300 mBlastBufferQueue=0xb400007950405c00 fn= 51 HdrRenderState mRenderHdrSdrRatio=1.0 caller= android.view.SyncRtSurfaceTransactionApplier.applyTransaction:96 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0:69 android.view.SyncRtSurfaceTransactionApplier.$r8$lambda$afI4fXg3U3-nBZQEDQMiNy-B06s:0
+I/VRI[MainActivity]@ab56323(26856): mWNT: t=0xb4000078889ec680 mBlastBufferQueue=0xb400007950405c00 fn= 52 HdrRenderState mRenderHdrSdrRatio=1.0 caller= android.view.SyncRtSurfaceTransactionApplier.applyTransaction:96 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0:69 android.view.SyncRtSurfaceTransactionApplier.$r8$lambda$afI4fXg3U3-nBZQEDQMiNy-B06s:0
+I/InsetsController(26856): onStateChanged: host=com.example.sudan/com.example.sudan.MainActivity, from=android.view.ViewRootImpl.handleResized:2789, state=InsetsState: {mDisplayFrame=Rect(0, 0 - 1340, 800), mDisplayCutout=DisplayCutout{insets=Rect(0, 0 - 0, 0) waterfall=Insets{left=0, top=0, right=0, bottom=0} boundingRect={Bounds=[Rect(0, 0 - 0, 0), Rect(0, 0 - 0, 0), Rect(0, 0 - 0, 0), Rect(0, 0 - 0, 0)]} cutoutPathParserInfo={CutoutPathParserInfo{displayWidth=0 displayHeight=0 physicalDisplayWidth=0 physicalDisplayHeight=0 density={0.0} cutoutSpec={} rotation={0} scale={0.0} physicalPixelDisplaySizeRatio={0.0}}} sideOverrides=null}, mRoundedCorners=RoundedCorners{[RoundedCorner{position=TopLeft, radius=9, center=Point(9, 9)}, RoundedCorner{position=TopRight, radius=9, center=Point(1331, 9)}, RoundedCorner{position=BottomRight, radius=9, center=Point(1331, 791)}, RoundedCorner{position=BottomLeft, radius=9, center=Point(9, 791)}]}  mRoundedCornerFrame=Rect(0, 0 - 1340, 800), mPrivacyIndicatorBounds=PrivacyIndicatorBounds {static bounds=Rect(1282, 0 - 1340, 32) rotation=1}, mDisplayShape=DisplayShape{ spec=-311912193 displayWidth=800 displayHeight=1340 physicalPixelDisplaySizeRatio=1.0 rotation=1 offsetX=0 offsetY=0 scale=1.0}, mSources= { InsetsSource: {a98a0000 mType=statusBars mFrame=[0,0][1340,32] mVisible=false mFlags= mSideHint=TOP mBoundingRects=null}, InsetsSource: {a98a0005 mType=mandatorySystemGestures mFrame=[0,0][1340,32] mVisible=true mFlags= mSideHint=TOP mBoundingRects=null}, InsetsSource: {a98a0006 mType=tappableElement mFrame=[0,0][1340,32] mVisible=true mFlags= mSideHint=TOP mBoundingRects=null}, InsetsSource: {3 mType=ime mFrame=[0,0][0,0] mVisible=false mFlags= mSideHint=NONE mBoundingRects=null}, InsetsSource: {70270001 mType=navigationBars mFrame=[0,736][1340,800] mVisible=false mFlags= mSideHint=BOTTOM mBoundingRects=null}, InsetsSource: {70270004 mType=systemGestures mFrame=[0,0][0,0] mVisible=true mFlags= mSideHint=NONE mBoundingRects=null}, InsetsSource: {70270005 mType=mandatorySystemGestures mFrame=[0,736][1340,800] mVisible=true mFlags= mSideHint=BOTTOM mBoundingRects=null}, InsetsSource: {70270006 mType=tappableElement mFrame=[0,736][1340,800] mVisible=true mFlags= mSideHint=BOTTOM mBoundingRects=null}, InsetsSource: {70270024 mType=systemGestures mFrame=[0,0][0,0] mVisible=true mFlags= mSideHint=NONE mBoundingRects=null} }
+I/VRI[MainActivity]@ab56323(26856): handleResized, frames=ClientWindowFrames{frame=[0,0][1340,800] display=[0,0][1340,800] parentFrame=[0,0][0,0]} displayId=0 dragResizing=false compatScale=1.0 frameChanged=false attachedFrameChanged=false configChanged=false displayChanged=false compatScaleChanged=false dragResizingChanged=false
+I/VRI[MainActivity]@ab56323(26856): mWNT: t=0xb4000078889ece00 mBlastBufferQueue=0xb400007950405c00 fn= 53 HdrRenderState mRenderHdrSdrRatio=1.0 caller= android.view.SyncRtSurfaceTransactionApplier.applyTransaction:96 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0:69 android.view.SyncRtSurfaceTransactionApplier.$r8$lambda$afI4fXg3U3-nBZQEDQMiNy-B06s:0
+I/VRI[MainActivity]@ab56323(26856): mWNT: t=0xb400007888bb8400 mBlastBufferQueue=0xb400007950405c00 fn= 54 HdrRenderState mRenderHdrSdrRatio=1.0 caller= android.view.SyncRtSurfaceTransactionApplier.applyTransaction:96 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0:69 android.view.SyncRtSurfaceTransactionApplier.$r8$lambda$afI4fXg3U3-nBZQEDQMiNy-B06s:0
+I/VRI[MainActivity]@ab56323(26856): mWNT: t=0xb400007950294080 mBlastBufferQueue=0xb400007950405c00 fn= 55 HdrRenderState mRenderHdrSdrRatio=1.0 caller= android.view.SyncRtSurfaceTransactionApplier.applyTransaction:96 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0:69 android.view.SyncRtSurfaceTransactionApplier.$r8$lambda$afI4fXg3U3-nBZQEDQMiNy-B06s:0
+I/VRI[MainActivity]@ab56323(26856): mWNT: t=0xb4000078889ebf00 mBlastBufferQueue=0xb400007950405c00 fn= 56 HdrRenderState mRenderHdrSdrRatio=1.0 caller= android.view.SyncRtSurfaceTransactionApplier.applyTransaction:96 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0:69 android.view.SyncRtSurfaceTransactionApplier.$r8$lambda$afI4fXg3U3-nBZQEDQMiNy-B06s:0
+I/InsetsController(26856): cancelAnimation: types=navigationBars, animType=1, host=com.example.sudan/com.example.sudan.MainActivity, from=android.view.InsetsController.notifyFinished:1890 android.view.InsetsAnimationControlImpl.applyChangeInsets:307 android.view.InsetsController.lambda$new$3:932
+I/VRI[MainActivity]@ab56323(26856): mWNT: t=0xb4000078889ed100 mBlastBufferQueue=0xb400007950405c00 fn= 57 HdrRenderState mRenderHdrSdrRatio=1.0 caller= android.view.SyncRtSurfaceTransactionApplier.applyTransaction:96 android.view.SyncRtSurfaceTransactionApplier.lambda$scheduleApply$0:69 android.view.SyncRtSurfaceTransactionApplier.$r8$lambda$afI4fXg3U3-nBZQEDQMiNy-B06s:0
+I/VRI[MainActivity]@ab56323(26856): call setFrameRateCategory for touch hint category=high hint, reason=touch, vri=VRI[MainActivity]@ab56323
+I/ImeTracker(26856): com.example.sudan:25a233a6: onRequestHide at ORIGIN_CLIENT reason HIDE_SOFT_INPUT fromUser false
+I/InputMethodManager_LC(26856): hsifw() - flag : 0
+I/InputMethodManager_LC(26856): hsifw() - mService.hideSoftInput
+I/flutter (26856): 🔵 [ROOM_FLOW] Calling saveRoom...
+I/flutter (26856):    - Room Name: ۱۱۱
+I/flutter (26856):    - Floor ID: null
+I/flutter (26856): 🟢 [ROOM_SETUP_VM] saveRoom called
+I/flutter (26856):    - _isSaving: false
+I/flutter (26856):    - isLoading: false
+I/flutter (26856):    - Room Name: ۱۱۱
+I/flutter (26856):    - Floor ID: null
+I/flutter (26856): 🟢 [ROOM_SETUP_VM] Set _isSaving = true
+I/flutter (26856): 🟢 [ROOM_SETUP_VM] Generated room ID: 6eda8bcd-c112-4708-9f8e-dfbe87f12d91
+I/flutter (26856): 🟢 [ROOM_SETUP_VM] Existing rooms count: 4
+I/flutter (26856): 🟢 [ROOM_SETUP_VM] Created room entity:
+I/flutter (26856):    - ID: 6eda8bcd-c112-4708-9f8e-dfbe87f12d91
+I/flutter (26856):    - Name: ۱۱۱
+I/flutter (26856):    - FloorId: null
+I/flutter (26856):    - Order: 4
+I/flutter (26856): 🟢 [ROOM_SETUP_VM] Calling createRoomUseCase...
+I/flutter (26856): 🟡 [ROOM_REPO] createRoom called
+I/flutter (26856):    - ID: 6eda8bcd-c112-4708-9f8e-dfbe87f12d91
+I/flutter (26856):    - Name: ۱۱۱
+I/flutter (26856):    - FloorId: null
+I/flutter (26856):    - Order: 4
+I/flutter (26856): 🟡 [ROOM_REPO] Created RoomModel, calling addRoom...
+I/flutter (26856): 🟠 [ROOM_DS] addRoom called
+I/flutter (26856):    - ID: 6eda8bcd-c112-4708-9f8e-dfbe87f12d91
+I/flutter (26856):    - Name: ۱۱۱
+I/flutter (26856):    - FloorId: null
+I/flutter (26856):    - Current lock: null
+I/flutter (26856): 🟠 [ROOM_DS] Lock acquired
+I/flutter (26856): 🟠 [ROOM_DS] Reading cached rooms...
+I/flutter (26856): 🟠 [ROOM_DS] Found 4 rooms in cache
+I/flutter (26856):    - Living Room (ID: room_living, FloorId: floor_1)
+I/flutter (26856):    - Kitchen (ID: room_kitchen, FloorId: floor_1)
+I/flutter (26856):    - Bathroom (ID: room_bathroom, FloorId: floor_1)
+I/flutter (26856):    - Bed Room (ID: room_bedroom, FloorId: floor_2)
+I/flutter (26856): 🟠 [ROOM_DS] Double-checking cache...
+I/flutter (26856): 🟠 [ROOM_DS] Latest cache has 4 rooms
+I/flutter (26856): 🟠 [ROOM_DS] All checks passed, adding room...
+I/flutter (26856): 🟠 [ROOM_DS] Room added to list. New count: 5
+I/flutter (26856): 🟠 [ROOM_DS] Rooms cached successfully
+I/flutter (26856): 🟠 [ROOM_DS] Releasing lock
+I/flutter (26856): 🟡 [ROOM_REPO] Room added to data source successfully
+I/flutter (26856): 🟢 [ROOM_SETUP_VM] Room created in repository:
+I/flutter (26856):    - ID: 6eda8bcd-c112-4708-9f8e-dfbe87f12d91
+I/flutter (26856):    - Name: ۱۱۱
+I/flutter (26856):    - FloorId: null
+I/flutter (26856): 🟢 [ROOM_SETUP_VM] No floorId, skipping addRoomToFloor
+I/VRI[MainActivity]@ab56323(26856): call setFrameRateCategory for touch hint category=no preference, reason=boost timeout, vri=VRI[MainActivity]@ab56323
+I/flutter (26856): 🔵 [ROOM_FLOW] saveRoom returned: true
+I/flutter (26856): 🔵 [ROOM_FLOW] Room saved successfully, refreshing viewmodels...
+I/flutter (26856): 🔵 [ROOM_FLOW] Loading rooms for floor: null
+I/flutter (26856): 🟡 [ROOM_VM] loadRooms called with floorId: null
+I/flutter (26856): 🟡 [ROOM_VM] Loaded 5 total rooms
+I/flutter (26856):    - Living Room (ID: room_living, FloorId: floor_1)
+I/flutter (26856):    - Bed Room (ID: room_bedroom, FloorId: floor_2)
+I/flutter (26856):    - Kitchen (ID: room_kitchen, FloorId: floor_1)
+I/flutter (26856):    - Bathroom (ID: room_bathroom, FloorId: floor_1)
+I/flutter (26856):    - ۱۱۱ (ID: 6eda8bcd-c112-4708-9f8e-dfbe87f12d91, FloorId: null)
+I/flutter (26856): 🟡 [ROOM_VM] No floorId provided, showing only rooms without floor (1 rooms)
+I/flutter (26856):    - ۱۱۱ (ID: 6eda8bcd-c112-4708-9f8e-dfbe87f12d91, FloorId: null)
+I/flutter (26856): 🟡 [ROOM_VM] No room selected, selecting first: ۱۱۱
+I/flutter (26856): 🟡 [ROOM_VM] Final state:
+I/flutter (26856):    - Total rooms: 5
+I/flutter (26856):    - Filtered rooms: 1
+I/flutter (26856):    - Selected room: ۱۱۱ (6eda8bcd-c112-4708-9f8e-dfbe87f12d91)
+I/flutter (26856): 🔵 [ROOM_FLOW] Rooms loaded. Count: 1
+I/flutter (26856):    - ۱۱۱ (ID: 6eda8bcd-c112-4708-9f8e-dfbe87f12d91, FloorId: null)
+I/flutter (26856): 🔵 [ROOM_FLOW] Devices refreshed
+I/flutter (26856): 🔵 [ROOM_FLOW] Looking for room with name: ۱۱۱
+I/flutter (26856): 🔵 [ROOM_FLOW] Found created room: ۱۱۱ (ID: 6eda8bcd-c112-4708-9f8e-dfbe87f12d91)
+I/flutter (26856): 🔵 [ROOM_FLOW] Selecting room: 6eda8bcd-c112-4708-9f8e-dfbe87f12d91
+I/flutter (26856): 🔵 [ROOM_FLOW] Room selected
+I/flutter (26856): 🔵 [ROOM_FLOW] Loading dashboard for room: 6eda8bcd-c112-4708-9f8e-dfbe87f12d91
+I/flutter (26856): 🔵 [DASHBOARD_VM] loadDashboard called with roomId: 6eda8bcd-c112-4708-9f8e-dfbe87f12d91
+I/flutter (26856): 🔵 [DASHBOARD_VM] Loaded 0 cards
+I/flutter (26856): 🔵 [DASHBOARD_VM] Loaded layout
+I/flutter (26856): 🔵 [DASHBOARD_VM] Normalized layout
+I/flutter (26856): 🔵 [DASHBOARD_VM] Syncing cards with devices for room: 6eda8bcd-c112-4708-9f8e-dfbe87f12d91
+I/flutter (26856): 🔵 [DASHBOARD_VM] syncCardsWithDevices called for room: 6eda8bcd-c112-4708-9f8e-dfbe87f12d91
+I/flutter (26856): 🔵 [DASHBOARD_VM] Current cards before sync: 0
+I/flutter (26856): 🔵 [DASHBOARD_VM] Found 10 devices in room
+I/flutter (26856):    - Light (DeviceType.light)
+I/flutter (26856):    - Curtain (DeviceType.curtain)
+I/flutter (26856):    - TV (DeviceType.tv)
+I/flutter (26856):    - Thermostat (DeviceType.thermostat)
+I/flutter (26856):    - Music Player (DeviceType.music)
+I/flutter (26856):    - Fan (DeviceType.fan)
+I/flutter (26856):    - Camera (DeviceType.camera)
+I/flutter (26856):    - Security System (DeviceType.security)
+I/flutter (26856):    - Tablet Charger (DeviceType.socket)
+I/flutter (26856):    - Lock (DeviceType.lock)
+I/flutter (26856): 🔵 [DASHBOARD_VM] Creating card for device f31d687f-f122-4d64-942e-c07a8121bc84 (DeviceType.light) -> CardType.light
+I/flutter (26856): 🔵 [DASHBOARD_VM] Added card f31d687f-f122-4d64-942e-c07a8121bc84_card (CardType.light). Total cards: 1
+I/flutter (26856): 🔵 [DASHBOARD_VM] Creating card for device 3dafe5a0-62d7-4042-be1e-17c49b110e20 (DeviceType.curtain) -> CardType.curtain
+I/flutter (26856): 🔵 [DASHBOARD_VM] Added card 3dafe5a0-62d7-4042-be1e-17c49b110e20_card (CardType.curtain). Total cards: 2
+I/flutter (26856): 🔵 [DASHBOARD_VM] Creating card for device f1b06507-dc7b-4014-8d91-70f76b0a872e (DeviceType.tv) -> CardType.tv
+I/flutter (26856): 🔵 [DASHBOARD_VM] Added card f1b06507-dc7b-4014-8d91-70f76b0a872e_card (CardType.tv). Total cards: 3
+I/flutter (26856): 🔵 [DASHBOARD_VM] Creating card for device 71e224c7-2d2a-4d45-bdd8-785c2fcc19f4 (DeviceType.thermostat) -> CardType.thermostat
+I/flutter (26856): 🔵 [DASHBOARD_VM] Added card 71e224c7-2d2a-4d45-bdd8-785c2fcc19f4_card (CardType.thermostat). Total cards: 4
+I/flutter (26856): 🔵 [DASHBOARD_VM] Creating card for device 44be5f36-7a62-480b-a882-8d0572c3ef00 (DeviceType.music) -> CardType.music
+I/flutter (26856): 🔵 [DASHBOARD_VM] Added card 44be5f36-7a62-480b-a882-8d0572c3ef00_card (CardType.music). Total cards: 5
+I/flutter (26856): 🔵 [DASHBOARD_VM] Creating card for device 87f1feed-e630-4f97-8e0a-b32be5d083c8 (DeviceType.fan) -> CardType.fan
+I/flutter (26856): 🔵 [DASHBOARD_VM] Added card 87f1feed-e630-4f97-8e0a-b32be5d083c8_card (CardType.fan). Total cards: 6
+I/flutter (26856): 🔵 [DASHBOARD_VM] Creating card for device e9ee0a90-573b-47e3-8809-264c8d889356 (DeviceType.camera) -> CardType.camera
+I/flutter (26856): 🔵 [DASHBOARD_VM] Added card e9ee0a90-573b-47e3-8809-264c8d889356_card (CardType.camera). Total cards: 7
+I/flutter (26856): 🔵 [DASHBOARD_VM] Creating card for device 00584d27-126a-42a2-982f-d5c4c4732d13 (DeviceType.security) -> CardType.security
+I/flutter (26856): 🔵 [DASHBOARD_VM] Added card 00584d27-126a-42a2-982f-d5c4c4732d13_card (CardType.security). Total cards: 8
+I/flutter (26856): 🔵 [DASHBOARD_VM] Skipping device 9fe84610-d085-4a9d-b6ec-5b46e9d371ed (DeviceType.socket) - no card type mapping
+I/flutter (26856): 🔵 [DASHBOARD_VM] Creating card for device fe13d48a-bf8a-418d-8f01-cd63da32dfbe (DeviceType.lock) -> CardType.door
+I/flutter (26856): 🔵 [DASHBOARD_VM] Added card fe13d48a-bf8a-418d-8f01-cd63da32dfbe_card (CardType.door). Total cards: 9
+I/flutter (26856): 🔵 [DASHBOARD_VM] Checking scenarios for room: 6eda8bcd-c112-4708-9f8e-dfbe87f12d91
+I/flutter (26856): 🟡 [SCENARIO_REPO] getAllScenarios called
+I/flutter (26856): 🟠 [SCENARIO_DS] getCachedScenarios called
+I/flutter (26856): 🟠 [SCENARIO_DS] Found cached scenarios JSON (length: 3015)
+I/flutter (26856): 🟠 [SCENARIO_DS] Parsed 4 scenarios from cache
+I/flutter (26856):    - Good Morning (ID: scenario_good_morning, RoomId: null)
+I/flutter (26856):    - Movie Night (ID: scenario_movie_night, RoomId: null)
+I/flutter (26856):    - Sleep (ID: scenario_sleep, RoomId: null)
+I/flutter (26856):    - Away (ID: scenario_away, RoomId: null)
+I/flutter (26856): 🟡 [SCENARIO_REPO] Retrieved 4 scenarios from cache
+I/flutter (26856):    - Good Morning (ID: scenario_good_morning, RoomId: null)
+I/flutter (26856):    - Movie Night (ID: scenario_movie_night, RoomId: null)
+I/flutter (26856):    - Sleep (ID: scenario_sleep, RoomId: null)
+I/flutter (26856):    - Away (ID: scenario_away, RoomId: null)
+I/flutter (26856): 🔵 [DASHBOARD_VM] Total scenarios: 4
+I/flutter (26856):    - Good Morning (RoomId: null)
+I/flutter (26856):    - Movie Night (RoomId: null)
+I/flutter (26856):    - Sleep (RoomId: null)
+I/flutter (26856):    - Away (RoomId: null)
+I/flutter (26856): 🔵 [DASHBOARD_VM] Scenarios for room 6eda8bcd-c112-4708-9f8e-dfbe87f12d91: 0
+I/flutter (26856): 🔵 [DASHBOARD_VM] No scenarios for this room, not adding scenarios section
+I/flutter (26856): 🔵 [DASHBOARD_VM] Final cards after sync: 9
+I/flutter (26856):    - Card f31d687f-f122-4d64-942e-c07a8121bc84_card (CardType.light, roomId: 6eda8bcd-c112-4708-9f8e-dfbe87f12d91)
+I/flutter (26856):    - Card 3dafe5a0-62d7-4042-be1e-17c49b110e20_card (CardType.curtain, roomId: 6eda8bcd-c112-4708-9f8e-dfbe87f12d91)
+I/flutter (26856):    - Card f1b06507-dc7b-4014-8d91-70f76b0a872e_card (CardType.tv, roomId: 6eda8bcd-c112-4708-9f8e-dfbe87f12d91)
+I/flutter (26856):    - Card 71e224c7-2d2a-4d45-bdd8-785c2fcc19f4_card (CardType.thermostat, roomId: 6eda8bcd-c112-4708-9f8e-dfbe87f12d91)
+I/flutter (26856):    - Card 44be5f36-7a62-480b-a882-8d0572c3ef00_card (CardType.music, roomId: 6eda8bcd-c112-4708-9f8e-dfbe87f12d91)
+I/flutter (26856):    - Card 87f1feed-e630-4f97-8e0a-b32be5d083c8_card (CardType.fan, roomId: 6eda8bcd-c112-4708-9f8e-dfbe87f12d91)
+I/flutter (26856):    - Card e9ee0a90-573b-47e3-8809-264c8d889356_card (CardType.camera, roomId: 6eda8bcd-c112-4708-9f8e-dfbe87f12d91)
+I/flutter (26856):    - Card 00584d27-126a-42a2-982f-d5c4c4732d13_card (CardType.security, roomId: 6eda8bcd-c112-4708-9f8e-dfbe87f12d91)
+I/flutter (26856):    - Card fe13d48a-bf8a-418d-8f01-cd63da32dfbe_card (CardType.door, roomId: 6eda8bcd-c112-4708-9f8e-dfbe87f12d91)
+I/flutter (26856): 🔵 [DASHBOARD_VM] Notified listeners after sync
+I/flutter (26856): 🔵 [DASHBOARD_VM] Cards synced. Final count: 9
+I/flutter (26856): 🔵 [DASHBOARD_VM] Dashboard loaded and listeners notified
+I/flutter (26856): 🔵 [ROOM_FLOW] Dashboard loaded
+
+════════ Exception caught by rendering library ═════════════════════════════════
+A RenderFlex overflowed by 162 pixels on the bottom.
+The relevant error-causing widget was:
+    Column Column:file:///Users/hamidaslami/sudan/lib/presentation/widgets/dashboard/led_control_panel.dart:154:16
+════════════════════════════════════════════════════════════════════════════════
+
+════════ Exception caught by rendering library ═════════════════════════════════
+A RenderFlex overflowed by 25 pixels on the bottom.
+The relevant error-causing widget was:
+    Column Column:file:///Users/hamidaslami/sudan/lib/presentation/widgets/dashboard/thermostat_control_panel.dart:144:16
+════════════════════════════════════════════════════════════════════════════════
+
+════════ Exception caught by rendering library ═════════════════════════════════
+A RenderFlex overflowed by 34 pixels on the bottom.
+The relevant error-causing widget was:
+    Column Column:file:///Users/hamidaslami/sudan/lib/presentation/widgets/dashboard/tablet_charger_control_panel.dart:127:16
+════════════════════════════════════════════════════════════════════════════════
+I/VRI[MainActivity]@ab56323(26856): call setFrameRateCategory for touch hint category=high hint, reason=touch, vri=VRI[MainActivity]@ab56323
+I/VRI[MainActivity]@ab56323(26856): call setFrameRateCategory for touch hint category=no preference, reason=boost timeout, vri=VRI[MainActivity]@ab56323

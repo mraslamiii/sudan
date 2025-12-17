@@ -13,6 +13,9 @@ enum CardType {
   window,
   airConditioner,
   humidifier,
+  elevator,
+  doorLock,
+  iphone,
 }
 
 enum CardSize {
@@ -29,6 +32,7 @@ class DashboardCardModel {
   final int position;
   final Map<String, dynamic> data;
   final bool isVisible;
+  final String? roomId; // ID of the room this card belongs to
 
   const DashboardCardModel({
     required this.id,
@@ -37,6 +41,7 @@ class DashboardCardModel {
     required this.position,
     this.data = const {},
     this.isVisible = true,
+    this.roomId,
   });
 
   DashboardCardModel copyWith({
@@ -46,6 +51,7 @@ class DashboardCardModel {
     int? position,
     Map<String, dynamic>? data,
     bool? isVisible,
+    String? roomId,
   }) {
     return DashboardCardModel(
       id: id ?? this.id,
@@ -54,6 +60,7 @@ class DashboardCardModel {
       position: position ?? this.position,
       data: data ?? this.data,
       isVisible: isVisible ?? this.isVisible,
+      roomId: roomId ?? this.roomId,
     );
   }
 
@@ -65,6 +72,7 @@ class DashboardCardModel {
       'position': position,
       'data': data,
       'isVisible': isVisible,
+      'roomId': roomId,
     };
   }
 
@@ -82,6 +90,7 @@ class DashboardCardModel {
       position: json['position'] as int,
       data: json['data'] as Map<String, dynamic>? ?? {},
       isVisible: json['isVisible'] as bool? ?? true,
+      roomId: json['roomId'] as String?,
     );
   }
 

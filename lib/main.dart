@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:sudan/presentation/views/advanced_dashboard_view.dart';
+import 'package:provider/provider.dart';
+import 'package:sudan/presentation/views/floor_selection_view.dart';
 import 'core/di/injection_container.dart' as di;
 import 'core/theme/app_theme.dart';
+import 'core/localization/app_localizations.dart';
 import 'data/data_sources/local/preferences/preferences_service.dart';
+import 'presentation/viewmodels/device_viewmodel.dart';
+import 'presentation/viewmodels/scenario_viewmodel.dart';
+import 'presentation/viewmodels/room_viewmodel.dart';
+import 'presentation/viewmodels/floor_viewmodel.dart';
+import 'presentation/viewmodels/dashboard_viewmodel.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,6 +31,15 @@ void main() async {
   // Initialize dependency injection
   await di.initDependencies();
 
+  // Clear all dashboard cards cache on app start
+  try {
+    final dashboardVM = di.getIt<DashboardViewModel>();
+    await dashboardVM.clearAllDashboardCards();
+    print('🧹 [MAIN] Cleared all dashboard cards cache');
+  } catch (e) {
+    print('⚠️ [MAIN] Could not clear dashboard cache: $e');
+  }
+
   runApp(const MyApp());
 }
 
@@ -36,26 +52,47 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   ThemeMode _themeMode = ThemeMode.system;
+  Locale _locale = const Locale('en', 'US');
   PreferencesService? _preferencesService;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    _loadThemeMode();
+    _loadPreferences();
   }
 
-  Future<void> _loadThemeMode() async {
+  Future<void> _loadPreferences() async {
     try {
       _preferencesService = di.getIt<PreferencesService>();
+      
+      // Load theme mode
       final savedTheme = _preferencesService?.getThemeMode();
       if (savedTheme != null) {
         setState(() {
           _themeMode = _parseThemeMode(savedTheme);
         });
       }
+      
+      // Load language
+      final savedLanguage = _preferencesService?.getLanguage();
+      if (savedLanguage != null) {
+        setState(() {
+          _locale = _parseLocale(savedLanguage);
+        });
+      }
     } catch (e) {
       // If service not available, use system default
+    }
+  }
+
+  Locale _parseLocale(String language) {
+    switch (language) {
+      case 'fa':
+        return const Locale('fa', 'IR');
+      case 'en':
+      default:
+        return const Locale('en', 'US');
     }
   }
 
@@ -93,6 +130,24 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     }
   }
 
+  void changeLanguage(String languageCode) {
+    setState(() {
+      _locale = _parseLocale(languageCode);
+    });
+    _saveLanguage(languageCode);
+  }
+
+  Future<void> _saveLanguage(String languageCode) async {
+    try {
+      if (_preferencesService == null) {
+        _preferencesService = di.getIt<PreferencesService>();
+      }
+      await _preferencesService?.setLanguage(languageCode);
+    } catch (e) {
+      // Handle error silently
+    }
+  }
+
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
@@ -113,24 +168,44 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'خانه هوشمند',
-      debugShowCheckedModeBanner: false,
-      theme: AppTheme.getLightTheme(),
-      darkTheme: AppTheme.getDarkTheme(),
-      themeMode: _themeMode,
-
-      // LTR Support for tablet design
-      locale: const Locale('en', 'US'),
-      supportedLocales: const [Locale('en', 'US'), Locale('fa', 'IR')],
-      localizationsDelegates: const [
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => di.getIt<DeviceViewModel>()..init(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => di.getIt<ScenarioViewModel>()..init(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => di.getIt<RoomViewModel>()..init(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => di.getIt<FloorViewModel>()..init(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => di.getIt<DashboardViewModel>()..init(),
+        ),
       ],
+      child: MaterialApp(
+        title: 'Smart Home',
+        debugShowCheckedModeBanner: false,
+        theme: AppTheme.getLightTheme(),
+        darkTheme: AppTheme.getDarkTheme(),
+        themeMode: _themeMode,
 
-      home: AdvancedDashboardView(
-        onThemeChanged: changeThemeMode,
+        locale: _locale,
+        supportedLocales: const [Locale('en', 'US'), Locale('fa', 'IR')],
+        localizationsDelegates: const [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+
+        home: FloorSelectionView(
+          onThemeChanged: changeThemeMode,
+          onLanguageChanged: changeLanguage,
+        ),
       ),
     );
   }

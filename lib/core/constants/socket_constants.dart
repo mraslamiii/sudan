@@ -22,6 +22,9 @@ class SocketConstants {
   static const String headLineScenarios = 'X';
   static const String headLineCameras = 'X2';
   static const String headLineBurglarAlarm = 'X1';
+  static const String headLineSocket = 'Y';
+  static const String headLineElevator = 'E';
+  static const String headLineDoorLock = 'L';
 
   // Hidden device
   static const String hiddenDevice = 'z';
@@ -45,6 +48,18 @@ class SocketConstants {
   static const String curtainOpen = 'O';
   static const String curtainClose = 'C';
   static const String curtainStop = 'S';
+
+  // Socket/Charger commands
+  static const String socketCharge = 'C';
+  static const String socketDischarge = 'D';
+  static const String socketOff = 'O';
+
+  // Elevator commands
+  static const String elevatorCall = 'C'; // Call to floor (format: floor number)
+
+  // Door lock commands
+  static const String doorLockUnlock = 'U';
+  static const String doorLockLock = 'L';
 
   // Scenario commands
   static const String commandScenarioGeneral = '!&';
