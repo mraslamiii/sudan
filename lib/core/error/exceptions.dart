@@ -24,3 +24,6 @@ class CacheException extends AppException {
   const CacheException(super.message, {super.code});
 }
 
+class UsbSerialException extends AppException {
+  const UsbSerialException(super.message, {super.code});
+}

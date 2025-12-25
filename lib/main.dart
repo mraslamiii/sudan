@@ -12,6 +12,7 @@ import 'presentation/viewmodels/scenario_viewmodel.dart';
 import 'presentation/viewmodels/room_viewmodel.dart';
 import 'presentation/viewmodels/floor_viewmodel.dart';
 import 'presentation/viewmodels/dashboard_viewmodel.dart';
+import 'core/utils/usb_serial_initializer.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,7 +22,7 @@ void main() async {
     SystemUiMode.immersiveSticky,
     overlays: [],
   );
-  
+
   // Set preferred orientations (landscape for tablet)
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.landscapeLeft,
@@ -38,6 +39,14 @@ void main() async {
     print('🧹 [MAIN] Cleared all dashboard cards cache');
   } catch (e) {
     print('⚠️ [MAIN] Could not clear dashboard cache: $e');
+  }
+
+  // Initialize USB Serial connection
+  try {
+    await UsbSerialInitializer.initialize();
+  } catch (e) {
+    print('⚠️ [MAIN] USB Serial initialization failed: $e');
+    // Continue app startup even if USB Serial fails
   }
 
   runApp(const MyApp());
@@ -65,7 +74,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   Future<void> _loadPreferences() async {
     try {
       _preferencesService = di.getIt<PreferencesService>();
-      
+
       // Load theme mode
       final savedTheme = _preferencesService?.getThemeMode();
       if (savedTheme != null) {
@@ -73,7 +82,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           _themeMode = _parseThemeMode(savedTheme);
         });
       }
-      
+
       // Load language
       final savedLanguage = _preferencesService?.getLanguage();
       if (savedLanguage != null) {
@@ -122,8 +131,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       final modeString = mode == ThemeMode.light
           ? 'light'
           : mode == ThemeMode.dark
-              ? 'dark'
-              : 'system';
+          ? 'dark'
+          : 'system';
       await _preferencesService?.setThemeMode(modeString);
     } catch (e) {
       // Handle error silently

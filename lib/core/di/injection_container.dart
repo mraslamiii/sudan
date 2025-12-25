@@ -7,12 +7,14 @@ import '../../data/data_sources/local/preferences/preferences_service.dart';
 import '../../data/data_sources/local/dashboard/dashboard_settings_service.dart';
 import '../../data/data_sources/local/pin/pin_service.dart';
 import '../../data/data_sources/remote/socket/socket_service.dart';
+import '../../data/data_sources/remote/usb_serial/usb_serial_service.dart';
 import '../../data/data_sources/local/device/device_local_data_source.dart';
 import '../../data/data_sources/local/scenario/scenario_local_data_source.dart';
 import '../../data/data_sources/local/room/room_local_data_source.dart';
 import '../../data/data_sources/local/floor/floor_local_data_source.dart';
 import '../../data/repositories/implementations/home_repository_impl.dart';
 import '../../data/repositories/implementations/socket_repository_impl.dart';
+import '../../data/repositories/implementations/usb_serial_repository_impl.dart';
 import '../../data/repositories/implementations/device_repository_impl.dart';
 import '../../data/repositories/implementations/scenario_repository_impl.dart';
 import '../../data/repositories/implementations/room_repository_impl.dart';
@@ -21,6 +23,7 @@ import '../../data/repositories/implementations/dashboard_repository_impl.dart';
 import '../../data/repositories/implementations/config_repository_impl.dart';
 import '../../domain/repositories/home_repository.dart';
 import '../../domain/repositories/socket_repository.dart';
+import '../../domain/repositories/usb_serial_repository.dart';
 import '../../domain/repositories/device_repository.dart';
 import '../../domain/repositories/scenario_repository.dart';
 import '../../domain/repositories/room_repository.dart';
@@ -30,6 +33,8 @@ import '../../domain/repositories/config_repository.dart';
 import '../../domain/use_cases/get_home_data_use_case.dart';
 import '../../domain/use_cases/connect_socket_use_case.dart';
 import '../../domain/use_cases/send_socket_command_use_case.dart';
+import '../../domain/use_cases/connect_usb_serial_use_case.dart';
+import '../../domain/use_cases/send_usb_serial_command_use_case.dart';
 import '../../domain/use_cases/device/get_all_devices_use_case.dart';
 import '../../domain/use_cases/device/get_devices_by_room_use_case.dart';
 import '../../domain/use_cases/device/get_device_by_id_use_case.dart';
@@ -62,6 +67,7 @@ import '../../domain/use_cases/dashboard/save_dashboard_layout_use_case.dart';
 import '../../domain/use_cases/dashboard/clear_all_dashboard_cards_use_case.dart';
 import '../../presentation/viewmodels/home_viewmodel.dart';
 import '../../presentation/viewmodels/socket_viewmodel.dart';
+import '../../presentation/viewmodels/usb_serial_viewmodel.dart';
 import '../../presentation/viewmodels/device_viewmodel.dart';
 import '../../presentation/viewmodels/scenario_viewmodel.dart';
 import '../../presentation/viewmodels/room_viewmodel.dart';
@@ -109,6 +115,11 @@ Future<void> initDependencies() async {
   // Socket Service (Singleton)
   getIt.registerLazySingleton<SocketService>(() => SocketService.instance);
 
+  // USB Serial Service (Singleton)
+  getIt.registerLazySingleton<UsbSerialService>(
+    () => UsbSerialService.instance,
+  );
+
   // Smart Home Local Data Sources
   getIt.registerLazySingleton<DeviceLocalDataSource>(
     () => DeviceLocalDataSource(getIt<PreferencesService>()),
@@ -136,6 +147,10 @@ Future<void> initDependencies() async {
 
   getIt.registerLazySingleton<SocketRepository>(
     () => SocketRepositoryImpl(getIt<SocketService>()),
+  );
+
+  getIt.registerLazySingleton<UsbSerialRepository>(
+    () => UsbSerialRepositoryImpl(getIt<UsbSerialService>()),
   );
 
   // Smart Home Repositories
@@ -181,6 +196,14 @@ Future<void> initDependencies() async {
 
   getIt.registerLazySingleton<SendSocketCommandUseCase>(
     () => SendSocketCommandUseCase(getIt<SocketRepository>()),
+  );
+
+  getIt.registerLazySingleton<ConnectUsbSerialUseCase>(
+    () => ConnectUsbSerialUseCase(getIt<UsbSerialRepository>()),
+  );
+
+  getIt.registerLazySingleton<SendUsbSerialCommandUseCase>(
+    () => SendUsbSerialCommandUseCase(getIt<UsbSerialRepository>()),
   );
 
   // Device Use Cases
@@ -316,6 +339,14 @@ Future<void> initDependencies() async {
     ),
   );
 
+  getIt.registerFactory<UsbSerialViewModel>(
+    () => UsbSerialViewModel(
+      getIt<UsbSerialRepository>(),
+      getIt<ConnectUsbSerialUseCase>(),
+      getIt<SendUsbSerialCommandUseCase>(),
+    ),
+  );
+
   // Smart Home ViewModels
   getIt.registerFactory<DeviceViewModel>(
     () => DeviceViewModel(
@@ -352,9 +383,7 @@ Future<void> initDependencies() async {
     ),
   );
 
-  getIt.registerFactory<ScenarioSetupViewModel>(
-    () => ScenarioSetupViewModel(),
-  );
+  getIt.registerFactory<ScenarioSetupViewModel>(() => ScenarioSetupViewModel());
 
   getIt.registerFactory<FloorViewModel>(
     () => FloorViewModel(

@@ -8,7 +8,7 @@ import '../../../core/utils/pin_protection.dart';
 
 /// Device Config Form
 /// Dialog for configuring a new device
-/// 
+///
 /// Usage:
 /// ```dart
 /// final device = await DeviceConfigForm.show(context, DeviceType.light);
@@ -44,9 +44,7 @@ class DeviceConfigForm {
     return showDialog<DeviceEntity>(
       context: context,
       barrierColor: Colors.black.withOpacity(0.6),
-      builder: (dialogContext) => _DeviceConfigDialog(
-        deviceType: deviceType,
-      ),
+      builder: (dialogContext) => _DeviceConfigDialog(deviceType: deviceType),
     );
   }
 }
@@ -54,9 +52,7 @@ class DeviceConfigForm {
 class _DeviceConfigDialog extends StatefulWidget {
   final DeviceType deviceType;
 
-  const _DeviceConfigDialog({
-    required this.deviceType,
-  });
+  const _DeviceConfigDialog({required this.deviceType});
 
   @override
   State<_DeviceConfigDialog> createState() => _DeviceConfigDialogState();
@@ -114,8 +110,9 @@ class _DeviceConfigDialogState extends State<_DeviceConfigDialog> {
           gradient: AppTheme.getSectionGradient(isDark),
           borderRadius: BorderRadius.circular(36),
           border: Border.all(
-            color: AppTheme.getSectionBorderColor(isDark)
-                .withOpacity(isDark ? 0.7 : 0.55),
+            color: AppTheme.getSectionBorderColor(
+              isDark,
+            ).withOpacity(isDark ? 0.7 : 0.55),
             width: 1.2,
           ),
           boxShadow: AppTheme.getSectionShadows(isDark, elevated: true),
@@ -208,16 +205,18 @@ class _DeviceConfigDialogState extends State<_DeviceConfigDialog> {
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(16),
                         borderSide: BorderSide(
-                          color: AppTheme.getSectionBorderColor(isDark)
-                              .withOpacity(0.3),
+                          color: AppTheme.getSectionBorderColor(
+                            isDark,
+                          ).withOpacity(0.3),
                           width: 1,
                         ),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(16),
                         borderSide: BorderSide(
-                          color: AppTheme.getSectionBorderColor(isDark)
-                              .withOpacity(0.3),
+                          color: AppTheme.getSectionBorderColor(
+                            isDark,
+                          ).withOpacity(0.3),
                           width: 1,
                         ),
                       ),
@@ -235,7 +234,9 @@ class _DeviceConfigDialogState extends State<_DeviceConfigDialog> {
                     ),
                     validator: (value) {
                       if (value == null || value.trim().isEmpty) {
-                        return AppLocalizations.of(context)!.pleaseEnterDeviceName;
+                        return AppLocalizations.of(
+                          context,
+                        )!.pleaseEnterDeviceName;
                       }
                       return null;
                     },
@@ -277,13 +278,10 @@ class _DeviceConfigDialogState extends State<_DeviceConfigDialog> {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(14),
                           ),
-                        ).copyWith(
-                          elevation: MaterialStateProperty.all(0),
-                        ),
+                        ).copyWith(elevation: MaterialStateProperty.all(0)),
                         child: Container(
                           decoration: BoxDecoration(
-                            gradient:
-                                AppTheme.getPrimaryButtonGradient(isDark),
+                            gradient: AppTheme.getPrimaryButtonGradient(isDark),
                             borderRadius: BorderRadius.circular(14),
                             boxShadow: [
                               BoxShadow(
@@ -344,6 +342,8 @@ class _DeviceConfigDialogState extends State<_DeviceConfigDialog> {
         return Icons.elevator_rounded;
       case DeviceType.doorLock:
         return Icons.door_front_door_rounded;
+      case DeviceType.iphone:
+        return Icons.doorbell_rounded;
     }
   }
 
@@ -373,6 +373,8 @@ class _DeviceConfigDialogState extends State<_DeviceConfigDialog> {
         return 'Elevator';
       case DeviceType.doorLock:
         return 'Door Lock';
+      case DeviceType.iphone:
+        return 'iPhone';
     }
   }
 
@@ -400,15 +402,9 @@ class _DeviceConfigDialogState extends State<_DeviceConfigDialog> {
           resolution: '4K',
         );
       case DeviceType.music:
-        return const MusicState(
-          isPlaying: false,
-          volume: 50,
-        );
+        return const MusicState(isPlaying: false, volume: 50);
       case DeviceType.security:
-        return const SecurityState(
-          isActive: false,
-          status: 'Disarmed',
-        );
+        return const SecurityState(isActive: false, status: 'Disarmed');
       case DeviceType.elevator:
         return const ElevatorState(
           currentFloor: 1,
