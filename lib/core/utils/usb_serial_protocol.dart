@@ -34,6 +34,7 @@ class UsbSerialProtocol {
 
   /// Decode a message from received bytes
   /// Returns null if frame is invalid
+  /// Handles both standard messages and ACK/NACK frames
   static UsbSerialMessage? decodeMessage(List<int> bytes) {
     if (bytes.isEmpty) return null;
 
@@ -57,12 +58,29 @@ class UsbSerialProtocol {
       }
     }
 
-    if (endIdx == -1 || endIdx < startIdx + 3) return null;
+    if (endIdx == -1) return null;
 
-    // Extract frame data
+    // Extract frame data (between STX and ETX)
     final frameData = bytes.sublist(startIdx + 1, endIdx);
-    if (frameData.length < 3)
+
+    // Check if this is an ACK/NACK frame (format: [STX, ACK/NACK, ETX])
+    // ACK/NACK frames are 3 bytes total: [STX, control_byte, ETX]
+    // So frameData should be 1 byte
+    if (frameData.length == 1) {
+      final controlByte = frameData[0];
+      if (controlByte == UsbSerialConstants.frameAck) {
+        return UsbSerialMessage(type: UsbSerialConstants.frameAck, data: '');
+      } else if (controlByte == UsbSerialConstants.frameNack) {
+        return UsbSerialMessage(type: UsbSerialConstants.frameNack, data: '');
+      }
+      // If it's not ACK/NACK but only 1 byte, it's invalid
+      return null;
+    }
+
+    // Standard message format: [STX][Type][Length][Data...][Checksum][ETX]
+    if (frameData.length < 3) {
       return null; // Need at least [Type][Length][Checksum]
+    }
 
     final messageType = frameData[0];
     final length = frameData[1];
@@ -150,10 +168,12 @@ class UsbSerialMessage {
   bool get isResponse => type == UsbSerialConstants.msgTypeResponse;
   bool get isHeartbeat => type == UsbSerialConstants.msgTypeHeartbeat;
   bool get isPushState => type == UsbSerialConstants.msgTypePushState;
-  bool get isAck =>
-      data.codeUnits.isNotEmpty &&
-      data.codeUnits[0] == UsbSerialConstants.frameAck;
-  bool get isNack =>
-      data.codeUnits.isNotEmpty &&
-      data.codeUnits[0] == UsbSerialConstants.frameNack;
+
+  /// Check if this is an ACK frame
+  /// ACK frames have type == frameAck and empty data
+  bool get isAck => type == UsbSerialConstants.frameAck;
+
+  /// Check if this is a NACK frame
+  /// NACK frames have type == frameNack and empty data
+  bool get isNack => type == UsbSerialConstants.frameNack;
 }

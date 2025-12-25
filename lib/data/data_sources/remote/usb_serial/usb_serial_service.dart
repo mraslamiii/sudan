@@ -17,6 +17,7 @@ class UsbSerialService {
   bool _isConnected = false;
   Timer? _heartbeatTimer;
   Timer? _ackTimeoutTimer;
+  StreamSubscription<List<int>>? _inputStreamSubscription;
 
   final StreamController<List<int>> _dataStreamController =
       StreamController<List<int>>.broadcast();
@@ -121,7 +122,8 @@ class UsbSerialService {
 
   /// Start listening to incoming data
   void _startListening() {
-    _port?.inputStream?.listen(
+    _inputStreamSubscription?.cancel();
+    _inputStreamSubscription = _port?.inputStream?.listen(
       (List<int> data) {
         _buffer.addAll(data);
         _processBuffer();
@@ -160,15 +162,14 @@ class UsbSerialService {
             }
           }
         } else {
-          // Send ACK for received message
+          // Send ACK for received message (only once)
           _sendRaw(UsbSerialProtocol.createAck());
 
-          // Handle heartbeat
+          // Handle heartbeat - no need to emit, just ACK was sent above
           if (message.isHeartbeat) {
-            // Respond to heartbeat
-            _sendRaw(UsbSerialProtocol.createAck());
+            // Heartbeat acknowledged, no further action needed
           } else {
-            // Emit message
+            // Emit non-heartbeat messages
             _dataStreamController.add(message.data.codeUnits);
             _messageStreamController.add(message);
           }
@@ -270,6 +271,10 @@ class UsbSerialService {
     _stopHeartbeat();
     _ackTimeoutTimer?.cancel();
     _ackTimeoutTimer = null;
+
+    // Cancel input stream subscription
+    await _inputStreamSubscription?.cancel();
+    _inputStreamSubscription = null;
 
     await _port?.close();
     _port = null;
