@@ -1,11 +1,11 @@
-import 'package:bms/data/data_sources/remote_data_sources/socket/connection_requests/result.dart';
-import 'package:bms/data/data_sources/remote_data_sources/socket/connection_requests/wrappers/connection_manager/connection_manager_data_model.dart';
-import 'package:bms/data/data_sources/remote_data_sources/socket/connection_requests/wrappers/connection_manager/ip_manager/ip_config.dart';
-import 'package:bms/data/data_sources/remote_data_sources/socket/socket.dart';
-import 'package:bms/presentation/screens/error_gps/error_gps_screen.dart';
+﻿import '../../../../../../../data/data_sources/remote_data_sources/socket/connection_requests/result.dart';
+import '../../../../../../../data/data_sources/remote_data_sources/socket/connection_requests/wrappers/connection_manager/connection_manager_data_model.dart';
+import '../../../../../../../data/data_sources/remote_data_sources/socket/connection_requests/wrappers/connection_manager/ip_manager/ip_config.dart';
+import '../../../../../../../data/data_sources/remote_data_sources/socket/socket.dart';
+import '../../../../../../../presentation/screens/error_gps/error_gps_screen.dart';
 import 'package:get/get.dart';
 import 'package:network_info_plus/network_info_plus.dart';
-import 'package:bms/data/enums/connection_error_code.dart';
+import '../../../../../../../data/enums/connection_error_code.dart';
 
 import '../../../../../../../core/utils/communication_constants.dart';
 import '../../../../../../../core/utils/globals.dart';

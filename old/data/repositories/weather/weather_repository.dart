@@ -1,4 +1,4 @@
-import 'package:bms/data/model/WeatherModel.dart';
+﻿import '../../../data/model/WeatherModel.dart';
 
 
 abstract class WeatherRepository {

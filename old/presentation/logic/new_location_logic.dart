@@ -1,16 +1,16 @@
 import 'dart:async';
 
-import 'package:bms/core/eventbus/event_bus_const.dart';
-import 'package:bms/core/eventbus/event_bus_model.dart';
-import 'package:bms/core/utils/constants.dart';
-import 'package:bms/core/utils/globals.dart';
-import 'package:bms/core/utils/util.dart';
-import 'package:bms/data/data_sources/remote_data_sources/socket/connection_requests/result.dart';
-import 'package:bms/data/data_sources/remote_data_sources/socket/connection_requests/wrappers/new_connection_wraper/new_location_data_model.dart';
-import 'package:bms/data/repositories/location_repository.dart';
-import 'package:bms/domain/usecases/update_devices/update_devices_usecase_impl.dart';
-import 'package:bms/presentation/logic/base_logic.dart';
-import 'package:bms/presentation/screens/splash/splash_screen.dart';
+import '../../core/eventbus/event_bus_const.dart';
+import '../../core/eventbus/event_bus_model.dart';
+import '../../core/utils/constants.dart';
+import '../../core/utils/globals.dart';
+import '../../core/utils/util.dart';
+import '../../data/data_sources/remote_data_sources/socket/connection_requests/result.dart';
+import '../../data/data_sources/remote_data_sources/socket/connection_requests/wrappers/new_connection_wraper/new_location_data_model.dart';
+import '../../data/repositories/location_repository.dart';
+import '../../domain/usecases/update_devices/update_devices_usecase_impl.dart';
+import 'base_logic.dart';
+import '../screens/splash/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -40,7 +40,8 @@ class NewLocationLogic extends BaseLogic {
   TextEditingController staticIpController = TextEditingController();
   late UpdateDeviceUseCaseImpl updateDeviceUseCase;
   bool mSetModemIpLoading = false;
-  late final LocationRepository _locationRepository = Get.find<LocationRepository>();
+  late final LocationRepository _locationRepository =
+      Get.find<LocationRepository>();
   StreamSubscription<EventBusModel>? _mSubscription;
   StreamSubscription<Result>? _mConnectionSubscription;
 
@@ -77,7 +78,10 @@ class NewLocationLogic extends BaseLogic {
   /// @M_S=Repeat
   /// @M_S=Error
   void _onEventSetModemHappened(EventBusModel event) {
-    SetModemUsecaseImpl().setModemData(locationToEdit!, event.data!, (bool status, String data) {
+    SetModemUsecaseImpl().setModemData(locationToEdit!, event.data!, (
+      bool status,
+      String data,
+    ) {
       if (!status) {
         Utils.snackError(data);
       } else {
@@ -95,10 +99,13 @@ class NewLocationLogic extends BaseLogic {
     _storeModemData();
 
     sendMessageToSocket(
-        '#AT+CWJAP="${modemNameController.text}","${modemPasswordController.text}"#');
+      '#AT+CWJAP="${modemNameController.text}","${modemPasswordController.text}"#',
+    );
 
-    _logger('setModemConfig - send ',
-        ' #AT+CWJAP="${modemNameController.text}","${modemPasswordController.text}"#');
+    _logger(
+      'setModemConfig - send ',
+      ' #AT+CWJAP="${modemNameController.text}","${modemPasswordController.text}"#',
+    );
   }
 
   _storeModemData() {
@@ -114,7 +121,7 @@ class NewLocationLogic extends BaseLogic {
 
     if (locationToEdit != null) {
       locationNameController.text = locationToEdit!.name ?? '';
-      wifiNameController.text = locationToEdit!.panelWifiName??'';
+      wifiNameController.text = locationToEdit!.panelWifiName ?? '';
       wifiPasswordController.text = locationToEdit!.panelWifiPassword ?? '';
 
       macAddressController.text = locationToEdit!.mac!;
@@ -134,7 +141,11 @@ class NewLocationLogic extends BaseLogic {
     _mConnectionSubscription?.cancel();
 
     var subject = ConnectionRequestsImpl.instance.newLocationRequest(
-        NewLocationDataModel(locationNameController.text, staticIpController.text));
+      NewLocationDataModel(
+        locationNameController.text,
+        staticIpController.text,
+      ),
+    );
     _mConnectionSubscription = subject.listen((result) {
       onConnectionResult(result);
     });
@@ -158,9 +169,12 @@ class NewLocationLogic extends BaseLogic {
   }
 
   _onConnectedCallback(ConnectionManagerDataModel? dataModel) {
-    _logger('_onConnectedCallback', 'dataModel : ${dataModel!.referenceLocation!.name}');
+    _logger(
+      '_onConnectedCallback',
+      'dataModel : ${dataModel!.referenceLocation!.name}',
+    );
 
-    _initFields(dataModel!.referenceLocation);
+    _initFields(dataModel.referenceLocation);
   }
 
   _onFailedCallback(ConnectionErrorCode? reason) {
@@ -203,15 +217,18 @@ class NewLocationLogic extends BaseLogic {
     if (_isNamePasswordValid()) {
       _storeWifiData();
       sendMessageToSocket(
-          '*AT+CWSAP="${wifiNameController.text}","${wifiPasswordController.text}",1,4*');
+        '*AT+CWSAP="${wifiNameController.text}","${wifiPasswordController.text}",1,4*',
+      );
     } else {
       showValidationError();
     }
   }
 
   bool _isNamePasswordValid() {
-    return wifiNameController.text.length > Constants.minimumBMSWifiNameCharacter &&
-        wifiPasswordController.text.length == Constants.exactBMSWifiPasswordCharacter;
+    return wifiNameController.text.length >
+            Constants.minimumBMSWifiNameCharacter &&
+        wifiPasswordController.text.length ==
+            Constants.exactBMSWifiPasswordCharacter;
   }
 
   void _storeWifiData() {
@@ -234,8 +251,10 @@ class NewLocationLogic extends BaseLogic {
   }
 
   void showValidationError() {
-    Utils.snackError('تعداد کارکتر مجاز نام wifi باید بیشتر از '
-        '${Constants.minimumBMSWifiNameCharacter} باشد \n و تعداد کاراکتر پسورد باید '
-        '${Constants.exactBMSWifiPasswordCharacter} کاراکتر باشد.');
+    Utils.snackError(
+      'تعداد کارکتر مجاز نام wifi باید بیشتر از '
+      '${Constants.minimumBMSWifiNameCharacter} باشد \n و تعداد کاراکتر پسورد باید '
+      '${Constants.exactBMSWifiPasswordCharacter} کاراکتر باشد.',
+    );
   }
 }

@@ -1,9 +1,9 @@
-import 'dart:convert';
+﻿import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:bms/core/utils/communication_constants.dart';
-import 'package:bms/data/enums/headline_code.dart';
-import 'package:bms/domain/usecases/run_scenario/run_scenario_usecase.dart';
+import '../../../core/utils/communication_constants.dart';
+import '../../../data/enums/headline_code.dart';
+import '../../../domain/usecases/run_scenario/run_scenario_usecase.dart';
 
 import '../../../core/utils/globals.dart';
 import '../../../core/utils/util.dart';

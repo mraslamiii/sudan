@@ -1,9 +1,9 @@
-import 'package:animated_toggle_switch/animated_toggle_switch.dart';
-import 'package:bms/core/utils/extension.dart';
-import 'package:bms/core/values/theme.dart';
-import 'package:bms/data/data_sources/local_data_sources/database/model/device.dart';
-import 'package:bms/data/data_sources/local_data_sources/database/model/place.dart';
-import 'package:bms/presentation/components/appbar.dart';
+﻿import 'package:animated_toggle_switch/animated_toggle_switch.dart';
+import '../../../../../core/utils/extension.dart';
+import '../../../../../core/values/theme.dart';
+import '../../../../../data/data_sources/local_data_sources/database/model/device.dart';
+import '../../../../../data/data_sources/local_data_sources/database/model/place.dart';
+import '../../../../../presentation/components/appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';

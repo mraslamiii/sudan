@@ -1,7 +1,7 @@
-import 'dart:async';
+﻿import 'dart:async';
 
-import 'package:bms/data/data_sources/remote_data_sources/socket/socket.dart';
-import 'package:bms/data/enums/connection_error_code.dart';
+import '../../../../../../../../data/data_sources/remote_data_sources/socket/socket.dart';
+import '../../../../../../../../data/enums/connection_error_code.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:network_info_plus/network_info_plus.dart';
 
@@ -11,21 +11,26 @@ import '../../../../../../../../core/utils/globals.dart';
 
 class ObserveConnection {
   late String? wifiBSSIDLookingFor;
-  StreamSubscription<List<ConnectivityResult>>? _mSubscription;
+  StreamSubscription<ConnectivityResult>? _mSubscription;
 
   ObserveConnection();
 
   void subscribe(String? wifiBSSIDLookingFor) {
     this.wifiBSSIDLookingFor = wifiBSSIDLookingFor;
     _logger('_subscribeToWifiChanges', 'do subscription');
-    _mSubscription = Connectivity().onConnectivityChanged.listen(_updateConnectionStatus);
+    _mSubscription = Connectivity().onConnectivityChanged
+        .map(
+          (results) =>
+              results.isNotEmpty ? results.first : ConnectivityResult.none,
+        )
+        .listen(_updateConnectionStatus);
   }
 
-  Future<void> _updateConnectionStatus(List<ConnectivityResult> result) async {
-    _logger('_updateConnectionStatus1', 'Changed to: ${result.join('-')}');
+  Future<void> _updateConnectionStatus(ConnectivityResult result) async {
+    _logger('_updateConnectionStatus1', 'Changed to: $result');
     final networkInfo = NetworkInfo();
 
-    if (result.last == ConnectivityResult.wifi) {
+    if (result == ConnectivityResult.wifi) {
       String? wifiBSSID = await networkInfo.getWifiBSSID();
 
       if (wifiBSSID != null && wifiBSSID == wifiBSSIDLookingFor) {
@@ -37,10 +42,9 @@ class ObserveConnection {
         _logger('_updateConnectionStatus', 'Unknown network');
         onDisconnected();
       }
-    } else if (result.last == ConnectivityResult.mobile) {
+    } else if (result == ConnectivityResult.mobile) {
       _logger('_updateConnectionStatus', 'On mobile internet');
-    }
-    else if (result.last == ConnectivityResult.vpn) {
+    } else if (result == ConnectivityResult.vpn) {
       _logger('_updateConnectionStatus', 'On vpn internet');
     } else {
       // Disconnected
@@ -48,12 +52,15 @@ class ObserveConnection {
       onDisconnected();
     }
 
-// Get WiFi Details
+    // Get WiFi Details
     String? wifiName = await networkInfo.getWifiName();
     String? wifiBSSID = await networkInfo.getWifiBSSID();
     String? wifiIP = await networkInfo.getWifiIP();
 
-    _logger('_subscribeToWifiChanges', 'wifiName: $wifiName wifiBSSID: $wifiBSSID wifiIP: $wifiIP');
+    _logger(
+      '_subscribeToWifiChanges',
+      'wifiName: $wifiName wifiBSSID: $wifiBSSID wifiIP: $wifiIP',
+    );
   }
 
   void onDisconnected() {
@@ -61,8 +68,12 @@ class ObserveConnection {
     if (Socket.instance.isConnected()) {
       cancel();
 
-      eventBus.fire(EventBusModel(
-          event: EventBusConst.eventSocketFailed, data: ConnectionErrorCode.wifiLost));
+      eventBus.fire(
+        EventBusModel(
+          event: EventBusConst.eventSocketFailed,
+          data: ConnectionErrorCode.wifiLost,
+        ),
+      );
     }
   }
 

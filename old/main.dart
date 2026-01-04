@@ -1,7 +1,7 @@
-import 'package:bms/core/values/theme.dart';
-import 'package:bms/core/values/translates.dart';
-import 'package:bms/data/data_sources/local_data_sources/database/app_database.dart';
-import 'package:bms/presentation/screens/splash/splash_screen.dart';
+﻿import 'core/values/theme.dart';
+import 'core/values/translates.dart';
+import 'data/data_sources/local_data_sources/database/app_database.dart';
+import 'presentation/screens/splash/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
@@ -17,7 +17,7 @@ Future<void> main() async {
   _observeLifeCycle();
   Get.isLogEnable = true;
   runApp(const MyApp());
-  _logger('main','run App called');
+  _logger('main', 'run App called');
 }
 
 void _observeLifeCycle() {
@@ -30,39 +30,42 @@ class MyApp extends StatelessWidget with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    return Sizer(builder: (
-      BuildContext context,
-      Orientation orientation,
-      DeviceType deviceType,
-    ) {
-      // Alice alice = Alice(showNotification: true);
-      return GetMaterialApp(
-        // navigatorKey:  alice.getNavigatorKey(),
-        title: 'BMS',
-        themeMode: ThemeMode.light,
-        initialBinding: AppBindings(),
-        translations: Translates(),
-        debugShowCheckedModeBanner: false,
-        locale: const Locale('fa', 'IR'),
-        localizationsDelegates: const [
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        supportedLocales: const [Locale('en', 'US'), Locale('fa', 'IR')],
-        theme: AppTheme().getThem(),
-        home: FutureBuilder<AppDatabase>(
-          future: AppDatabase.init(),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return SplashScreen();
-            }
+    return Sizer(
+      builder:
+          (
+            BuildContext context,
+            Orientation orientation,
+            DeviceType deviceType,
+          ) {
+            // Alice alice = Alice(showNotification: true);
+            return GetMaterialApp(
+              // navigatorKey:  alice.getNavigatorKey(),
+              title: 'BMS',
+              themeMode: ThemeMode.light,
+              initialBinding: AppBindings(),
+              translations: Translates(),
+              debugShowCheckedModeBanner: false,
+              locale: const Locale('fa', 'IR'),
+              localizationsDelegates: const [
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+              ],
+              supportedLocales: const [Locale('en', 'US'), Locale('fa', 'IR')],
+              theme: AppTheme().getThem(),
+              home: FutureBuilder<AppDatabase>(
+                future: AppDatabase.init(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return SplashScreen();
+                  }
 
-            return Container();
+                  return Container();
+                },
+              ),
+            );
           },
-        ),
-      );
-    });
+    );
   }
 }
 

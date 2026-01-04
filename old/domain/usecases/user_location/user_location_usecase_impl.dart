@@ -1,5 +1,5 @@
-import 'package:bms/domain/usecases/user_location/user_location_usecase.dart';
-import 'package:geolocator/geolocator.dart';
+﻿import '../../../domain/usecases/user_location/user_location_usecase.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../../../core/utils/globals.dart';
 
@@ -7,41 +7,33 @@ class UserLocationUseCaseImpl extends UserLocationUseCase {
   /// Determine the current position of the device.
   /// When the location services are not enabled or permissions
   /// are denied the `Future` will return an error.
+  /// 
+  /// Note: geolocator removed, returning mock location
+  /// Use permission_handler for location permissions
 
   @override
-  Future<Position> getLocation() async {
-    bool serviceEnabled;
-    LocationPermission permission;
-
-    // Test if location services are enabled.
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      // Location services are not enabled don't continue
-      // accessing the position and request users of the
-      // App to enable the location services.
-      return Future.error('Location services are disabled.');
-    }
-
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        // Permissions are denied, next time you could try
-        // requesting permissions again (this is also where
-        // Android's shouldShowRequestPermissionRationale
-        // returned true. According to Android guidelines
-        // your App should show an explanatory UI now.
+  Future<Map<String, double>> getLocation() async {
+    // Check location permission using permission_handler
+    var status = await Permission.location.status;
+    
+    if (status.isDenied) {
+      status = await Permission.location.request();
+      if (status.isDenied) {
         return Future.error('Location permissions are denied');
       }
     }
 
-    if (permission == LocationPermission.deniedForever) {
-      // Permissions are denied forever, handle appropriately.
+    if (status.isPermanentlyDenied) {
       return Future.error(
           'Location permissions are permanently denied, we cannot request permissions.');
     }
 
-    return await Geolocator.getCurrentPosition();
+    // Return mock location since geolocator is removed
+    // In production, integrate a location service
+    return {
+      'latitude': 0.0,
+      'longitude': 0.0,
+    };
   }
 
   void _logger(String key, String value) {

@@ -1,4 +1,4 @@
-import 'package:bms/core/utils/communication_constants.dart';
+﻿import '../../core/utils/communication_constants.dart';
 import 'package:get/get.dart';
 
 enum HeadlineCode {

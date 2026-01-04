@@ -1,7 +1,7 @@
-import 'package:bms/core/utils/globals.dart';
-import 'package:bms/data/data_sources/local_data_sources/database/model/device.dart';
-import 'package:bms/data/data_sources/remote_data_sources/socket/socket.dart';
-import 'package:bms/domain/usecases/update_devices/update_devices_usecase_impl.dart';
+﻿import '../../core/utils/globals.dart';
+import '../../data/data_sources/local_data_sources/database/model/device.dart';
+import '../../data/data_sources/remote_data_sources/socket/socket.dart';
+import '../../domain/usecases/update_devices/update_devices_usecase_impl.dart';
 import 'package:get/get.dart';
 
 import '../../domain/usecases/send_data/send_data_socket_usecase.dart';

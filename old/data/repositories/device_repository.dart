@@ -1,7 +1,7 @@
-import 'package:bms/core/utils/communication_constants.dart';
-import 'package:bms/data/data_sources/local_data_sources/database/app_database.dart';
-import 'package:bms/data/data_sources/local_data_sources/database/model/device.dart';
-import 'package:bms/data/data_sources/local_data_sources/database/model/place.dart';
+﻿import '../../core/utils/communication_constants.dart';
+import '../../data/data_sources/local_data_sources/database/app_database.dart';
+import '../../data/data_sources/local_data_sources/database/model/device.dart';
+import '../../data/data_sources/local_data_sources/database/model/place.dart';
 import 'package:get/get.dart';
 
 import '../enums/floor_code.dart';

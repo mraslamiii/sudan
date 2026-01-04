@@ -1,12 +1,12 @@
-import 'package:bms/core/utils/extension.dart';
-import 'package:bms/core/values/theme.dart';
+﻿import '../../core/utils/extension.dart';
+import '../../core/values/theme.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:location/location.dart';
 import 'package:lottie/lottie.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class Utils {
   static bool checkIfDarkModeEnabled(BuildContext context) {
@@ -118,36 +118,24 @@ class CardNumberFormatter extends TextInputFormatter {
 enum MobileSize { small, normal, large }
 
 Future<void> enableGPS() async {
-  // Create an instance of the location package
-  Location location = new Location();
-
-  bool _serviceEnabled;
-  PermissionStatus _permissionGranted;
-  LocationData _locationData;
-
-  // Check if the GPS service is enabled
-  _serviceEnabled = await location.serviceEnabled();
-  if (!_serviceEnabled) {
-    // Request the user to enable GPS
-    _serviceEnabled = await location.requestService();
-    if (!_serviceEnabled) {
-      // If the user refuses to turn on GPS, return from the function
-      return;
-    }
-  }
-
-  // Check if the app has permission to access location
-  _permissionGranted = await location.hasPermission();
-  if (_permissionGranted == PermissionStatus.denied) {
+  // Using permission_handler instead of location package
+  var status = await Permission.location.status;
+  
+  if (status.isDenied) {
     // Request location permission from the user
-    _permissionGranted = await location.requestPermission();
-    if (_permissionGranted != PermissionStatus.granted) {
+    status = await Permission.location.request();
+    if (!status.isGranted) {
       // If permission is not granted, return from the function
       return;
     }
   }
 
-  // Once GPS is enabled and permissions are granted, get the location
-  _locationData = await location.getLocation();
-  print("Location: ${_locationData.latitude}, ${_locationData.longitude}");
+  if (status.isPermanentlyDenied) {
+    // Open app settings for user to enable permission
+    await openAppSettings();
+    return;
+  }
+
+  // Location permission granted
+  print("Location permission granted");
 }

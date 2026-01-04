@@ -1,4 +1,4 @@
-import 'package:bms/core/utils/communication_constants.dart';
+﻿import '../../../../../../../core/utils/communication_constants.dart';
 
 import '../../../../../local_data_sources/database/model/location.dart';
 import '../new_connection_wraper/new_location_data_model.dart';

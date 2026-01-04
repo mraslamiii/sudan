@@ -1,4 +1,4 @@
-import 'package:bms/presentation/logic/base_logic.dart';
+﻿import '../../presentation/logic/base_logic.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 

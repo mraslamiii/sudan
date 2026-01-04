@@ -1,8 +1,8 @@
-import 'dart:async';
+﻿import 'dart:async';
 
-import 'package:bms/core/utils/communication_constants.dart';
-import 'package:bms/data/data_sources/remote_data_sources/socket/socket.dart';
-import 'package:bms/domain/usecases/send_data/send_data_socket_usecase.dart';
+import '../../../core/utils/communication_constants.dart';
+import '../../../data/data_sources/remote_data_sources/socket/socket.dart';
+import '../../../domain/usecases/send_data/send_data_socket_usecase.dart';
 
 import '../../../core/utils/globals.dart';
 

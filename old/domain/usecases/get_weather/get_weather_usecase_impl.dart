@@ -1,4 +1,4 @@
-import 'package:bms/data/repositories/weather/weather_repository_impl.dart';
+﻿import '../../../data/repositories/weather/weather_repository_impl.dart';
 import 'package:get/get.dart';
 
 import '../../../core/utils/globals.dart';
@@ -10,7 +10,10 @@ class GetWeatherCaseImpl extends GetWeatherCase {
   Future<String> getWeather() async {
     var position = await UserLocationUseCaseImpl().getLocation();
 
-    var model = await Get.find<WeatherRepositoryImpl>().getWeather(position.latitude,position.longitude);
+    var model = await Get.find<WeatherRepositoryImpl>().getWeather(
+      position['latitude']!,
+      position['longitude']!,
+    );
 
     if (model.current != null && model.current?.temperature_2m != null) {
       return '${model.current?.temperature_2m}°';
@@ -22,5 +25,4 @@ class GetWeatherCaseImpl extends GetWeatherCase {
   void _logger(String key, String value) {
     doLogGlobal('get_weather_usecase_impl. H:$hashCode', key, value);
   }
-
 }

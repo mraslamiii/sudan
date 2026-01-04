@@ -1,6 +1,6 @@
-import 'package:bms/core/utils/communication_constants.dart';
-import 'package:bms/data/data_sources/local_data_sources/database/dao/base_dao.dart';
-import 'package:bms/data/data_sources/local_data_sources/database/model/device.dart';
+﻿import '../../../../../core/utils/communication_constants.dart';
+import '../../../../../data/data_sources/local_data_sources/database/dao/base_dao.dart';
+import '../../../../../data/data_sources/local_data_sources/database/model/device.dart';
 import 'package:floor/floor.dart';
 
 import '../../../../enums/headline_code.dart';

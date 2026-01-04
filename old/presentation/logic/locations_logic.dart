@@ -1,13 +1,12 @@
-import 'package:bms/data/data_sources/local_data_sources/database/model/location.dart';
-import 'package:bms/data/data_sources/remote_data_sources/socket/socket.dart';
-import 'package:bms/data/repositories/location_repository.dart';
-import 'package:bms/presentation/logic/base_logic.dart';
 import 'package:get/get.dart';
+
+import '../../data/data_sources/local_data_sources/database/model/location.dart';
+import '../../data/repositories/location_repository.dart';
+import 'base_logic.dart';
 
 import '../../core/di/app_binding.dart';
 import '../../data/data_sources/remote_data_sources/socket/connection_requests/connection_requests_impl.dart';
 import '../screens/splash/splash_screen.dart';
-
 
 class LocationsLogic extends BaseLogic {
   List<Location> locationList = [];
@@ -42,7 +41,7 @@ class LocationsLogic extends BaseLogic {
       await _mLocRepo.updateSelectedLocation(locationList[0].id!);
     }
 
-   await _mLocRepo.deleteLocation(location);
+    await _mLocRepo.deleteLocation(location);
     _logger('deleteLocation', "do clear data");
 
     ConnectionRequestsImpl.instance.destroyConnections();
@@ -53,6 +52,4 @@ class LocationsLogic extends BaseLogic {
   void _logger(String key, String value) {
     doLog('settings_logic. H:$hashCode', key, value);
   }
-
-
 }

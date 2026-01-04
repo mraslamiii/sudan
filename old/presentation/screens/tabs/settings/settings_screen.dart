@@ -1,12 +1,12 @@
-import 'package:bms/presentation/components/appbar.dart';
-import 'package:bms/core/eventbus/event_bus_const.dart';
-import 'package:bms/core/eventbus/event_bus_model.dart';
-import 'package:bms/core/utils/extension.dart';
-import 'package:bms/core/utils/globals.dart';
-import 'package:bms/data/data_sources/local_data_sources/pref/pref_helper.dart';
-import 'package:bms/core/values/theme.dart';
+﻿import '../../../../presentation/components/appbar.dart';
+import '../../../../core/eventbus/event_bus_const.dart';
+import '../../../../core/eventbus/event_bus_model.dart';
+import '../../../../core/utils/extension.dart';
+import '../../../../core/utils/globals.dart';
+import '../../../../data/data_sources/local_data_sources/pref/pref_helper.dart';
+import '../../../../core/values/theme.dart';
 
-import 'package:bms/presentation/screens/tabs/settings/pages/locations_screen.dart';
+import '../../../../presentation/screens/tabs/settings/pages/locations_screen.dart';
 
  
 import 'package:flutter/material.dart';

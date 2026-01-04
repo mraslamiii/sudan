@@ -1,8 +1,8 @@
-import 'package:bms/core/utils/extension.dart';
-import 'package:bms/core/values/theme.dart';
-import 'package:bms/data/data_sources/local_data_sources/database/model/scenario.dart';
-import 'package:bms/presentation/components/appbar.dart';
-import 'package:bms/presentation/components/primary_button.dart';
+﻿import '../../../../core/utils/extension.dart';
+import '../../../../core/values/theme.dart';
+import '../../../../data/data_sources/local_data_sources/database/model/scenario.dart';
+import '../../../../presentation/components/appbar.dart';
+import '../../../../presentation/components/primary_button.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

@@ -1,6 +1,6 @@
-import 'package:bms/data/data_sources/local_data_sources/database/model/logger.dart';
-import 'package:bms/data/repositories/logger/logger_repo_impl.dart';
-import 'package:bms/presentation/logic/base_logic.dart';
+﻿import '../../data/data_sources/local_data_sources/database/model/logger.dart';
+import '../../data/repositories/logger/logger_repo_impl.dart';
+import '../../presentation/logic/base_logic.dart';
 import 'package:get/get.dart';
 
 

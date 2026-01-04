@@ -1,7 +1,5 @@
-import 'dart:ffi';
-
-import 'package:bms/data/data_sources/remote_data_sources/socket/connection_requests/wrappers/connection_manager/connection_manager_data_model.dart';
-import 'package:bms/data/data_sources/remote_data_sources/socket/socket.dart';
+﻿import '../../../../../data/data_sources/remote_data_sources/socket/connection_requests/wrappers/connection_manager/connection_manager_data_model.dart';
+import '../../../../../data/data_sources/remote_data_sources/socket/socket.dart';
 
 class CacheConnection{
     ConnectionManagerDataModel _mDataModel = ConnectionManagerDataModel();

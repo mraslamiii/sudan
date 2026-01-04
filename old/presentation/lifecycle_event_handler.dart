@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 
 import '../core/utils/globals.dart';
 import '../data/data_sources/remote_data_sources/socket/connection_requests/connection_requests_impl.dart';
-import '../data/data_sources/remote_data_sources/socket/socket.dart';
 
 class LifecycleEventHandler extends WidgetsBindingObserver {
   LifecycleEventHandler();

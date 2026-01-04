@@ -1,5 +1,5 @@
-import 'package:bms/data/data_sources/local_data_sources/database/model/scenario.dart';
-import 'package:bms/data/data_sources/local_data_sources/database/model/scenario_det.dart';
+﻿import '../../../data/data_sources/local_data_sources/database/model/scenario.dart';
+import '../../../data/data_sources/local_data_sources/database/model/scenario_det.dart';
 import 'package:get/get.dart';
 
 import '../../../core/eventbus/event_bus_const.dart';

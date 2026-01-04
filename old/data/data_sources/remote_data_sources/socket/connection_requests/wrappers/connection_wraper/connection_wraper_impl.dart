@@ -1,11 +1,7 @@
-import 'package:bms/domain/store_ip_config/store_ip_config_usecase.dart';
-import 'package:bms/domain/store_ip_config/store_ip_config_usecase_impl.dart';
+﻿import '../../../../../../../domain/store_ip_config/store_ip_config_usecase_impl.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
-import 'package:network_info_plus/network_info_plus.dart';
 
-import '../../../../../../../core/eventbus/event_bus_const.dart';
-import '../../../../../../../core/eventbus/event_bus_model.dart';
 import '../../../../../../../core/utils/globals.dart';
 import '../../../../../../enums/connection_error_code.dart';
 import '../../../../../../repositories/location_repository.dart';

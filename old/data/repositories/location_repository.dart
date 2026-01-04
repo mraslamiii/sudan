@@ -1,8 +1,8 @@
-import 'package:bms/data/data_sources/local_data_sources/database/app_database.dart';
-import 'package:bms/data/data_sources/local_data_sources/database/model/device.dart';
-import 'package:bms/data/data_sources/local_data_sources/database/model/location.dart';
-import 'package:bms/data/data_sources/local_data_sources/database/model/place.dart';
-import 'package:bms/data/data_sources/local_data_sources/database/model/scenario.dart';
+﻿import '../../data/data_sources/local_data_sources/database/app_database.dart';
+import '../../data/data_sources/local_data_sources/database/model/device.dart';
+import '../../data/data_sources/local_data_sources/database/model/location.dart';
+import '../../data/data_sources/local_data_sources/database/model/place.dart';
+import '../../data/data_sources/local_data_sources/database/model/scenario.dart';
 import 'package:get/get.dart';
 
 class LocationRepository {

@@ -1,5 +1,5 @@
-import 'package:bms/core/utils/constants.dart';
-import 'package:bms/core/utils/util.dart';
+﻿import '../../../core/utils/constants.dart';
+import '../../../core/utils/util.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';

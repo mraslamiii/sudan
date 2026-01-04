@@ -1,6 +1,6 @@
-import 'package:bms/data/data_sources/remote_data_sources/api/weather_api.dart';
-import 'package:bms/data/data_sources/remote_data_sources/remote_data/weather_remote_data_source.dart';
-import 'package:bms/data/model/WeatherModel.dart';
+﻿import '../../../../data/data_sources/remote_data_sources/api/weather_api.dart';
+import '../../../../data/data_sources/remote_data_sources/remote_data/weather_remote_data_source.dart';
+import '../../../../data/model/WeatherModel.dart';
 import 'package:get/get.dart';
 
 

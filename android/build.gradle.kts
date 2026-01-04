@@ -2,6 +2,12 @@ allprojects {
     repositories {
         google()
         mavenCentral()
+        maven {
+            url = uri("https://jitpack.io")
+        }
+        maven {
+            url = uri("https://repo.maven.apache.org/maven2")
+        }
     }
 }
 
@@ -17,6 +23,14 @@ subprojects {
 }
 subprojects {
     project.evaluationDependsOn(":app")
+    
+    // Fix for geolocator_android core-proto issue
+    buildscript {
+        repositories {
+            google()
+            mavenCentral()
+        }
+    }
 }
 
 tasks.register<Delete>("clean") {

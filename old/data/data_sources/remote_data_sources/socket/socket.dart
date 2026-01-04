@@ -1,10 +1,9 @@
-import 'package:bms/core/eventbus/event_bus_const.dart';
-import 'package:bms/core/eventbus/event_bus_model.dart';
-import 'package:bms/core/utils/globals.dart';
-import 'package:bms/data/data_sources/remote_data_sources/socket/tcp_socket_connection.dart';
+﻿import '../../../../core/eventbus/event_bus_const.dart';
+import '../../../../core/eventbus/event_bus_model.dart';
+import '../../../../core/utils/globals.dart';
+import '../../../../data/data_sources/remote_data_sources/socket/tcp_socket_connection.dart';
 
 import '../../../../core/utils/util.dart';
-import '../../../enums/connection_error_code.dart';
 import 'connection_requests/result.dart';
 
 class Socket {

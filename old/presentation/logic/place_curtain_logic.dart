@@ -1,9 +1,9 @@
-import 'dart:async';
+﻿import 'dart:async';
 
-import 'package:bms/data/data_sources/local_data_sources/database/model/device.dart';
-import 'package:bms/data/data_sources/local_data_sources/database/model/place.dart';
-import 'package:bms/domain/usecases/get_devices/get_devices_usecase_impl.dart';
-import 'package:bms/presentation/logic/base_logic.dart';
+import '../../data/data_sources/local_data_sources/database/model/device.dart';
+import '../../data/data_sources/local_data_sources/database/model/place.dart';
+import '../../domain/usecases/get_devices/get_devices_usecase_impl.dart';
+import '../../presentation/logic/base_logic.dart';
 import 'package:get/get.dart';
 
 import '../../core/eventbus/event_bus_const.dart';

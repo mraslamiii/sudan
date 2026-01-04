@@ -1,14 +1,14 @@
 import 'dart:async';
 
-import 'package:bms/core/utils/communication_constants.dart';
-import 'package:bms/data/data_sources/local_data_sources/database/model/place.dart';
-import 'package:bms/data/data_sources/local_data_sources/database/model/scenario.dart';
-import 'package:bms/data/data_sources/local_data_sources/database/model/scenario_det.dart';
-import 'package:bms/data/enums/headline_code.dart';
-import 'package:bms/domain/usecases/get_scenario/get_scenario_usecase.dart';
-import 'package:bms/domain/usecases/get_scenario/get_scenario_usecase_impl.dart';
-import 'package:bms/domain/usecases/update_scenario/update_scenario_usecase_impl.dart';
-import 'package:bms/presentation/logic/base_logic.dart';
+import '../../core/utils/communication_constants.dart';
+import '../../data/data_sources/local_data_sources/database/model/place.dart';
+import '../../data/data_sources/local_data_sources/database/model/scenario.dart';
+import '../../data/data_sources/local_data_sources/database/model/scenario_det.dart';
+import '../../data/enums/headline_code.dart';
+import '../../domain/usecases/get_scenario/get_scenario_usecase.dart';
+import '../../domain/usecases/get_scenario/get_scenario_usecase_impl.dart';
+import '../../domain/usecases/update_scenario/update_scenario_usecase_impl.dart';
+import 'base_logic.dart';
 
 import '../../core/eventbus/event_bus_const.dart';
 import '../../core/eventbus/event_bus_model.dart';
@@ -26,7 +26,11 @@ class PlaceScenariosLogic extends BaseLogic {
   List<ScenarioDet> devicesInScenario = [];
   StreamSubscription<EventBusModel>? _mSubscription;
 
-  PlaceScenariosLogic({required this.place, required this.floor, required this.currentLocationId});
+  PlaceScenariosLogic({
+    required this.place,
+    required this.floor,
+    required this.currentLocationId,
+  });
 
   @override
   void onInit() {
@@ -57,13 +61,17 @@ class PlaceScenariosLogic extends BaseLogic {
 
   _initScenariosHeader() async {
     _logger(
-        '_initScenariosHeader',
-        'currentLocationId $currentLocationId '
-            'place.code ${place.code} '
-            'floor.value ${floor.value}');
+      '_initScenariosHeader',
+      'currentLocationId $currentLocationId '
+          'place.code ${place.code} '
+          'floor.value ${floor.value}',
+    );
 
     scenarios = await _getScenarioUseCase.getScenarioFloorAndPlaceAndGeneral(
-        currentLocationId, place.code, floor.value);
+      currentLocationId,
+      place.code,
+      floor.value,
+    );
     currentScenario = scenarios[0];
 
     _initLightsForCurrentScenarios();
@@ -71,10 +79,11 @@ class PlaceScenariosLogic extends BaseLogic {
 
   changeScenario(Scenario scenario) {
     _logger(
-        'changeScenario',
-        'scenario.name ${scenario.name} '
-            'scenario.code ${scenario.place} '
-            'scenario.floor ${scenario.floor}');
+      'changeScenario',
+      'scenario.name ${scenario.name} '
+          'scenario.code ${scenario.place} '
+          'scenario.floor ${scenario.floor}',
+    );
     currentScenario = scenario;
     devicesInScenario.clear();
     update();
@@ -82,8 +91,10 @@ class PlaceScenariosLogic extends BaseLogic {
   }
 
   _initLightsForCurrentScenarios() async {
-    devicesInScenario =
-        await _getScenarioUseCase.getByScenarioId(currentScenario!.id!, place.code!);
+    devicesInScenario = await _getScenarioUseCase.getByScenarioId(
+      currentScenario!.id!,
+      place.code!,
+    );
 
     update();
   }

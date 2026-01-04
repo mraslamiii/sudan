@@ -1,8 +1,7 @@
-import 'package:geolocator/geolocator.dart';
-
+// geolocator removed - using permission_handler instead
 
 abstract class UserLocationUseCase {
-  Future<Position> getLocation();
+  Future<Map<String, double>> getLocation();
 
 }
 

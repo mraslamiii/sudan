@@ -1,4 +1,4 @@
-import 'package:bms/domain/usecases/remove_scenario/remove_scenatio.dart';
+﻿import '../../../domain/usecases/remove_scenario/remove_scenatio.dart';
 import 'package:get/get.dart';
 
 import '../../../core/eventbus/event_bus_const.dart';

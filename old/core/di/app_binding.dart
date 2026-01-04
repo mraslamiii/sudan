@@ -1,12 +1,12 @@
-import 'package:bms/core/utils/globals.dart';
-import 'package:bms/data/data_sources/remote_data_sources/api/weather_api.dart';
-import 'package:bms/data/data_sources/remote_data_sources/config/dio_client.dart';
-import 'package:bms/data/data_sources/remote_data_sources/remote_data/weather_remote_data_source_impl.dart';
-import 'package:bms/data/repositories/device_repository.dart';
-import 'package:bms/data/repositories/location_repository.dart';
-import 'package:bms/data/repositories/logger/logger_repo_impl.dart';
-import 'package:bms/data/repositories/scenario_repository.dart';
-import 'package:bms/data/repositories/weather/weather_repository_impl.dart';
+﻿import '../../core/utils/globals.dart';
+import '../../data/data_sources/remote_data_sources/api/weather_api.dart';
+import '../../data/data_sources/remote_data_sources/config/dio_client.dart';
+import '../../data/data_sources/remote_data_sources/remote_data/weather_remote_data_source_impl.dart';
+import '../../data/repositories/device_repository.dart';
+import '../../data/repositories/location_repository.dart';
+import '../../data/repositories/logger/logger_repo_impl.dart';
+import '../../data/repositories/scenario_repository.dart';
+import '../../data/repositories/weather/weather_repository_impl.dart';
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 

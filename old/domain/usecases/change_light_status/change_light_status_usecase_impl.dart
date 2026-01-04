@@ -1,9 +1,9 @@
-import 'dart:async';
+﻿import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:bms/domain/usecases/change_light_status/change_light_status_usecase.dart';
-import 'package:bms/domain/usecases/send_data/send_data_socket_usecase_impl.dart';
+import '../../../domain/usecases/change_light_status/change_light_status_usecase.dart';
+import '../../../domain/usecases/send_data/send_data_socket_usecase_impl.dart';
 
 import '../../../core/utils/communication_constants.dart';
 import '../../../core/utils/globals.dart';

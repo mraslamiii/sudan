@@ -1,7 +1,7 @@
-import 'package:bms/presentation/components/primary_button.dart';
-import 'package:bms/presentation/components/secondary_button.dart';
-import 'package:bms/core/utils/extension.dart';
-import 'package:bms/core/values/theme.dart';
+﻿import '../../presentation/components/primary_button.dart';
+import '../../presentation/components/secondary_button.dart';
+import '../../core/utils/extension.dart';
+import '../../core/values/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sizer/sizer.dart';

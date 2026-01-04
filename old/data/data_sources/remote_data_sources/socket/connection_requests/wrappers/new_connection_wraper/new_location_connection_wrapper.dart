@@ -1,5 +1,5 @@
-import 'package:bms/core/utils/globals.dart';
-import 'package:bms/data/data_sources/remote_data_sources/socket/connection_requests/wrappers/new_connection_wraper/manage_new_locattion_data.dart';
+﻿import '../../../../../../../core/utils/globals.dart';
+import '../../../../../../../data/data_sources/remote_data_sources/socket/connection_requests/wrappers/new_connection_wraper/manage_new_locattion_data.dart';
 
 import '../../result.dart';
 import '../connection_manager/connection_manager_data_model.dart';

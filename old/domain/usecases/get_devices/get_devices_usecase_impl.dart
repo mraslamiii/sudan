@@ -1,5 +1,5 @@
-import 'package:bms/data/data_sources/local_data_sources/database/model/device.dart';
-import 'package:bms/data/enums/floor_code.dart';
+﻿import '../../../data/data_sources/local_data_sources/database/model/device.dart';
+import '../../../data/enums/floor_code.dart';
 import 'package:get/get.dart';
 
 import '../../../core/utils/globals.dart';

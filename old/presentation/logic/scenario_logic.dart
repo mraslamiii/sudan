@@ -1,8 +1,8 @@
-import 'dart:async';
+﻿import 'dart:async';
 
-import 'package:bms/data/data_sources/local_data_sources/database/model/scenario.dart';
-import 'package:bms/domain/usecases/get_scenario/get_scenario_usecase_impl.dart';
-import 'package:bms/presentation/logic/base_logic.dart';
+import '../../data/data_sources/local_data_sources/database/model/scenario.dart';
+import '../../domain/usecases/get_scenario/get_scenario_usecase_impl.dart';
+import '../../presentation/logic/base_logic.dart';
 
 import '../../core/eventbus/event_bus_const.dart';
 import '../../core/eventbus/event_bus_model.dart';

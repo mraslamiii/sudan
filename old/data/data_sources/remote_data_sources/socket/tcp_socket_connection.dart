@@ -4,8 +4,6 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:convert';
 
-import 'package:get_storage/get_storage.dart';
-
 import '../../../../core/utils/globals.dart';
 import '../../../enums/connection_error_code.dart';
 import 'connection_requests/result.dart';

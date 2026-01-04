@@ -1,11 +1,11 @@
-import 'dart:async';
+﻿import 'dart:async';
 
-import 'package:bms/data/data_sources/remote_data_sources/socket/connection_requests/cache_connection.dart';
-import 'package:bms/data/data_sources/remote_data_sources/socket/connection_requests/result.dart';
-import 'package:bms/data/data_sources/remote_data_sources/socket/connection_requests/wrappers/connection_wraper/connection_wraper_impl.dart';
-import 'package:bms/data/data_sources/remote_data_sources/socket/connection_requests/wrappers/new_connection_wraper/new_location_connection_wrapper.dart';
-import 'package:bms/data/data_sources/remote_data_sources/socket/connection_requests/wrappers/new_connection_wraper/new_location_data_model.dart';
-import 'package:bms/data/data_sources/remote_data_sources/socket/socket.dart';
+import '../../../../../data/data_sources/remote_data_sources/socket/connection_requests/cache_connection.dart';
+import '../../../../../data/data_sources/remote_data_sources/socket/connection_requests/result.dart';
+import '../../../../../data/data_sources/remote_data_sources/socket/connection_requests/wrappers/connection_wraper/connection_wraper_impl.dart';
+import '../../../../../data/data_sources/remote_data_sources/socket/connection_requests/wrappers/new_connection_wraper/new_location_connection_wrapper.dart';
+import '../../../../../data/data_sources/remote_data_sources/socket/connection_requests/wrappers/new_connection_wraper/new_location_data_model.dart';
+import '../../../../../data/data_sources/remote_data_sources/socket/socket.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../../../../../core/utils/communication_constants.dart';

@@ -1,9 +1,9 @@
-import 'dart:async';
+﻿import 'dart:async';
 import 'dart:convert';
 
-import 'package:bms/data/data_sources/remote_data_sources/socket/socket.dart';
-import 'package:bms/data/enums/connection_error_code.dart';
-import 'package:bms/domain/extract_ip_config/extract_ip_config_usecase_impl.dart';
+import '../../../../../../../../data/data_sources/remote_data_sources/socket/socket.dart';
+import '../../../../../../../../data/enums/connection_error_code.dart';
+import '../../../../../../../../domain/extract_ip_config/extract_ip_config_usecase_impl.dart';
 
 import '../../../../../../../../core/utils/communication_constants.dart';
 import '../../../../../../../../core/utils/globals.dart';

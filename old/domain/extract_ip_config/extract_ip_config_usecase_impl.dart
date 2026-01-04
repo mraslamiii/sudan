@@ -1,7 +1,7 @@
-import 'dart:convert';
+﻿import 'dart:convert';
 
-import 'package:bms/data/data_sources/remote_data_sources/socket/connection_requests/wrappers/connection_manager/connection_manager_data_model.dart';
-import 'package:bms/domain/extract_ip_config/extract_ip_config_usecase.dart';
+import '../../data/data_sources/remote_data_sources/socket/connection_requests/wrappers/connection_manager/connection_manager_data_model.dart';
+import '../../domain/extract_ip_config/extract_ip_config_usecase.dart';
 
 class ExtractIpConfigDataUsecaseImpl extends ExtractIpConfigDataUsecase {
   /// Input Expectation: " %80:64:6f:ae:cf:90+192.168.43.96   +Redmi Note 9 Pro".

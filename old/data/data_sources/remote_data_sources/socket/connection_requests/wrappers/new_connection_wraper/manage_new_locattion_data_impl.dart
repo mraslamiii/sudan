@@ -1,4 +1,4 @@
-import 'package:bms/domain/extract_data/extract_data_usecase_impl.dart';
+﻿import '../../../../../../../domain/extract_data/extract_data_usecase_impl.dart';
 import 'package:get/get.dart';
 import 'package:network_info_plus/network_info_plus.dart';
 

@@ -1,8 +1,7 @@
-import 'dart:async';
+﻿import 'dart:async';
 
-import 'package:bms/core/di/app_binding.dart';
-import 'package:bms/data/data_sources/remote_data_sources/socket/socket.dart';
-import 'package:bms/presentation/logic/base_logic.dart';
+import '../../core/di/app_binding.dart';
+import '../../presentation/logic/base_logic.dart';
 import 'package:get/get.dart';
 
 import '../../core/eventbus/event_bus_const.dart';

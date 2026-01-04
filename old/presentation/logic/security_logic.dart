@@ -1,7 +1,7 @@
-import 'dart:async';
+﻿import 'dart:async';
 
-import 'package:bms/core/utils/communication_constants.dart';
-import 'package:bms/presentation/logic/base_logic.dart';
+import '../../core/utils/communication_constants.dart';
+import 'base_logic.dart';
 import 'package:get/get.dart';
 
 import '../../core/eventbus/event_bus_const.dart';

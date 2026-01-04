@@ -1,5 +1,5 @@
-import 'package:bms/core/utils/communication_constants.dart';
-import 'package:bms/data/data_sources/local_data_sources/database/model/device.dart';
+﻿import '../../../core/utils/communication_constants.dart';
+import '../../../data/data_sources/local_data_sources/database/model/device.dart';
 import 'package:get/get.dart';
 
 import '../../../core/utils/globals.dart';

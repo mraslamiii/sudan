@@ -1,7 +1,7 @@
-import 'package:bms/core/utils/communication_constants.dart';
-import 'package:bms/core/utils/extension.dart';
-import 'package:bms/core/values/theme.dart';
-import 'package:bms/presentation/components/appbar.dart';
+﻿import '../../../../core/utils/communication_constants.dart';
+import '../../../../core/utils/extension.dart';
+import '../../../../core/values/theme.dart';
+import '../../../../presentation/components/appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';

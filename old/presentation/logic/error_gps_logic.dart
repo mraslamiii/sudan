@@ -1,7 +1,7 @@
-import 'package:bms/core/di/app_binding.dart';
-import 'package:bms/presentation/logic/base_logic.dart';
+﻿import '../../core/di/app_binding.dart';
+import '../../presentation/logic/base_logic.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:geolocator/geolocator.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:get/get.dart';
 
 import '../../core/utils/util.dart';
@@ -26,7 +26,8 @@ class ErrorGpsLogic extends BaseLogic {
   }
 
   void openGps() async {
-    var isPageOpened = await Geolocator.openLocationSettings();
+    // Using permission_handler to open app settings
+    var isPageOpened = await openAppSettings();
     if (!isPageOpened) {
       Utils.toast('تنظیمات باز نشد، لطفا بصورت دستی GPS را روشن کنید.', Toast.LENGTH_LONG);
     }

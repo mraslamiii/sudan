@@ -1,8 +1,8 @@
-import 'package:bms/data/data_sources/local_data_sources/database/model/location.dart';
-import 'package:bms/data/data_sources/local_data_sources/database/model/scenario.dart';
-import 'package:bms/data/data_sources/local_data_sources/database/model/scenario_det.dart';
-import 'package:bms/data/repositories/location_repository.dart';
-import 'package:bms/data/repositories/scenario_repository.dart';
+﻿import '../../../data/data_sources/local_data_sources/database/model/location.dart';
+import '../../../data/data_sources/local_data_sources/database/model/scenario.dart';
+import '../../../data/data_sources/local_data_sources/database/model/scenario_det.dart';
+import '../../../data/repositories/location_repository.dart';
+import '../../../data/repositories/scenario_repository.dart';
 import 'package:get/get.dart';
 
 import '../../../core/utils/globals.dart';
