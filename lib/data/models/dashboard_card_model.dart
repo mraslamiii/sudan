@@ -16,6 +16,7 @@ enum CardType {
   elevator,
   doorLock,
   iphone,
+  usbSerial,
 }
 
 enum CardSize {

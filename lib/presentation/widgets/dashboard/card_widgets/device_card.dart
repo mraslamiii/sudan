@@ -160,6 +160,8 @@ class _DeviceCardState extends State<DeviceCard> with SingleTickerProviderStateM
         return 'Humidifier';
       case CardType.iphone:
         return 'آیفون درب';
+      case CardType.usbSerial:
+        return 'USB Serial';
     }
   }
 
@@ -195,6 +197,8 @@ class _DeviceCardState extends State<DeviceCard> with SingleTickerProviderStateM
         return Icons.water_drop_rounded;
       case CardType.iphone:
         return Icons.doorbell_rounded;
+      case CardType.usbSerial:
+        return Icons.usb_rounded;
     }
   }
 

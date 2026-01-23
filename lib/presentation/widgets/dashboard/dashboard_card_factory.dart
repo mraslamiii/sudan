@@ -11,6 +11,7 @@ import 'curtain_control_panel.dart';
 import 'elevator_control_panel.dart';
 import 'door_lock_control_panel.dart';
 import 'iphone_control_panel.dart';
+import 'usb_serial_status_panel.dart';
 import 'base_dashboard_card.dart';
 
 /// Factory class to create appropriate card widget based on card type
@@ -388,6 +389,19 @@ class DashboardCardFactory {
             onTap?.call();
           },
         ),
+      );
+    }
+
+    // USB Serial cards use the special UsbSerialStatusPanel
+    if (card.type == CardType.usbSerial) {
+      return BaseDashboardCard(
+        card: card,
+        isEditMode: isEditMode,
+        onTap: onTap,
+        onLongPress: onLongPress,
+        onDelete: onDelete,
+        onResize: onResize,
+        child: const UsbSerialStatusPanel(),
       );
     }
 

@@ -2789,6 +2789,8 @@ class _AdvancedDashboardViewState extends State<AdvancedDashboardView>
         return 'Intercom';
       case CardType.iphone:
         return 'آیفون درب';
+      case CardType.usbSerial:
+        return 'USB Serial';
     }
   }
 
