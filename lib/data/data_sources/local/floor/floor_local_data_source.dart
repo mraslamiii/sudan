@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:flutter/material.dart';
 import '../preferences/preferences_service.dart';
 import '../../../models/floor_model.dart';
 
@@ -42,7 +41,7 @@ class FloorLocalDataSource {
   Future<void> updateFloor(FloorModel floor) async {
     final floors = await getCachedFloors();
     final index = floors.indexWhere((f) => f.id == floor.id);
-    
+
     if (index != -1) {
       floors[index] = floor;
       await cacheFloors(floors);
@@ -68,37 +67,15 @@ class FloorLocalDataSource {
     await _preferencesService.remove(_floorsKey);
   }
 
-  /// Initialize with default mock floors
+  /// Replace cache with floors received from microcontroller (USB).
+  /// Use when USB is connected and micro sends floor list.
+  Future<void> setFloorsFromMicro(List<FloorModel> floorsFromMicro) async {
+    final floors = List<FloorModel>.from(floorsFromMicro);
+    await cacheFloors(floors);
+  }
+
+  /// Default when cache is empty: no floors (list from micro when USB connected).
   List<FloorModel> _getDefaultFloors() {
-    return [
-      FloorModel.mock(
-        id: 'floor_1',
-        name: 'First Floor',
-        icon: Icons.layers_rounded,
-        roomIds: [
-          'room_living',
-          'room_kitchen',
-          'room_bathroom',
-        ],
-        order: 0,
-      ),
-      FloorModel.mock(
-        id: 'floor_2',
-        name: 'Second Floor',
-        icon: Icons.layers_rounded,
-        roomIds: [
-          'room_bedroom',
-        ],
-        order: 1,
-      ),
-      FloorModel.mock(
-        id: 'floor_basement',
-        name: 'Basement',
-        icon: Icons.layers_rounded,
-        roomIds: [],
-        order: 2,
-      ),
-    ];
+    return [];
   }
 }
-

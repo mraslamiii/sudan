@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -15,6 +16,7 @@ import '../../data/data_sources/local/floor/floor_local_data_source.dart';
 import '../../data/repositories/implementations/home_repository_impl.dart';
 import '../../data/repositories/implementations/socket_repository_impl.dart';
 import '../../data/repositories/implementations/usb_serial_repository_impl.dart';
+import '../../data/repositories/implementations/mock_usb_serial_repository_impl.dart';
 import '../../data/repositories/implementations/device_repository_impl.dart';
 import '../../data/repositories/implementations/scenario_repository_impl.dart';
 import '../../data/repositories/implementations/room_repository_impl.dart';
@@ -150,7 +152,9 @@ Future<void> initDependencies() async {
   );
 
   getIt.registerLazySingleton<UsbSerialRepository>(
-    () => UsbSerialRepositoryImpl(getIt<UsbSerialService>()),
+    () => kDebugMode
+        ? MockUsbSerialRepositoryImpl()
+        : UsbSerialRepositoryImpl(getIt<UsbSerialService>()),
   );
 
   // Smart Home Repositories
@@ -167,13 +171,17 @@ Future<void> initDependencies() async {
   );
 
   getIt.registerLazySingleton<RoomRepository>(
-    () => RoomRepositoryImpl(getIt<RoomLocalDataSource>()),
+    () => RoomRepositoryImpl(
+      getIt<RoomLocalDataSource>(),
+      getIt<UsbSerialRepository>(),
+    ),
   );
 
   getIt.registerLazySingleton<FloorRepository>(
     () => FloorRepositoryImpl(
       getIt<FloorLocalDataSource>(),
       getIt<RoomRepository>(),
+      getIt<UsbSerialRepository>(),
     ),
   );
 

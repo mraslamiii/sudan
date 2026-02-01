@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -55,24 +56,48 @@ class _UsbSerialStatusPanelState extends State<UsbSerialStatusPanel>
       });
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('خطا در دریافت دستگاه‌ها: $e')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('خطا در دریافت دستگاه‌ها: $e')));
       }
     }
   }
 
   Future<void> _handleConnect() async {
-    if (_viewModel == null || _availableDevices.isEmpty) {
-      await _loadAvailableDevices();
-      if (_availableDevices.isEmpty) {
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('هیچ دستگاه USB یافت نشد')),
-          );
+    if (_viewModel == null) return;
+
+    await _loadAvailableDevices();
+
+    // Debug: when no USB device, allow "simulate connection" for testing
+    if (_availableDevices.isEmpty) {
+      if (kDebugMode) {
+        HapticFeedback.mediumImpact();
+        try {
+          await _viewModel!.connect(device: null, baudRate: 9600);
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('اتصال شبیه‌سازی شد (تست) – لیست اتاق از Mock'),
+                backgroundColor: Colors.green,
+              ),
+            );
+          }
+        } catch (e) {
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('خطا در اتصال شبیه‌سازی: $e'),
+                backgroundColor: Colors.red,
+              ),
+            );
+          }
         }
-        return;
+      } else if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('هیچ دستگاه USB یافت نشد')),
+        );
       }
+      return;
     }
 
     HapticFeedback.mediumImpact();
@@ -158,7 +183,8 @@ class _UsbSerialStatusPanelState extends State<UsbSerialStatusPanel>
           // Update pulse animation based on connection status
           if (viewModel.isUsbConnected && !_pulseController.isAnimating) {
             _pulseController.repeat(reverse: true);
-          } else if (!viewModel.isUsbConnected && _pulseController.isAnimating) {
+          } else if (!viewModel.isUsbConnected &&
+              _pulseController.isAnimating) {
             _pulseController.stop();
             _pulseController.reset();
           }
@@ -179,7 +205,9 @@ class _UsbSerialStatusPanelState extends State<UsbSerialStatusPanel>
                     _buildHeader(context, isDark, isCompact, viewModel),
 
                     SizedBox(
-                      height: isCompact ? CardStyles.space8 : CardStyles.space12,
+                      height: isCompact
+                          ? CardStyles.space8
+                          : CardStyles.space12,
                     ),
 
                     // Main content
@@ -269,8 +297,7 @@ class _UsbSerialStatusPanelState extends State<UsbSerialStatusPanel>
                   const SizedBox(width: 6),
                   Text(
                     _getStatusText(),
-                    style: CardStyles
-                        .cardSubtitle(isDark, isCompact: isCompact)
+                    style: CardStyles.cardSubtitle(isDark, isCompact: isCompact)
                         .copyWith(
                           color: _accentColor,
                           fontWeight: FontWeight.w600,
@@ -357,8 +384,9 @@ class _UsbSerialStatusPanelState extends State<UsbSerialStatusPanel>
                           backgroundColor: isDark
                               ? Colors.white.withOpacity(0.08)
                               : Colors.black.withOpacity(0.05),
-                          valueColor:
-                              AlwaysStoppedAnimation<Color>(_accentColor),
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            _accentColor,
+                          ),
                           strokeCap: StrokeCap.round,
                         ),
                       ),
@@ -369,12 +397,10 @@ class _UsbSerialStatusPanelState extends State<UsbSerialStatusPanel>
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           color: viewModel.isUsbConnected
-                              ? _accentColor.withOpacity(
-                                  isDark ? 0.2 : 0.12,
-                                )
+                              ? _accentColor.withOpacity(isDark ? 0.2 : 0.12)
                               : (isDark
-                                  ? Colors.white.withOpacity(0.06)
-                                  : Colors.black.withOpacity(0.04)),
+                                    ? Colors.white.withOpacity(0.06)
+                                    : Colors.black.withOpacity(0.04)),
                           border: Border.all(
                             color: _accentColor.withOpacity(
                               viewModel.isUsbConnected ? 0.4 : 0.15,
@@ -487,8 +513,8 @@ class _UsbSerialStatusPanelState extends State<UsbSerialStatusPanel>
           color: isSelected
               ? _accentColor.withOpacity(isDark ? 0.2 : 0.12)
               : (isDark
-                  ? Colors.white.withOpacity(0.06)
-                  : Colors.black.withOpacity(0.04)),
+                    ? Colors.white.withOpacity(0.06)
+                    : Colors.black.withOpacity(0.04)),
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
             color: isSelected
@@ -545,10 +571,7 @@ class _UsbSerialStatusPanelState extends State<UsbSerialStatusPanel>
       decoration: BoxDecoration(
         color: _accentColor.withOpacity(isDark ? 0.12 : 0.08),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: _accentColor.withOpacity(0.2),
-          width: 1,
-        ),
+        border: Border.all(color: _accentColor.withOpacity(0.2), width: 1),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -561,7 +584,9 @@ class _UsbSerialStatusPanelState extends State<UsbSerialStatusPanel>
           SizedBox(width: isCompact ? 6 : 8),
           Flexible(
             child: Text(
-              device.deviceName.isNotEmpty ? device.deviceName : 'Unknown Device',
+              device.deviceName.isNotEmpty
+                  ? device.deviceName
+                  : 'Unknown Device',
               style: TextStyle(
                 fontSize: isCompact ? 11 : 12,
                 fontWeight: FontWeight.w500,
@@ -575,4 +600,3 @@ class _UsbSerialStatusPanelState extends State<UsbSerialStatusPanel>
     );
   }
 }
-

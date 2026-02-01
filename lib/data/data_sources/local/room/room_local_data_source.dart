@@ -19,7 +19,7 @@ class RoomLocalDataSource {
     try {
       final String? roomsJson = _preferencesService.getString(_roomsKey);
       List<RoomModel> rooms;
-      
+
       if (roomsJson == null || roomsJson.isEmpty) {
         rooms = _getDefaultRooms();
       } else {
@@ -28,10 +28,10 @@ class RoomLocalDataSource {
             .map((roomJson) => RoomModel.fromJson(roomJson))
             .toList();
       }
-      
+
       // Ensure general room exists
       await _ensureGeneralRoomExists(rooms);
-      
+
       return rooms;
     } catch (e) {
       // If there's an error parsing, return defaults
@@ -45,7 +45,7 @@ class RoomLocalDataSource {
   Future<void> _ensureGeneralRoomExists(List<RoomModel> rooms) async {
     const generalRoomId = 'room_general';
     final generalRoomExists = rooms.any((r) => r.id == generalRoomId);
-    
+
     if (!generalRoomExists) {
       // Create general room
       final generalRoom = RoomModel.mock(
@@ -84,9 +84,7 @@ class RoomLocalDataSource {
 
   /// Cache rooms locally
   Future<void> cacheRooms(List<RoomModel> rooms) async {
-    final roomsJson = json.encode(
-      rooms.map((room) => room.toJson()).toList(),
-    );
+    final roomsJson = json.encode(rooms.map((room) => room.toJson()).toList());
     await _preferencesService.setString(_roomsKey, roomsJson);
   }
 
@@ -94,7 +92,7 @@ class RoomLocalDataSource {
   Future<void> updateRoom(RoomModel room) async {
     final rooms = await getCachedRooms();
     final index = rooms.indexWhere((r) => r.id == room.id);
-    
+
     if (index != -1) {
       rooms[index] = room;
       await cacheRooms(rooms);
@@ -109,7 +107,7 @@ class RoomLocalDataSource {
     print('   - Name: ${room.name}');
     print('   - FloorId: ${room.floorId}');
     print('   - Current lock: ${_addRoomLock != null ? "EXISTS" : "null"}');
-    
+
     // Wait for any ongoing addRoom operation to complete
     while (_addRoomLock != null) {
       print('🟠 [ROOM_DS] Waiting for lock to be released...');
@@ -119,7 +117,7 @@ class RoomLocalDataSource {
     // Create a new lock for this operation
     _addRoomLock = Completer<void>();
     print('🟠 [ROOM_DS] Lock acquired');
-    
+
     try {
       // Read the latest rooms from cache
       print('🟠 [ROOM_DS] Reading cached rooms...');
@@ -128,35 +126,45 @@ class RoomLocalDataSource {
       for (var r in rooms) {
         print('   - ${r.name} (ID: ${r.id}, FloorId: ${r.floorId})');
       }
-      
+
       // Check if room with same ID already exists
       if (rooms.any((r) => r.id == room.id)) {
         print('🔴 [ROOM_DS] ERROR: Room with ID ${room.id} already exists!');
         throw Exception('Room with ID ${room.id} already exists');
       }
-      
+
       // Check if room with same name already exists (case-insensitive)
       if (rooms.any((r) => r.name.toLowerCase() == room.name.toLowerCase())) {
-        print('🔴 [ROOM_DS] ERROR: Room with name "${room.name}" already exists!');
+        print(
+          '🔴 [ROOM_DS] ERROR: Room with name "${room.name}" already exists!',
+        );
         throw Exception('Room with name "${room.name}" already exists');
       }
-      
+
       // Double-check after reading cache again to prevent race conditions
       print('🟠 [ROOM_DS] Double-checking cache...');
       final latestRooms = await getCachedRooms();
       print('🟠 [ROOM_DS] Latest cache has ${latestRooms.length} rooms');
       if (latestRooms.any((r) => r.id == room.id)) {
-        print('🔴 [ROOM_DS] ERROR: Room with ID ${room.id} already exists in latest cache!');
+        print(
+          '🔴 [ROOM_DS] ERROR: Room with ID ${room.id} already exists in latest cache!',
+        );
         throw Exception('Room with ID ${room.id} already exists');
       }
-      if (latestRooms.any((r) => r.name.toLowerCase() == room.name.toLowerCase())) {
-        print('🔴 [ROOM_DS] ERROR: Room with name "${room.name}" already exists in latest cache!');
+      if (latestRooms.any(
+        (r) => r.name.toLowerCase() == room.name.toLowerCase(),
+      )) {
+        print(
+          '🔴 [ROOM_DS] ERROR: Room with name "${room.name}" already exists in latest cache!',
+        );
         throw Exception('Room with name "${room.name}" already exists');
       }
-      
+
       print('🟠 [ROOM_DS] All checks passed, adding room...');
       latestRooms.add(room);
-      print('🟠 [ROOM_DS] Room added to list. New count: ${latestRooms.length}');
+      print(
+        '🟠 [ROOM_DS] Room added to list. New count: ${latestRooms.length}',
+      );
       await cacheRooms(latestRooms);
       print('🟠 [ROOM_DS] Rooms cached successfully');
     } finally {
@@ -183,14 +191,18 @@ class RoomLocalDataSource {
     print('🟠 [ROOM_DS] deleteRoomsByFloorId called for floorId: $floorId');
     final rooms = await getCachedRooms();
     final roomsToDelete = rooms.where((r) => r.floorId == floorId).toList();
-    print('🟠 [ROOM_DS] Found ${roomsToDelete.length} rooms to delete for floor $floorId');
+    print(
+      '🟠 [ROOM_DS] Found ${roomsToDelete.length} rooms to delete for floor $floorId',
+    );
     for (var room in roomsToDelete) {
       print('   - ${room.name} (ID: ${room.id})');
     }
-    
+
     rooms.removeWhere((r) => r.floorId == floorId);
     await cacheRooms(rooms);
-    print('🟠 [ROOM_DS] Deleted ${roomsToDelete.length} rooms for floor $floorId');
+    print(
+      '🟠 [ROOM_DS] Deleted ${roomsToDelete.length} rooms for floor $floorId',
+    );
   }
 
   /// Clear all cached rooms
@@ -198,75 +210,27 @@ class RoomLocalDataSource {
     await _preferencesService.remove(_roomsKey);
   }
 
-  /// Initialize with default mock rooms
-  /// Rooms are assigned to floors based on floor_entity roomIds
+  /// Replace cache with rooms received from microcontroller (USB).
+  /// Ensures general room exists and is first. Use when USB is connected and micro sends room list.
+  Future<void> setRoomsFromMicro(List<RoomModel> roomsFromMicro) async {
+    final rooms = List<RoomModel>.from(roomsFromMicro);
+    await _ensureGeneralRoomExists(rooms);
+    await cacheRooms(rooms);
+  }
+
+  /// Default rooms when cache is empty: only general room.
+  /// Real room list is loaded from microcontroller via USB when connected.
   List<RoomModel> _getDefaultRooms() {
     return [
-      // General/Public room (always first)
       RoomModel.mock(
         id: 'room_general',
-        name: 'عمومی', // General/Public in Persian
+        name: 'عمومی',
         icon: Icons.home_rounded,
         deviceIds: [],
-        order: -1, // Always first
-        floorId: null, // Not tied to any floor
+        order: -1,
+        floorId: null,
         isGeneral: true,
-      ),
-      // First Floor rooms
-      RoomModel.mock(
-        id: 'room_living',
-        name: 'Living Room',
-        icon: Icons.living_rounded,
-        deviceIds: [
-          'light_living_001',
-          'light_living_002',
-          'thermostat_living_001',
-          'tv_living_001',
-          'curtain_living_001',
-          'camera_living_001',
-        ],
-        order: 0,
-        floorId: 'floor_1',
-      ),
-      RoomModel.mock(
-        id: 'room_kitchen',
-        name: 'Kitchen',
-        icon: Icons.kitchen_rounded,
-        deviceIds: [
-          'light_kitchen_001',
-          'socket_kitchen_001',
-          'camera_kitchen_001',
-        ],
-        order: 1,
-        floorId: 'floor_1',
-      ),
-      RoomModel.mock(
-        id: 'room_bathroom',
-        name: 'Bathroom',
-        icon: Icons.bathroom_rounded,
-        deviceIds: [
-          'light_bathroom_001',
-          'fan_bathroom_001',
-          'camera_bathroom_001',
-        ],
-        order: 2,
-        floorId: 'floor_1',
-      ),
-      // Second Floor rooms
-      RoomModel.mock(
-        id: 'room_bedroom',
-        name: 'Bed Room',
-        icon: Icons.bed_rounded,
-        deviceIds: [
-          'light_bedroom_001',
-          'fan_bedroom_001',
-          'curtain_bedroom_001',
-          'camera_bedroom_001',
-        ],
-        order: 0,
-        floorId: 'floor_2',
       ),
     ];
   }
 }
-

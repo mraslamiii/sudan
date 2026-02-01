@@ -1,24 +1,39 @@
 import '../../../domain/entities/room_entity.dart';
 import '../../../domain/repositories/room_repository.dart';
+import '../../../domain/repositories/usb_serial_repository.dart';
 import '../../data_sources/local/room/room_local_data_source.dart';
 import '../../models/room_model.dart';
 
 /// Room Repository Implementation
-/// Handles room CRUD operations and device-room associations
-/// 
+/// Handles room CRUD operations and device-room associations.
+/// When USB is connected to microcontroller, room list is fetched from micro and cached locally.
+///
 /// For future developers:
 /// - Room management affects device filtering in the UI
 /// - Can be extended with room-based automation (e.g. "Turn off all Living Room devices")
 /// - Can add room templates for quick setup
 class RoomRepositoryImpl implements RoomRepository {
   final RoomLocalDataSource _localDataSource;
+  final UsbSerialRepository? _usbSerialRepository;
 
-  RoomRepositoryImpl(this._localDataSource);
+  RoomRepositoryImpl(this._localDataSource, [this._usbSerialRepository]);
 
   @override
   Future<List<RoomEntity>> getAllRooms() async {
+    // When USB is connected, try to get room list from microcontroller
+    final usb = _usbSerialRepository;
+    if (usb != null && usb.isConnected()) {
+      final fromMicro = await usb.requestRooms();
+      if (fromMicro != null && fromMicro.isNotEmpty) {
+        final rooms = fromMicro
+            .map((e) => RoomModel.fromJson(Map<String, dynamic>.from(e)))
+            .toList();
+        await _localDataSource.setRoomsFromMicro(rooms);
+        rooms.sort((a, b) => a.order.compareTo(b.order));
+        return rooms;
+      }
+    }
     final rooms = await _localDataSource.getCachedRooms();
-    // Sort by order
     rooms.sort((a, b) => a.order.compareTo(b.order));
     return rooms;
   }
@@ -39,9 +54,9 @@ class RoomRepositoryImpl implements RoomRepository {
     print('   - Name: ${room.name}');
     print('   - FloorId: ${room.floorId}');
     print('   - Order: ${room.order}');
-    
+
     await Future.delayed(const Duration(milliseconds: 200));
-    
+
     final roomModel = RoomModel(
       id: room.id,
       name: room.name,
@@ -51,7 +66,7 @@ class RoomRepositoryImpl implements RoomRepository {
       order: room.order,
       floorId: room.floorId,
     );
-    
+
     print('🟡 [ROOM_REPO] Created RoomModel, calling addRoom...');
     await _localDataSource.addRoom(roomModel);
     print('🟡 [ROOM_REPO] Room added to data source successfully');
@@ -61,7 +76,7 @@ class RoomRepositoryImpl implements RoomRepository {
   @override
   Future<RoomEntity> updateRoom(RoomEntity room) async {
     await Future.delayed(const Duration(milliseconds: 200));
-    
+
     final roomModel = RoomModel(
       id: room.id,
       name: room.name,
@@ -71,7 +86,7 @@ class RoomRepositoryImpl implements RoomRepository {
       order: room.order,
       floorId: room.floorId,
     );
-    
+
     await _localDataSource.updateRoom(roomModel);
     return roomModel;
   }
@@ -113,7 +128,7 @@ class RoomRepositoryImpl implements RoomRepository {
   @override
   Future<void> reorderRooms(List<String> roomIds) async {
     final rooms = await getAllRooms();
-    
+
     // Update order for each room
     for (int i = 0; i < roomIds.length; i++) {
       final roomId = roomIds[i];
@@ -138,4 +153,3 @@ class RoomRepositoryImpl implements RoomRepository {
     return null;
   }
 }
-

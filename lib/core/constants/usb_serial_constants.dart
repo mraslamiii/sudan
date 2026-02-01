@@ -56,6 +56,20 @@ class UsbSerialConstants {
   static const String requestIp = '${request + mode}_IP';
   static const String requestQueryFloorsCount = '${request + mode}_F_C';
   static const String requestAFloor = '${request + mode}_F_';
+
+  /// Request floor list (response: text lines, each line id|name|order|roomIds)
+  static const String requestFloors = '${request + mode}_F_A';
+
+  /// Create floor command: send one line id|name|order|roomIds (roomIds comma-sep)
+  static const String commandCreateFloor = '${command + mode}_F_N';
+
+  /// Request room list (response: text lines, each line id|name|order|floorId|icon|deviceIds|isGeneral)
+  static const String requestRooms = '${request + mode}_R';
+
+  // Text format delimiters (no JSON)
+  static const String fieldSep = '|';
+  static const String recordSep = '\n';
+  static const String listSep = ',';
   static const String requestBurglarAlarms =
       '${request + headLineBurglarAlarm}Z';
 
