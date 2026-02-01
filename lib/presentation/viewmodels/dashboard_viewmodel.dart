@@ -1013,6 +1013,8 @@ class DashboardViewModel extends BaseViewModel {
         return DeviceType.doorLock;
       case CardType.iphone:
         return DeviceType.iphone;
+      case CardType.usbSerial:
+        return null; // USB Serial doesn't map to a DeviceType
     }
   }
 
@@ -1049,6 +1051,8 @@ class DashboardViewModel extends BaseViewModel {
         return '$roomName Humidifier';
       case CardType.iphone:
         return '$roomName آیفون درب';
+      case CardType.usbSerial:
+        return 'USB Serial';
     }
   }
 
@@ -1233,6 +1237,8 @@ class DashboardViewModel extends BaseViewModel {
           'batteryLevel': 100,
           'isCharging': false,
         };
+      case CardType.usbSerial:
+        return {}; // USB Serial panel doesn't need default data
     }
   }
 
