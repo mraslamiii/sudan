@@ -2,15 +2,18 @@
 """
 شبیه‌ساز میکروکنترلر برای تست ارتباط USB Serial با اپ سودان.
 
+فرمت متن (بدون JSON): جداکننده فیلد | ، هر رکورد یک خط.
+- طبقات: هر خط = id|name|order|roomIds (roomIds با کاما)
+- اتاق‌ها: هر خط = id|name|order|floorId|icon|deviceIds|isGeneral
+
 نحوه استفاده (وقتی تبلت با مبدل USB-Serial به لپ‌تاپ وصل است):
-  1. پورت سریال لپ‌تاپ را مشخص کنید (مثلاً COM3 در ویندوز یا /dev/ttyUSB0 در لینوکس).
-  2. این اسکریپت را اجرا کنید: python usb_serial_simulator.py COM3
-  3. در اپ روی تبلت به USB متصل شوید و داشبورد را باز کنید؛ لیست اتاق‌ها از این اسکریپت می‌آید.
+  1. پورت سریال را مشخص کنید (مثلاً COM3 در ویندوز یا /dev/ttyUSB0 در لینوکس).
+  2. اجرا: python usb_serial_simulator.py COM3
+  3. در اپ به USB متصل شوید؛ لیست طبقات/اتاق‌ها از این اسکریپت می‌آید.
 
 نیاز: pip install pyserial
 """
 
-import json
 import sys
 import time
 
@@ -20,7 +23,7 @@ except ImportError:
     print("نصب pyserial: pip install pyserial")
     sys.exit(1)
 
-# Protocol constants (same as UsbSerialConstants in Dart)
+# Protocol (هماهنگ با UsbSerialConstants)
 STX = 0x02
 ETX = 0x03
 ACK = 0x06
@@ -29,25 +32,25 @@ MSG_TYPE_REQUEST = 0x02
 MSG_TYPE_RESPONSE = 0x03
 REQUEST_FLOORS = "@M_F_A"
 REQUEST_ROOMS = "@M_R"
-ACTION_CREATE_FLOOR = "create_floor"
+COMMAND_CREATE_FLOOR = "&M_F_N"
+FIELD_SEP = "|"
+RECORD_SEP = "\n"
+LIST_SEP = ","
 
-# Sample floors response (first screen – list of floors)
-FLOORS_JSON = json.dumps([
-    {"id": "floor_1", "name": "طبقه اول", "order": 0, "roomIds": ["room_living", "room_kitchen", "room_bathroom"], "icon": "layers"},
-    {"id": "floor_2", "name": "طبقه دوم", "order": 1, "roomIds": ["room_bedroom"], "icon": "layers"},
-])
+# پاسخ طبقات: هر خط id|name|order|roomIds
+FLOORS_TEXT = "floor_1|طبقه اول|0|room_living,room_kitchen,room_bathroom" + RECORD_SEP + "floor_2|طبقه دوم|1|room_bedroom"
 
-# Sample rooms response (JSON array)
-ROOMS_JSON = json.dumps([
-    {"id": "room_general", "name": "عمومی", "order": -1, "floorId": None, "icon": "home", "deviceIds": [], "isGeneral": True},
-    {"id": "room_living", "name": "اتاق نشیمن", "order": 0, "floorId": "floor_1", "icon": "living", "deviceIds": [], "isGeneral": False},
-    {"id": "room_kitchen", "name": "آشپزخانه", "order": 1, "floorId": "floor_1", "icon": "kitchen", "deviceIds": [], "isGeneral": False},
-    {"id": "room_bedroom", "name": "اتاق خواب", "order": 0, "floorId": "floor_2", "icon": "bedroom", "deviceIds": [], "isGeneral": False},
-])
+# پاسخ اتاق‌ها: هر خط id|name|order|floorId|icon|deviceIds|isGeneral
+ROOMS_TEXT = (
+    "room_general|عمومی|-1||home||1" + RECORD_SEP
+    + "room_living|اتاق نشیمن|0|floor_1|living||0" + RECORD_SEP
+    + "room_kitchen|آشپزخانه|1|floor_1|kitchen||0" + RECORD_SEP
+    + "room_bedroom|اتاق خواب|0|floor_2|bedroom||0"
+)
 
 
 def encode_frame(msg_type: int, data: str) -> bytes:
-    """Build frame: [STX][Type][Length][Data...][Checksum][ETX]"""
+    """فریم: [STX][Type][Length][Data...][Checksum][ETX]"""
     data_bytes = data.encode("utf-8")
     length = len(data_bytes)
     checksum = (msg_type + length + sum(data_bytes)) & 0xFF
@@ -59,7 +62,7 @@ def send_ack(ser):
 
 
 def find_frame(buf: bytearray):
-    """Find first complete frame; returns (msg_type, data_str) or None, and new buffer."""
+    """پیدا کردن اولین فریم کامل؛ برگشت (msg_type, data_str) یا None و بافر جدید."""
     start = -1
     for i in range(len(buf)):
         if buf[i] == STX:
@@ -68,25 +71,23 @@ def find_frame(buf: bytearray):
     if start == -1:
         return None, bytearray()
 
-    # ACK/NACK: 3 bytes [STX, control, ETX]
     if start + 2 < len(buf) and buf[start + 2] == ETX:
         control = buf[start + 1]
-        if control == ACK or control == 0x15:  # NACK
-            return None, buf[start + 3 :]  # skip this frame
+        if control == ACK or control == 0x15:
+            return None, buf[start + 3 :]
 
-    # Normal frame: [STX, Type, Length, Data..., Checksum, ETX]
     if start + 3 > len(buf):
         return None, buf[start:]
     msg_type = buf[start + 1]
     length = buf[start + 2]
-    need = start + 3 + length + 1 + 1  # +checksum +ETX
+    need = start + 3 + length + 1 + 1
     if len(buf) < need:
         return None, buf[start:]
     data_bytes = buf[start + 3 : start + 3 + length]
     checksum = buf[start + 3 + length]
     end_etx = buf[start + 3 + length + 1]
     if end_etx != ETX:
-        return None, buf[start + 1 :]  # skip bad STX
+        return None, buf[start + 1 :]
     calc_checksum = (msg_type + length + sum(data_bytes)) & 0xFF
     if checksum != calc_checksum:
         return None, buf[start + 1 :]
@@ -111,7 +112,7 @@ def main():
         print("Example: python usb_serial_simulator.py COM3")
         sys.exit(1)
 
-    print("Simulator running. @M_F_A = floors (first screen), @M_R = rooms. Ctrl+C to exit.")
+    print("Simulator running. @M_F_A=floors, @M_R=rooms, &M_F_N=create floor. Ctrl+C to exit.")
     buf = bytearray()
     try:
         while True:
@@ -125,23 +126,32 @@ def main():
                 msg_type, data = result
                 if msg_type == MSG_TYPE_REQUEST and data == REQUEST_FLOORS:
                     send_ack(ser)
-                    response = encode_frame(MSG_TYPE_RESPONSE, FLOORS_JSON)
-                    ser.write(response)
-                    print("Sent floors response")
+                    ser.write(encode_frame(MSG_TYPE_RESPONSE, FLOORS_TEXT))
+                    print("Sent floors response (text)")
                 elif msg_type == MSG_TYPE_REQUEST and data == REQUEST_ROOMS:
                     send_ack(ser)
-                    response = encode_frame(MSG_TYPE_RESPONSE, ROOMS_JSON)
-                    ser.write(response)
-                    print("Sent rooms response")
+                    ser.write(encode_frame(MSG_TYPE_RESPONSE, ROOMS_TEXT))
+                    print("Sent rooms response (text)")
                 elif msg_type == MSG_TYPE_COMMAND:
                     send_ack(ser)
-                    try:
-                        obj = json.loads(data)
-                        if obj.get("action") == ACTION_CREATE_FLOOR:
-                            print(f"Create floor received: id={obj.get('id')} name={obj.get('name')} order={obj.get('order')}")
+                    # Format: &M_F_N\nid|name|order|roomIds
+                    if RECORD_SEP in data and data.startswith(COMMAND_CREATE_FLOOR):
+                        lines = data.split(RECORD_SEP, 1)
+                        if len(lines) >= 2:
+                            parts = lines[1].strip().split(FIELD_SEP)
+                            if len(parts) >= 4:
+                                print(f"Create floor: id={parts[0]} name={parts[1]} order={parts[2]} roomIds={parts[3]}")
+                            else:
+                                print(f"Command: {data[:80]}...")
                         else:
                             print(f"Command: {data[:80]}...")
-                    except Exception:
+                    elif FIELD_SEP in data and data.strip().startswith("floor_"):
+                        parts = data.strip().split(FIELD_SEP)
+                        if len(parts) >= 3:
+                            print(f"Create floor (legacy): id={parts[0]} name={parts[1]} order={parts[2]}")
+                        else:
+                            print(f"Command: {data[:80]}...")
+                    else:
                         print(f"Command: {data[:80]}...")
                 elif msg_type == MSG_TYPE_REQUEST:
                     send_ack(ser)

@@ -1,4 +1,3 @@
-import '../../../core/constants/usb_serial_constants.dart';
 import '../../../domain/entities/floor_entity.dart';
 import '../../../domain/repositories/floor_repository.dart';
 import '../../../domain/repositories/room_repository.dart';
@@ -71,14 +70,6 @@ class FloorRepositoryImpl implements FloorRepository {
     );
 
     await _localDataSource.addFloor(floorModel);
-
-    final usb = _usbSerialRepository;
-    if (usb != null && usb.isConnected()) {
-      final payload = Map<String, dynamic>.from(floorModel.toJson())
-        ..['action'] = UsbSerialConstants.actionCreateFloor;
-      await usb.createFloorOnMicro(payload);
-    }
-
     return floorModel;
   }
 

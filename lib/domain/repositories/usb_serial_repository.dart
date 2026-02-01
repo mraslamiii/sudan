@@ -38,18 +38,17 @@ abstract class UsbSerialRepository {
   Stream<String> get connectionStatusStream;
 
   /// Request floor list from microcontroller via USB.
-  /// Sends request and waits for response (JSON array of floor objects).
+  /// Sends request and waits for response (text lines, no JSON).
   /// Returns parsed list of floor maps, or null on timeout/failure/disconnect.
-  /// Expected response format: [{"id":"floor_1","name":"...","order":0,"roomIds":[]}, ...]
+  /// Expected response: one line per floor, format id|name|order|roomIds (roomIds comma-sep).
   Future<List<Map<String, dynamic>>?> requestFloors();
 
-  /// Notify microcontroller that a new floor was created (command + JSON).
-  /// Payload should include action, id, name, order, roomIds, icon.
+  /// Send create-floor command to microcontroller (text line: id|name|order|roomIds).
   Future<void> createFloorOnMicro(Map<String, dynamic> floor);
 
   /// Request room list from microcontroller via USB.
-  /// Sends request and waits for response (JSON array of room objects).
+  /// Sends request and waits for response (text lines, no JSON).
   /// Returns parsed list of room maps, or null on timeout/failure/disconnect.
-  /// Expected response format: [{"id":"room_1","name":"...","order":0,"floorId":"...","icon":"living"}, ...]
+  /// Expected response: one line per room, format id|name|order|floorId|icon|deviceIds|isGeneral.
   Future<List<Map<String, dynamic>>?> requestRooms();
 }

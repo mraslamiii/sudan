@@ -5,6 +5,70 @@ import '../../../../domain/repositories/usb_serial_repository.dart';
 import '../../../../core/utils/usb_serial_protocol.dart';
 import '../../data_sources/remote/usb_serial/usb_serial_service.dart';
 
+/// Parse text response: one line per floor, format id|name|order|roomIds (roomIds comma-sep).
+List<Map<String, dynamic>> _parseFloorsText(String text) {
+  final list = <Map<String, dynamic>>[];
+  final lines = text.split(UsbSerialConstants.recordSep);
+  for (final line in lines) {
+    final t = line.trim();
+    if (t.isEmpty) continue;
+    final parts = t.split(UsbSerialConstants.fieldSep);
+    if (parts.length < 4) continue;
+    final roomIds = parts[3].isEmpty
+        ? <String>[]
+        : parts[3]
+              .split(UsbSerialConstants.listSep)
+              .map((e) => e.trim())
+              .where((e) => e.isNotEmpty)
+              .toList();
+    list.add({
+      'id': parts[0],
+      'name': parts[1],
+      'order': int.tryParse(parts[2]) ?? 0,
+      'roomIds': roomIds,
+    });
+  }
+  return list;
+}
+
+/// Format one floor as one line: id|name|order|roomIds.
+String _floorToLine(Map<String, dynamic> floor) {
+  final id = (floor['id'] as String?) ?? '';
+  final name = (floor['name'] as String?) ?? '';
+  final order = (floor['order'] as int?) ?? 0;
+  final roomIds = (floor['roomIds'] as List<dynamic>?)?.cast<String>() ?? [];
+  return '$id${UsbSerialConstants.fieldSep}$name${UsbSerialConstants.fieldSep}$order${UsbSerialConstants.fieldSep}${roomIds.join(UsbSerialConstants.listSep)}';
+}
+
+/// Parse text response: one line per room, format id|name|order|floorId|icon|deviceIds|isGeneral.
+List<Map<String, dynamic>> _parseRoomsText(String text) {
+  final list = <Map<String, dynamic>>[];
+  final lines = text.split(UsbSerialConstants.recordSep);
+  for (final line in lines) {
+    final t = line.trim();
+    if (t.isEmpty) continue;
+    final parts = t.split(UsbSerialConstants.fieldSep);
+    if (parts.length < 7) continue;
+    final deviceIds = parts[5].isEmpty
+        ? <String>[]
+        : parts[5]
+              .split(UsbSerialConstants.listSep)
+              .map((e) => e.trim())
+              .where((e) => e.isNotEmpty)
+              .toList();
+    list.add({
+      'id': parts[0],
+      'name': parts[1],
+      'order': int.tryParse(parts[2]) ?? 0,
+      'floorId': parts[3].isEmpty ? null : parts[3],
+      'icon': parts[4].isEmpty ? 'home' : parts[4],
+      'deviceIds': deviceIds,
+      'isGeneral': parts[6] == '1' || parts[6].toLowerCase() == 'true',
+    });
+  }
+  return list;
+}
+
 class UsbSerialRepositoryImpl implements UsbSerialRepository {
   final UsbSerialService _usbSerialService;
 
@@ -85,12 +149,7 @@ class UsbSerialRepositoryImpl implements UsbSerialRepository {
       await _usbSerialService.sendRequest(UsbSerialConstants.requestFloors);
       final responseData = await responseFuture;
 
-      final decoded = json.decode(responseData);
-      if (decoded is! List) return null;
-      final list = decoded
-          .whereType<Map<String, dynamic>>()
-          .map((e) => Map<String, dynamic>.from(e))
-          .toList();
+      final list = _parseFloorsText(responseData);
       return list.isNotEmpty ? list : null;
     } on TimeoutException {
       return null;
@@ -103,7 +162,9 @@ class UsbSerialRepositoryImpl implements UsbSerialRepository {
   Future<void> createFloorOnMicro(Map<String, dynamic> floor) async {
     if (!_usbSerialService.isConnected) return;
     try {
-      final data = json.encode(floor);
+      final line = _floorToLine(floor);
+      final data =
+          '${UsbSerialConstants.commandCreateFloor}${UsbSerialConstants.recordSep}$line';
       await _usbSerialService.send(
         messageType: UsbSerialConstants.msgTypeCommand,
         data: data,
@@ -131,12 +192,7 @@ class UsbSerialRepositoryImpl implements UsbSerialRepository {
       await _usbSerialService.sendRequest(UsbSerialConstants.requestRooms);
       final responseData = await responseFuture;
 
-      final decoded = json.decode(responseData);
-      if (decoded is! List) return null;
-      final list = decoded
-          .whereType<Map<String, dynamic>>()
-          .map((e) => Map<String, dynamic>.from(e))
-          .toList();
+      final list = _parseRoomsText(responseData);
       return list.isNotEmpty ? list : null;
     } on TimeoutException {
       return null;
