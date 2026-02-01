@@ -408,6 +408,7 @@ Future<void> initDependencies() async {
       getIt<RoomRepository>(),
       getIt<GetAllScenariosUseCase>(),
       getIt<ClearAllDashboardCardsUseCase>(),
+      getIt<UsbSerialViewModel>(), // USB Serial for sending commands
     ),
   );
 }

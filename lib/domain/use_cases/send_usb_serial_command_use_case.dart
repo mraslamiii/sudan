@@ -157,4 +157,113 @@ class SendUsbSerialCommandUseCase {
         '${UsbSerialConstants.command}${UsbSerialConstants.headLineDoorLock}$deviceId$actionCode';
     await sendCommand(command);
   }
+
+  /// Send LED color command
+  /// Color format: RGB hex string (e.g., 'FF9500' for orange)
+  Future<void> sendLEDColorCommand(String deviceId, String colorHex) async {
+    // Remove # if present
+    final cleanColor = colorHex.replaceAll('#', '');
+    final command =
+        '${UsbSerialConstants.command}${UsbSerialConstants.headLineLight}$deviceId${cleanColor}';
+    await sendCommand(command);
+  }
+
+  /// Send LED brightness command (0-100)
+  Future<void> sendLEDBrightnessCommand(String deviceId, int brightness) async {
+    final clampedBrightness = brightness.clamp(0, 100);
+    final command =
+        '${UsbSerialConstants.command}${UsbSerialConstants.headLineLight}$deviceId${clampedBrightness.toString().padLeft(3, '0')}';
+    await sendCommand(command);
+  }
+
+  /// Send curtain position command (0-100)
+  Future<void> sendCurtainPositionCommand(String deviceId, int position) async {
+    final clampedPosition = position.clamp(0, 100);
+    String actionCode;
+    if (clampedPosition == 0) {
+      actionCode = UsbSerialConstants.curtainClose;
+    } else if (clampedPosition == 100) {
+      actionCode = UsbSerialConstants.curtainOpen;
+    } else {
+      // Send position as percentage
+      actionCode = clampedPosition.toString().padLeft(3, '0');
+    }
+    final command =
+        '${UsbSerialConstants.command}${UsbSerialConstants.headLineCurtain}$deviceId$actionCode';
+    await sendCommand(command);
+  }
+
+  /// Send thermostat temperature command
+  Future<void> sendThermostatTemperatureCommand(String deviceId, int temperature) async {
+    final clampedTemp = temperature.clamp(10, 35);
+    final command =
+        '${UsbSerialConstants.command}${UsbSerialConstants.headLineTemperature}$deviceId${clampedTemp.toString().padLeft(2, '0')}';
+    await sendCommand(command);
+  }
+
+  /// Send thermostat mode command (Auto, Cool, Heat)
+  Future<void> sendThermostatModeCommand(String deviceId, String mode) async {
+    String modeCode;
+    switch (mode.toLowerCase()) {
+      case 'auto':
+        modeCode = 'A';
+        break;
+      case 'cool':
+        modeCode = 'C';
+        break;
+      case 'heat':
+        modeCode = 'H';
+        break;
+      default:
+        modeCode = 'A';
+    }
+    final command =
+        '${UsbSerialConstants.command}${UsbSerialConstants.headLineTemperature}$deviceId$modeCode';
+    await sendCommand(command);
+  }
+
+  /// Send security system arm/disarm command
+  Future<void> sendSecurityCommand(String deviceId, bool isArmed) async {
+    final command =
+        '${UsbSerialConstants.command}${UsbSerialConstants.headLineBurglarAlarm}$deviceId${isArmed ? '1' : '0'}';
+    await sendCommand(command);
+  }
+
+  /// Send music play/pause command
+  Future<void> sendMusicPlayPauseCommand(String deviceId, bool isPlaying) async {
+    final command =
+        '${UsbSerialConstants.command}${UsbSerialConstants.headLineScenarios}$deviceId${isPlaying ? 'P' : 'S'}';
+    await sendCommand(command);
+  }
+
+  /// Send music previous track command
+  Future<void> sendMusicPreviousCommand(String deviceId) async {
+    final command =
+        '${UsbSerialConstants.command}${UsbSerialConstants.headLineScenarios}$deviceId${'PREV'}';
+    await sendCommand(command);
+  }
+
+  /// Send music next track command
+  Future<void> sendMusicNextCommand(String deviceId) async {
+    final command =
+        '${UsbSerialConstants.command}${UsbSerialConstants.headLineScenarios}$deviceId${'NEXT'}';
+    await sendCommand(command);
+  }
+
+  /// Send music volume command (0-100)
+  Future<void> sendMusicVolumeCommand(String deviceId, int volume) async {
+    final clampedVolume = volume.clamp(0, 100);
+    final command =
+        '${UsbSerialConstants.command}${UsbSerialConstants.headLineScenarios}$deviceId${'VOL'}${clampedVolume.toString().padLeft(3, '0')}';
+    await sendCommand(command);
+  }
+
+  /// Send iPhone control command
+  Future<void> sendIPhoneCommand(String deviceId, bool isActive) async {
+    // iPhone commands might use a different protocol
+    // Adjust based on actual protocol requirements
+    final command =
+        '${UsbSerialConstants.command}${UsbSerialConstants.headLineCameras}$deviceId${isActive ? '1' : '0'}';
+    await sendCommand(command);
+  }
 }

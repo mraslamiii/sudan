@@ -17,6 +17,7 @@ import '../../domain/use_cases/device/add_device_to_room_use_case.dart';
 import '../../domain/repositories/room_repository.dart';
 import '../../domain/use_cases/scenario/get_all_scenarios_use_case.dart';
 import '../widgets/dashboard/iphone_alert_dialog.dart';
+import 'usb_serial_viewmodel.dart';
 
 /// Dashboard ViewModel
 /// Manages all dashboard card state and operations
@@ -46,6 +47,7 @@ class DashboardViewModel extends BaseViewModel {
   final RoomRepository _roomRepository;
   final GetAllScenariosUseCase _getAllScenariosUseCase;
   final ClearAllDashboardCardsUseCase _clearAllDashboardCardsUseCase;
+  final UsbSerialViewModel? _usbSerialViewModel;
   static const _uuid = Uuid();
 
   List<DashboardCardModel> _cards = [];
@@ -65,6 +67,7 @@ class DashboardViewModel extends BaseViewModel {
     this._roomRepository,
     this._getAllScenariosUseCase,
     this._clearAllDashboardCardsUseCase,
+    this._usbSerialViewModel,
   );
 
   // Getters
@@ -335,11 +338,232 @@ class DashboardViewModel extends BaseViewModel {
   void updateCardData(String cardId, Map<String, dynamic> newData) {
     final index = _cards.indexWhere((card) => card.id == cardId);
     if (index != -1) {
-      final currentData = Map<String, dynamic>.from(_cards[index].data);
+      final card = _cards[index];
+      final deviceId = card.data['deviceId'] as String?;
+      
+      // Send USB Serial commands if deviceId exists and USB is connected
+      if (deviceId != null && _usbSerialViewModel?.isUsbConnected == true) {
+        _sendUsbSerialCommands(card.type, deviceId, newData, card.data);
+      }
+      
+      final currentData = Map<String, dynamic>.from(card.data);
       currentData.addAll(newData);
       _cards[index] = _cards[index].copyWith(data: currentData);
       notifyListeners();
       saveDashboard();
+    }
+  }
+
+  /// Send USB Serial commands based on card type and data changes
+  void _sendUsbSerialCommands(
+    CardType cardType,
+    String deviceId,
+    Map<String, dynamic> newData,
+    Map<String, dynamic> currentData,
+  ) {
+    if (_usbSerialViewModel == null) return;
+
+    try {
+      switch (cardType) {
+        case CardType.light:
+          // LED Control Panel commands
+          if (newData.containsKey('isOn')) {
+            _usbSerialViewModel!.sendLightCommand(deviceId, newData['isOn'] as bool);
+          }
+          if (newData.containsKey('color')) {
+            final colorHex = newData['color'] as String?;
+            if (colorHex != null) {
+              _usbSerialViewModel!.sendLEDColorCommand(deviceId, colorHex);
+            }
+          }
+          if (newData.containsKey('brightness')) {
+            final brightness = newData['brightness'] as int?;
+            if (brightness != null) {
+              _usbSerialViewModel!.sendLEDBrightnessCommand(deviceId, brightness);
+            }
+          }
+          break;
+
+        case CardType.curtain:
+          // Curtain Control Panel commands
+          if (newData.containsKey('position')) {
+            final position = newData['position'] as int?;
+            if (position != null) {
+              _usbSerialViewModel!.sendCurtainPositionCommand(deviceId, position);
+            }
+          } else if (newData.containsKey('isOpen')) {
+            final isOpen = newData['isOpen'] as bool?;
+            if (isOpen != null) {
+              _usbSerialViewModel!.sendCurtainCommand(deviceId, isOpen ? 'open' : 'close');
+            }
+          }
+          break;
+
+        case CardType.thermostat:
+        case CardType.airConditioner:
+          // Thermostat Control Panel commands
+          if (newData.containsKey('targetTemperature')) {
+            final temp = newData['targetTemperature'] as int?;
+            if (temp != null) {
+              _usbSerialViewModel!.sendThermostatTemperatureCommand(deviceId, temp);
+            }
+          }
+          if (newData.containsKey('mode')) {
+            final mode = newData['mode'] as String?;
+            if (mode != null) {
+              _usbSerialViewModel!.sendThermostatModeCommand(deviceId, mode);
+            }
+          }
+          if (newData.containsKey('isOn')) {
+            // Thermostat on/off might need a specific command
+            // For now, we can use temperature command with 0 or a specific value
+          }
+          break;
+
+        case CardType.music:
+          // Music Player Control Panel commands
+          if (newData.containsKey('isPlaying')) {
+            final isPlaying = newData['isPlaying'] as bool?;
+            if (isPlaying != null) {
+              _usbSerialViewModel!.sendMusicPlayPauseCommand(deviceId, isPlaying);
+            }
+          }
+          if (newData.containsKey('volume')) {
+            final volume = newData['volume'] as int?;
+            if (volume != null) {
+              _usbSerialViewModel!.sendMusicVolumeCommand(deviceId, volume);
+            }
+          }
+          // Note: Previous/Next commands are handled separately in the widget
+          break;
+
+        case CardType.security:
+          // Security Control Panel commands
+          if (newData.containsKey('isActive')) {
+            final isActive = newData['isActive'] as bool?;
+            if (isActive != null) {
+              _usbSerialViewModel!.sendSecurityCommand(deviceId, isActive);
+            }
+          }
+          break;
+
+        case CardType.elevator:
+          // Elevator Control Panel commands
+          if (newData.containsKey('targetFloor')) {
+            final targetFloor = newData['targetFloor'] as int?;
+            if (targetFloor != null) {
+              _usbSerialViewModel!.sendElevatorCallCommand(deviceId, targetFloor);
+            }
+          }
+          break;
+
+        case CardType.doorLock:
+          // Door Lock Control Panel commands
+          if (newData.containsKey('isLocked')) {
+            final isLocked = newData['isLocked'] as bool?;
+            if (isLocked != null) {
+              _usbSerialViewModel!.sendDoorLockCommand(deviceId, isLocked);
+            }
+          }
+          break;
+
+        case CardType.iphone:
+          // iPhone Control Panel commands
+          if (newData.containsKey('isActive')) {
+            final isActive = newData['isActive'] as bool?;
+            if (isActive != null) {
+              _usbSerialViewModel!.sendIPhoneCommand(deviceId, isActive);
+            }
+          }
+          break;
+
+        case CardType.tv:
+        case CardType.fan:
+        case CardType.window:
+        case CardType.door:
+        case CardType.humidifier:
+          // Simple on/off devices
+          if (newData.containsKey('isOn')) {
+            final isOn = newData['isOn'] as bool?;
+            if (isOn != null) {
+              // Use socket command for these devices
+              _usbSerialViewModel!.sendSocketCommand(deviceId, isOn);
+            }
+          }
+          break;
+
+        case CardType.camera:
+          // Camera commands might be handled differently
+          // For now, we can use socket command for on/off
+          if (newData.containsKey('isOn')) {
+            final isOn = newData['isOn'] as bool?;
+            if (isOn != null) {
+              _usbSerialViewModel!.sendSocketCommand(deviceId, isOn);
+            }
+          }
+          break;
+
+        // Tablet Charger - uses socket commands
+        // Note: Tablet Charger might not have a specific CardType
+        // If it does, add it here with charge/discharge commands
+        default:
+          // For any other device types, try socket commands for on/off
+          if (newData.containsKey('isOn')) {
+            final isOn = newData['isOn'] as bool?;
+            if (isOn != null) {
+              _usbSerialViewModel!.sendSocketCommand(deviceId, isOn);
+            }
+          }
+          // Handle charge/discharge for tablet charger
+          if (newData.containsKey('isCharging')) {
+            final isCharging = newData['isCharging'] as bool?;
+            if (isCharging != null && isCharging) {
+              _usbSerialViewModel!.sendSocketChargeCommand(deviceId);
+            }
+          }
+          if (newData.containsKey('isDischarging')) {
+            final isDischarging = newData['isDischarging'] as bool?;
+            if (isDischarging != null && isDischarging) {
+              _usbSerialViewModel!.sendSocketDischargeCommand(deviceId);
+            }
+          }
+          break;
+      }
+    } catch (e) {
+      print('❌ [DASHBOARD_VM] Failed to send USB Serial command: $e');
+      // Don't throw - allow UI to update even if command fails
+    }
+  }
+
+  /// Send music previous track command
+  void sendMusicPreviousCommand(String cardId) {
+    final index = _cards.indexWhere((card) => card.id == cardId);
+    if (index != -1) {
+      final card = _cards[index];
+      final deviceId = card.data['deviceId'] as String?;
+      if (deviceId != null && _usbSerialViewModel?.isUsbConnected == true) {
+        try {
+          _usbSerialViewModel!.sendMusicPreviousCommand(deviceId);
+        } catch (e) {
+          print('❌ [DASHBOARD_VM] Failed to send music previous command: $e');
+        }
+      }
+    }
+  }
+
+  /// Send music next track command
+  void sendMusicNextCommand(String cardId) {
+    final index = _cards.indexWhere((card) => card.id == cardId);
+    if (index != -1) {
+      final card = _cards[index];
+      final deviceId = card.data['deviceId'] as String?;
+      if (deviceId != null && _usbSerialViewModel?.isUsbConnected == true) {
+        try {
+          _usbSerialViewModel!.sendMusicNextCommand(deviceId);
+        } catch (e) {
+          print('❌ [DASHBOARD_VM] Failed to send music next command: $e');
+        }
+      }
     }
   }
 

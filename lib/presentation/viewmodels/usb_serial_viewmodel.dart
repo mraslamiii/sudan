@@ -179,6 +179,61 @@ class UsbSerialViewModel extends BaseViewModel {
     await _sendCommandUseCase.sendDoorLockCommand(deviceId, isLocked);
   }
 
+  /// Send LED color command
+  Future<void> sendLEDColorCommand(String deviceId, String colorHex) async {
+    await _sendCommandUseCase.sendLEDColorCommand(deviceId, colorHex);
+  }
+
+  /// Send LED brightness command
+  Future<void> sendLEDBrightnessCommand(String deviceId, int brightness) async {
+    await _sendCommandUseCase.sendLEDBrightnessCommand(deviceId, brightness);
+  }
+
+  /// Send curtain position command
+  Future<void> sendCurtainPositionCommand(String deviceId, int position) async {
+    await _sendCommandUseCase.sendCurtainPositionCommand(deviceId, position);
+  }
+
+  /// Send thermostat temperature command
+  Future<void> sendThermostatTemperatureCommand(String deviceId, int temperature) async {
+    await _sendCommandUseCase.sendThermostatTemperatureCommand(deviceId, temperature);
+  }
+
+  /// Send thermostat mode command
+  Future<void> sendThermostatModeCommand(String deviceId, String mode) async {
+    await _sendCommandUseCase.sendThermostatModeCommand(deviceId, mode);
+  }
+
+  /// Send security command
+  Future<void> sendSecurityCommand(String deviceId, bool isArmed) async {
+    await _sendCommandUseCase.sendSecurityCommand(deviceId, isArmed);
+  }
+
+  /// Send music play/pause command
+  Future<void> sendMusicPlayPauseCommand(String deviceId, bool isPlaying) async {
+    await _sendCommandUseCase.sendMusicPlayPauseCommand(deviceId, isPlaying);
+  }
+
+  /// Send music previous track command
+  Future<void> sendMusicPreviousCommand(String deviceId) async {
+    await _sendCommandUseCase.sendMusicPreviousCommand(deviceId);
+  }
+
+  /// Send music next track command
+  Future<void> sendMusicNextCommand(String deviceId) async {
+    await _sendCommandUseCase.sendMusicNextCommand(deviceId);
+  }
+
+  /// Send music volume command
+  Future<void> sendMusicVolumeCommand(String deviceId, int volume) async {
+    await _sendCommandUseCase.sendMusicVolumeCommand(deviceId, volume);
+  }
+
+  /// Send iPhone command
+  Future<void> sendIPhoneCommand(String deviceId, bool isActive) async {
+    await _sendCommandUseCase.sendIPhoneCommand(deviceId, isActive);
+  }
+
   @override
   void dispose() {
     _dataSubscription?.cancel();

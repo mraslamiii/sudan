@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/di/injection_container.dart';
 
 import '../../../data/models/dashboard_card_model.dart';
 import 'card_widgets/device_card.dart';
@@ -12,6 +13,7 @@ import 'elevator_control_panel.dart';
 import 'door_lock_control_panel.dart';
 import 'iphone_control_panel.dart';
 import 'base_dashboard_card.dart';
+import '../../../presentation/viewmodels/usb_serial_viewmodel.dart';
 
 /// Factory class to create appropriate card widget based on card type
 class DashboardCardFactory {
@@ -144,10 +146,32 @@ class DashboardCardFactory {
             });
           },
           onPrevious: () {
-            // Could trigger previous track logic
+            // Send USB Serial command for previous track
+            final deviceId = card.data['deviceId'] as String?;
+            if (deviceId != null) {
+              try {
+                final usbSerialVM = getIt<UsbSerialViewModel>();
+                if (usbSerialVM.isUsbConnected) {
+                  usbSerialVM.sendMusicPreviousCommand(deviceId);
+                }
+              } catch (e) {
+                print('❌ [DASHBOARD_CARD_FACTORY] Failed to send music previous command: $e');
+              }
+            }
           },
           onNext: () {
-            // Could trigger next track logic
+            // Send USB Serial command for next track
+            final deviceId = card.data['deviceId'] as String?;
+            if (deviceId != null) {
+              try {
+                final usbSerialVM = getIt<UsbSerialViewModel>();
+                if (usbSerialVM.isUsbConnected) {
+                  usbSerialVM.sendMusicNextCommand(deviceId);
+                }
+              } catch (e) {
+                print('❌ [DASHBOARD_CARD_FACTORY] Failed to send music next command: $e');
+              }
+            }
           },
           onVolumeChanged: (newVolume) {
             onDataUpdate?.call({
