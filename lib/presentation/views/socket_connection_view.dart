@@ -1,283 +1,388 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:provider/provider.dart';
-import '../viewmodels/socket_viewmodel.dart';
+import 'package:usb_serial/usb_serial.dart';
+import '../viewmodels/usb_serial_viewmodel.dart';
 import '../../core/di/injection_container.dart';
-import '../../core/constants/socket_constants.dart';
+import '../../core/constants/usb_serial_constants.dart';
 import '../../core/localization/app_localizations.dart';
 
-class SocketConnectionView extends StatelessWidget {
+/// صفحه اتصال سریال (USB Serial) به میکروکنترلر
+/// قبلاً از Socket TCP استفاده می‌شد؛ اکنون فقط اتصال سریال پشتیبانی می‌شود.
+class SocketConnectionView extends StatefulWidget {
   const SocketConnectionView({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => getIt<SocketViewModel>(),
-      child: const _SocketConnectionViewContent(),
-    );
-  }
+  State<SocketConnectionView> createState() => _SocketConnectionViewState();
 }
 
-class _SocketConnectionViewContent extends StatefulWidget {
-  const _SocketConnectionViewContent();
+class _SocketConnectionViewState extends State<SocketConnectionView> {
+  List<UsbDevice> _availableDevices = [];
+  UsbSerialViewModel? _viewModel;
 
   @override
-  State<_SocketConnectionViewContent> createState() => _SocketConnectionViewContentState();
-}
+  void initState() {
+    super.initState();
+    _viewModel = getIt<UsbSerialViewModel>();
+    _loadDevices();
+  }
 
-class _SocketConnectionViewContentState extends State<_SocketConnectionViewContent> {
-  final TextEditingController _ipController = TextEditingController(
-    text: SocketConstants.defaultIp,
-  );
-  final TextEditingController _portController = TextEditingController(
-    text: SocketConstants.defaultPort.toString(),
-  );
+  Future<void> _loadDevices() async {
+    if (_viewModel == null) return;
+    try {
+      final devices = await _viewModel!.getAvailableDevices();
+      if (mounted) setState(() => _availableDevices = devices);
+    } catch (_) {}
+  }
 
-  @override
-  void dispose() {
-    _ipController.dispose();
-    _portController.dispose();
-    super.dispose();
+  Future<void> _handleConnect() async {
+    if (_viewModel == null) return;
+    await _loadDevices();
+
+    if (_availableDevices.isEmpty) {
+      if (kDebugMode) {
+        try {
+          await _viewModel!.connect(
+            device: null,
+            baudRate: UsbSerialConstants.defaultBaudRate,
+          );
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('اتصال شبیه‌سازی شد (بدون دستگاه USB فیزیکی)'),
+                backgroundColor: Colors.green,
+              ),
+            );
+          }
+        } catch (e) {
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('خطا: $e'), backgroundColor: Colors.red),
+            );
+          }
+        }
+      } else if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('هیچ دستگاه USB یافت نشد')),
+        );
+      }
+      return;
+    }
+
+    try {
+      await _viewModel!.connect(
+        device: _availableDevices.first,
+        baudRate: UsbSerialConstants.defaultBaudRate,
+        context: context,
+      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('متصل شد: ${_availableDevices.first.deviceName}'),
+            backgroundColor: Colors.green,
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('خطا در اتصال: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
+  }
+
+  Future<void> _handleDisconnect() async {
+    await _viewModel?.disconnect();
+    if (mounted) setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-    final viewModel = context.watch<SocketViewModel>();
     final l10n = AppLocalizations.of(context)!;
-
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(l10n.socketConnection),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            // Connection Status
-            Card(
-              color: viewModel.isConnected ? Colors.green : Colors.red,
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  children: [
-                    Icon(
-                      viewModel.isConnected ? Icons.check_circle : Icons.error,
-                      color: Colors.white,
-                      size: 48,
+    return ChangeNotifierProvider.value(
+      value: _viewModel!,
+      child: Scaffold(
+        appBar: AppBar(title: Text(l10n.serialConnection)),
+        body: Consumer<UsbSerialViewModel>(
+          builder: (context, viewModel, _) {
+            final isConnected = viewModel.isUsbConnected;
+            return Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: ListView(
+                children: [
+                  // وضعیت اتصال
+                  Card(
+                    color: isConnected ? Colors.green : Colors.red,
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        children: [
+                          Icon(
+                            isConnected ? Icons.check_circle : Icons.error,
+                            color: Colors.white,
+                            size: 48,
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            isConnected ? l10n.connected : l10n.disconnected,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            '${l10n.status} ${viewModel.connectionStatus}',
+                            style: const TextStyle(color: Colors.white70),
+                          ),
+                        ],
+                      ),
                     ),
-                    const SizedBox(height: 8),
+                  ),
+                  const SizedBox(height: 16),
+
+                  // انتخاب دستگاه USB (اگر موجود باشد)
+                  if (_availableDevices.isNotEmpty && !isConnected) ...[
                     Text(
-                      viewModel.isConnected ? l10n.connected : l10n.disconnected,
+                      'دستگاه USB',
+                      style: Theme.of(context).textTheme.titleSmall,
+                    ),
+                    const SizedBox(height: 4),
+                    Card(
+                      child: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Text(
+                          _availableDevices.first.deviceName.isEmpty
+                              ? 'دستگاه ۱'
+                              : _availableDevices.first.deviceName,
+                          style: const TextStyle(fontFamily: 'monospace'),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                  ],
+
+                  // دکمه‌های اتصال / قطع
+                  if (!isConnected)
+                    ElevatedButton.icon(
+                      onPressed: viewModel.isLoading
+                          ? null
+                          : () async {
+                              await _handleConnect();
+                              setState(() {});
+                            },
+                      icon: viewModel.isLoading
+                          ? const SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(strokeWidth: 2),
+                            )
+                          : const Icon(Icons.usb),
+                      label: Text(l10n.connect),
+                    )
+                  else
+                    Row(
+                      children: [
+                        Expanded(
+                          child: OutlinedButton.icon(
+                            onPressed: () async {
+                              await _handleDisconnect();
+                              setState(() {});
+                            },
+                            icon: const Icon(Icons.link_off),
+                            label: Text(l10n.disconnect),
+                          ),
+                        ),
+                      ],
+                    ),
+
+                  if (viewModel.hasError) ...[
+                    const SizedBox(height: 16),
+                    Card(
+                      color: Colors.red.shade50,
+                      child: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Row(
+                          children: [
+                            const Icon(Icons.error, color: Colors.red),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Text(
+                                viewModel.errorMessage ?? l10n.unknownError,
+                                style: const TextStyle(color: Colors.red),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+
+                  const SizedBox(height: 24),
+                  const Divider(),
+                  const SizedBox(height: 16),
+
+                  // دستورات تست
+                  Text(
+                    l10n.commands,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+
+                  _CmdButton(
+                    enabled: isConnected,
+                    icon: Icons.settings_ethernet,
+                    label: l10n.requestIpConfig,
+                    onPressed: () => viewModel.requestIpConfig(),
+                  ),
+                  const SizedBox(height: 8),
+                  _CmdButton(
+                    enabled: isConnected,
+                    icon: Icons.layers,
+                    label: l10n.requestFloorsCount,
+                    onPressed: () => viewModel.requestFloorsCount(),
+                  ),
+                  const SizedBox(height: 8),
+                  _CmdButton(
+                    enabled: isConnected,
+                    icon: Icons.list_alt,
+                    label: l10n.requestFloorsList,
+                    onPressed: () async {
+                      final list = await viewModel.requestFloors();
+                      if (!context.mounted) return;
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            list != null
+                                ? '${l10n.requestFloorsList}: ${list.length}'
+                                : '${l10n.requestFloorsList}: timeout / error',
+                          ),
+                          backgroundColor: list != null
+                              ? Colors.green
+                              : Colors.orange,
+                        ),
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 8),
+                  _CmdButton(
+                    enabled: isConnected,
+                    icon: Icons.door_front_door,
+                    label: l10n.requestRoomsList,
+                    onPressed: () async {
+                      final list = await viewModel.requestRooms();
+                      if (!context.mounted) return;
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            list != null
+                                ? '${l10n.requestRoomsList}: ${list.length}'
+                                : '${l10n.requestRoomsList}: timeout / error',
+                          ),
+                          backgroundColor: list != null
+                              ? Colors.green
+                              : Colors.orange,
+                        ),
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 8),
+                  _CmdButton(
+                    enabled: isConnected,
+                    icon: Icons.lightbulb,
+                    label: l10n.turnOnLightDevice,
+                    onPressed: () => viewModel.sendLightCommand('1', true),
+                  ),
+                  const SizedBox(height: 8),
+                  _CmdButton(
+                    enabled: isConnected,
+                    icon: Icons.curtains,
+                    label: l10n.openCurtainDevice,
+                    onPressed: () => viewModel.sendCurtainCommand('1', 'open'),
+                  ),
+                  const SizedBox(height: 8),
+                  _CmdButton(
+                    enabled: isConnected,
+                    icon: Icons.battery_charging_full,
+                    label: l10n.chargeTabletDevice,
+                    onPressed: () => viewModel.sendSocketChargeCommand('1'),
+                  ),
+                  const SizedBox(height: 8),
+                  _CmdButton(
+                    enabled: isConnected,
+                    icon: Icons.battery_std,
+                    label: l10n.dischargeTabletDevice,
+                    onPressed: () => viewModel.sendSocketDischargeCommand('1'),
+                  ),
+                  const SizedBox(height: 8),
+                  _CmdButton(
+                    enabled: isConnected,
+                    icon: Icons.power,
+                    label: l10n.socketOnDevice,
+                    onPressed: () => viewModel.sendSocketCommand('1', true),
+                  ),
+
+                  // آخرین داده دریافت‌شده (سریال)
+                  if (viewModel.lastReceivedMessage != null) ...[
+                    const SizedBox(height: 24),
+                    const Divider(),
+                    const SizedBox(height: 16),
+                    Text(
+                      l10n.lastReceivedData,
                       style: const TextStyle(
-                        color: Colors.white,
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    Text(
-                      '${l10n.status} ${viewModel.connectionStatus}',
-                      style: const TextStyle(color: Colors.white70),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(height: 16),
-
-            // IP and Port Input
-            TextField(
-              controller: _ipController,
-              decoration: InputDecoration(
-                labelText: l10n.ipAddress,
-                border: const OutlineInputBorder(),
-              ),
-              enabled: !viewModel.isConnected,
-            ),
-            const SizedBox(height: 8),
-            TextField(
-              controller: _portController,
-              decoration: InputDecoration(
-                labelText: l10n.port,
-                border: const OutlineInputBorder(),
-              ),
-              keyboardType: TextInputType.number,
-              enabled: !viewModel.isConnected,
-            ),
-            const SizedBox(height: 16),
-
-            // Connection Buttons
-            if (!viewModel.isConnected)
-              ElevatedButton.icon(
-                onPressed: viewModel.isLoading
-                    ? null
-                    : () async {
-                        final ip = _ipController.text.trim();
-                        final port = int.tryParse(_portController.text.trim());
-                        if (ip.isNotEmpty && port != null) {
-                          await viewModel.connect(ip: ip, port: port);
-                        } else {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text(l10n.pleaseEnterValidIpPort)),
-                          );
-                        }
-                      },
-                icon: viewModel.isLoading
-                    ? const SizedBox(
-                        width: 20,
-                        height: 20,
-                        child: CircularProgressIndicator(strokeWidth: 2),
-                      )
-                    : const Icon(Icons.link),
-                label: Text(l10n.connect),
-              )
-            else
-              Row(
-                children: [
-                  Expanded(
-                    child: OutlinedButton.icon(
-                      onPressed: () => viewModel.disconnect(),
-                      icon: const Icon(Icons.link_off),
-                      label: Text(l10n.disconnect),
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: OutlinedButton.icon(
-                      onPressed: () => viewModel.reconnect(),
-                      icon: const Icon(Icons.refresh),
-                      label: Text(l10n.reconnect),
-                    ),
-                  ),
-                ],
-              ),
-
-            if (viewModel.hasError) ...[
-              const SizedBox(height: 16),
-              Card(
-                color: Colors.red.shade50,
-                child: Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Row(
-                    children: [
-                      const Icon(Icons.error, color: Colors.red),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: Text(
-                          viewModel.errorMessage ?? l10n.unknownError,
-                          style: const TextStyle(color: Colors.red),
+                    const SizedBox(height: 8),
+                    Card(
+                      child: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: SelectableText(
+                          viewModel.lastReceivedMessage!.data.isNotEmpty
+                              ? viewModel.lastReceivedMessage!.data
+                              : 'type: ${viewModel.lastReceivedMessage!.type}',
+                          style: const TextStyle(fontFamily: 'monospace'),
                         ),
                       ),
-                    ],
-                  ),
-                ),
+                    ),
+                  ],
+                ],
               ),
-            ],
-
-            const SizedBox(height: 24),
-            const Divider(),
-            const SizedBox(height: 16),
-
-            // Command Section
-            Text(
-              l10n.commands,
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 16),
-
-            // Request IP Config
-            ElevatedButton.icon(
-              onPressed: viewModel.isConnected
-                  ? () => viewModel.requestIpConfig()
-                  : null,
-              icon: const Icon(Icons.settings_ethernet),
-              label: Text(l10n.requestIpConfig),
-            ),
-            const SizedBox(height: 8),
-
-            // Request Floors Count
-            ElevatedButton.icon(
-              onPressed: viewModel.isConnected
-                  ? () => viewModel.requestFloorsCount()
-                  : null,
-              icon: const Icon(Icons.layers),
-              label: Text(l10n.requestFloorsCount),
-            ),
-            const SizedBox(height: 8),
-
-            // Test Light Command
-            ElevatedButton.icon(
-              onPressed: viewModel.isConnected
-                  ? () => viewModel.sendLightCommand('1', true)
-                  : null,
-              icon: const Icon(Icons.lightbulb),
-              label: Text(l10n.turnOnLightDevice),
-            ),
-            const SizedBox(height: 8),
-
-            // Test Curtain Command
-            ElevatedButton.icon(
-              onPressed: viewModel.isConnected
-                  ? () => viewModel.sendCurtainCommand('1', 'open')
-                  : null,
-              icon: const Icon(Icons.curtains),
-              label: Text(l10n.openCurtainDevice),
-            ),
-            const SizedBox(height: 8),
-
-            // Test Socket Charge Command
-            ElevatedButton.icon(
-              onPressed: viewModel.isConnected
-                  ? () => viewModel.sendSocketChargeCommand('1')
-                  : null,
-              icon: const Icon(Icons.battery_charging_full),
-              label: Text(l10n.chargeTabletDevice),
-            ),
-            const SizedBox(height: 8),
-
-            // Test Socket Discharge Command
-            ElevatedButton.icon(
-              onPressed: viewModel.isConnected
-                  ? () => viewModel.sendSocketDischargeCommand('1')
-                  : null,
-              icon: const Icon(Icons.battery_std),
-              label: Text(l10n.dischargeTabletDevice),
-            ),
-            const SizedBox(height: 8),
-
-            // Test Socket On/Off Command
-            ElevatedButton.icon(
-              onPressed: viewModel.isConnected
-                  ? () => viewModel.sendSocketCommand('1', true)
-                  : null,
-              icon: const Icon(Icons.power),
-              label: Text(l10n.socketOnDevice),
-            ),
-
-            // Last Received Data
-            if (viewModel.lastReceivedData != null) ...[
-              const SizedBox(height: 24),
-              const Divider(),
-              const SizedBox(height: 16),
-              Text(
-                l10n.lastReceivedData,
-                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 8),
-              Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Text(
-                    viewModel.lastReceivedData!.join('-'),
-                    style: const TextStyle(fontFamily: 'monospace'),
-                  ),
-                ),
-              ),
-            ],
-          ],
+            );
+          },
         ),
       ),
     );
   }
 }
 
+class _CmdButton extends StatelessWidget {
+  const _CmdButton({
+    required this.enabled,
+    required this.icon,
+    required this.label,
+    required this.onPressed,
+  });
 
+  final bool enabled;
+  final IconData icon;
+  final String label;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton.icon(
+      onPressed: enabled ? onPressed : null,
+      icon: Icon(icon),
+      label: Text(label),
+    );
+  }
+}

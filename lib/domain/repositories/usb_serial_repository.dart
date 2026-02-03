@@ -46,9 +46,24 @@ abstract class UsbSerialRepository {
   /// Send create-floor command to microcontroller (text line: id|name|order|roomIds).
   Future<void> createFloorOnMicro(Map<String, dynamic> floor);
 
+  /// Send update-floor command to microcontroller (text line: id|name|order|roomIds).
+  Future<void> updateFloorOnMicro(Map<String, dynamic> floor);
+
+  /// Send delete-floor command to microcontroller (floor id).
+  Future<void> deleteFloorOnMicro(String floorId);
+
   /// Request room list from microcontroller via USB.
   /// Sends request and waits for response (text lines, no JSON).
   /// Returns parsed list of room maps, or null on timeout/failure/disconnect.
   /// Expected response: one line per room, format id|name|order|floorId|icon|deviceIds|isGeneral.
   Future<List<Map<String, dynamic>>?> requestRooms();
+
+  /// Send create-room command to microcontroller.
+  Future<void> createRoomOnMicro(Map<String, dynamic> room);
+
+  /// Send update-room command to microcontroller.
+  Future<void> updateRoomOnMicro(Map<String, dynamic> room);
+
+  /// Send delete-room command to microcontroller (room id).
+  Future<void> deleteRoomOnMicro(String roomId);
 }

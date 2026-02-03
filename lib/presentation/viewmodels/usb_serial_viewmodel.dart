@@ -144,9 +144,19 @@ class UsbSerialViewModel extends BaseViewModel {
     await _sendCommandUseCase.requestIpConfig();
   }
 
-  /// Request floors count
+  /// Request floors count (@M_F_C)
   Future<void> requestFloorsCount() async {
     await _sendCommandUseCase.requestFloorsCount();
+  }
+
+  /// Request full floors list from micro (@M_F_A). Returns parsed list or null.
+  Future<List<Map<String, dynamic>>?> requestFloors() async {
+    return _usbSerialRepository.requestFloors();
+  }
+
+  /// Request full rooms list from micro (@M_R). Returns parsed list or null.
+  Future<List<Map<String, dynamic>>?> requestRooms() async {
+    return _usbSerialRepository.requestRooms();
   }
 
   /// Request a specific floor
@@ -195,8 +205,14 @@ class UsbSerialViewModel extends BaseViewModel {
   }
 
   /// Send thermostat temperature command
-  Future<void> sendThermostatTemperatureCommand(String deviceId, int temperature) async {
-    await _sendCommandUseCase.sendThermostatTemperatureCommand(deviceId, temperature);
+  Future<void> sendThermostatTemperatureCommand(
+    String deviceId,
+    int temperature,
+  ) async {
+    await _sendCommandUseCase.sendThermostatTemperatureCommand(
+      deviceId,
+      temperature,
+    );
   }
 
   /// Send thermostat mode command
@@ -210,7 +226,10 @@ class UsbSerialViewModel extends BaseViewModel {
   }
 
   /// Send music play/pause command
-  Future<void> sendMusicPlayPauseCommand(String deviceId, bool isPlaying) async {
+  Future<void> sendMusicPlayPauseCommand(
+    String deviceId,
+    bool isPlaying,
+  ) async {
     await _sendCommandUseCase.sendMusicPlayPauseCommand(deviceId, isPlaying);
   }
 
@@ -232,6 +251,11 @@ class UsbSerialViewModel extends BaseViewModel {
   /// Send iPhone command
   Future<void> sendIPhoneCommand(String deviceId, bool isActive) async {
     await _sendCommandUseCase.sendIPhoneCommand(deviceId, isActive);
+  }
+
+  /// Send scenario command to micro (general / floor / place)
+  Future<void> sendScenarioCommand(String scenarioId, String type) async {
+    await _sendCommandUseCase.sendScenarioCommand(scenarioId, type);
   }
 
   @override

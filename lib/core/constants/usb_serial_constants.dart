@@ -63,8 +63,23 @@ class UsbSerialConstants {
   /// Create floor command: send one line id|name|order|roomIds (roomIds comma-sep)
   static const String commandCreateFloor = '${command + mode}_F_N';
 
+  /// Update floor command: send one line id|name|order|roomIds
+  static const String commandUpdateFloor = '${command + mode}_F_U';
+
+  /// Delete floor command: send floor id (e.g. &M_F_D\nfloor_1 or &M_F_Dfloor_1)
+  static const String commandDeleteFloor = '${command + mode}_F_D';
+
   /// Request room list (response: text lines, each line id|name|order|floorId|icon|deviceIds|isGeneral)
   static const String requestRooms = '${request + mode}_R';
+
+  /// Create room command: send one line id|name|order|floorId|icon|deviceIds|isGeneral
+  static const String commandCreateRoom = '${command + mode}_R_N';
+
+  /// Update room command: send one line id|name|order|floorId|icon|deviceIds|isGeneral
+  static const String commandUpdateRoom = '${command + mode}_R_U';
+
+  /// Delete room command: send room id
+  static const String commandDeleteRoom = '${command + mode}_R_D';
 
   // Text format delimiters (no JSON)
   static const String fieldSep = '|';

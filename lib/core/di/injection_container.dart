@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -7,16 +6,13 @@ import '../../data/data_sources/remote/api/api_client.dart';
 import '../../data/data_sources/local/preferences/preferences_service.dart';
 import '../../data/data_sources/local/dashboard/dashboard_settings_service.dart';
 import '../../data/data_sources/local/pin/pin_service.dart';
-import '../../data/data_sources/remote/socket/socket_service.dart';
 import '../../data/data_sources/remote/usb_serial/usb_serial_service.dart';
 import '../../data/data_sources/local/device/device_local_data_source.dart';
 import '../../data/data_sources/local/scenario/scenario_local_data_source.dart';
 import '../../data/data_sources/local/room/room_local_data_source.dart';
 import '../../data/data_sources/local/floor/floor_local_data_source.dart';
 import '../../data/repositories/implementations/home_repository_impl.dart';
-import '../../data/repositories/implementations/socket_repository_impl.dart';
 import '../../data/repositories/implementations/usb_serial_repository_impl.dart';
-import '../../data/repositories/implementations/mock_usb_serial_repository_impl.dart';
 import '../../data/repositories/implementations/device_repository_impl.dart';
 import '../../data/repositories/implementations/scenario_repository_impl.dart';
 import '../../data/repositories/implementations/room_repository_impl.dart';
@@ -24,7 +20,6 @@ import '../../data/repositories/implementations/floor_repository_impl.dart';
 import '../../data/repositories/implementations/dashboard_repository_impl.dart';
 import '../../data/repositories/implementations/config_repository_impl.dart';
 import '../../domain/repositories/home_repository.dart';
-import '../../domain/repositories/socket_repository.dart';
 import '../../domain/repositories/usb_serial_repository.dart';
 import '../../domain/repositories/device_repository.dart';
 import '../../domain/repositories/scenario_repository.dart';
@@ -33,8 +28,6 @@ import '../../domain/repositories/floor_repository.dart';
 import '../../domain/repositories/dashboard_repository.dart';
 import '../../domain/repositories/config_repository.dart';
 import '../../domain/use_cases/get_home_data_use_case.dart';
-import '../../domain/use_cases/connect_socket_use_case.dart';
-import '../../domain/use_cases/send_socket_command_use_case.dart';
 import '../../domain/use_cases/connect_usb_serial_use_case.dart';
 import '../../domain/use_cases/send_usb_serial_command_use_case.dart';
 import '../../domain/use_cases/device/get_all_devices_use_case.dart';
@@ -68,7 +61,6 @@ import '../../domain/use_cases/dashboard/load_dashboard_layout_use_case.dart';
 import '../../domain/use_cases/dashboard/save_dashboard_layout_use_case.dart';
 import '../../domain/use_cases/dashboard/clear_all_dashboard_cards_use_case.dart';
 import '../../presentation/viewmodels/home_viewmodel.dart';
-import '../../presentation/viewmodels/socket_viewmodel.dart';
 import '../../presentation/viewmodels/usb_serial_viewmodel.dart';
 import '../../presentation/viewmodels/device_viewmodel.dart';
 import '../../presentation/viewmodels/scenario_viewmodel.dart';
@@ -114,9 +106,6 @@ Future<void> initDependencies() async {
     () => PinService(getIt<PreferencesService>()),
   );
 
-  // Socket Service (Singleton)
-  getIt.registerLazySingleton<SocketService>(() => SocketService.instance);
-
   // USB Serial Service (Singleton)
   getIt.registerLazySingleton<UsbSerialService>(
     () => UsbSerialService.instance,
@@ -147,14 +136,8 @@ Future<void> initDependencies() async {
     ),
   );
 
-  getIt.registerLazySingleton<SocketRepository>(
-    () => SocketRepositoryImpl(getIt<SocketService>()),
-  );
-
   getIt.registerLazySingleton<UsbSerialRepository>(
-    () => kDebugMode
-        ? MockUsbSerialRepositoryImpl()
-        : UsbSerialRepositoryImpl(getIt<UsbSerialService>()),
+    () => UsbSerialRepositoryImpl(getIt<UsbSerialService>()),
   );
 
   // Smart Home Repositories
@@ -196,14 +179,6 @@ Future<void> initDependencies() async {
   // Use cases
   getIt.registerLazySingleton<GetHomeDataUseCase>(
     () => GetHomeDataUseCase(getIt<HomeRepository>()),
-  );
-
-  getIt.registerLazySingleton<ConnectSocketUseCase>(
-    () => ConnectSocketUseCase(getIt<SocketRepository>()),
-  );
-
-  getIt.registerLazySingleton<SendSocketCommandUseCase>(
-    () => SendSocketCommandUseCase(getIt<SocketRepository>()),
   );
 
   getIt.registerLazySingleton<ConnectUsbSerialUseCase>(
@@ -339,15 +314,8 @@ Future<void> initDependencies() async {
     () => HomeViewModel(getIt<GetHomeDataUseCase>()),
   );
 
-  getIt.registerFactory<SocketViewModel>(
-    () => SocketViewModel(
-      getIt<SocketRepository>(),
-      getIt<ConnectSocketUseCase>(),
-      getIt<SendSocketCommandUseCase>(),
-    ),
-  );
-
-  getIt.registerFactory<UsbSerialViewModel>(
+  // UsbSerialViewModel: Singleton so connection state is shared (e.g. connection page + dashboard)
+  getIt.registerLazySingleton<UsbSerialViewModel>(
     () => UsbSerialViewModel(
       getIt<UsbSerialRepository>(),
       getIt<ConnectUsbSerialUseCase>(),
@@ -363,6 +331,7 @@ Future<void> initDependencies() async {
       getIt<UpdateDeviceUseCase>(),
       getIt<ToggleDeviceUseCase>(),
       getIt<GetDeviceByIdUseCase>(),
+      getIt<UsbSerialViewModel>(),
     ),
   );
 
@@ -373,6 +342,7 @@ Future<void> initDependencies() async {
       getIt<UpdateScenarioUseCase>(),
       getIt<DeleteScenarioUseCase>(),
       getIt<ExecuteScenarioUseCase>(),
+      getIt<UsbSerialViewModel>(),
     ),
   );
 

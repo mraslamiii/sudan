@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:sudan/presentation/views/floor_selection_view.dart';
+import 'package:sudan/presentation/widgets/micro_connection_status_bar.dart';
 import 'core/di/injection_container.dart' as di;
 import 'core/theme/app_theme.dart';
 import 'core/localization/app_localizations.dart';
@@ -12,6 +13,7 @@ import 'presentation/viewmodels/scenario_viewmodel.dart';
 import 'presentation/viewmodels/room_viewmodel.dart';
 import 'presentation/viewmodels/floor_viewmodel.dart';
 import 'presentation/viewmodels/dashboard_viewmodel.dart';
+import 'presentation/viewmodels/usb_serial_viewmodel.dart';
 import 'core/utils/usb_serial_initializer.dart';
 
 void main() async {
@@ -179,6 +181,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (_) => di.getIt<UsbSerialViewModel>()),
         ChangeNotifierProvider(
           create: (_) => di.getIt<DeviceViewModel>()..init(),
         ),
@@ -215,6 +218,15 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           onThemeChanged: changeThemeMode,
           onLanguageChanged: changeLanguage,
         ),
+
+        builder: (context, child) {
+          return Column(
+            children: [
+              const MicroConnectionStatusBar(atTop: true),
+              Expanded(child: child ?? const SizedBox.shrink()),
+            ],
+          );
+        },
       ),
     );
   }

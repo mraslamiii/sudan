@@ -70,6 +70,13 @@ class FloorRepositoryImpl implements FloorRepository {
     );
 
     await _localDataSource.addFloor(floorModel);
+
+    // وقتی USB به میکرو وصل است، ایجاد طبقه را به میکرو هم بفرست
+    final usb = _usbSerialRepository;
+    if (usb != null && usb.isConnected()) {
+      await usb.createFloorOnMicro(floorModel.toJson());
+    }
+
     return floorModel;
   }
 
@@ -87,6 +94,12 @@ class FloorRepositoryImpl implements FloorRepository {
     );
 
     await _localDataSource.updateFloor(floorModel);
+
+    final usb = _usbSerialRepository;
+    if (usb != null && usb.isConnected()) {
+      await usb.updateFloorOnMicro(floorModel.toJson());
+    }
+
     return floorModel;
   }
 
@@ -98,6 +111,11 @@ class FloorRepositoryImpl implements FloorRepository {
     // Delete all rooms belonging to this floor
     print('🟡 [FLOOR_REPO] Deleting all rooms for floor $id');
     await _roomRepository.deleteRoomsByFloorId(id);
+
+    final usb = _usbSerialRepository;
+    if (usb != null && usb.isConnected()) {
+      await usb.deleteFloorOnMicro(id);
+    }
 
     // Delete the floor itself
     await _localDataSource.deleteFloor(id);

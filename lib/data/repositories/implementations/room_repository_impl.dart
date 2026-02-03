@@ -69,6 +69,12 @@ class RoomRepositoryImpl implements RoomRepository {
 
     print('🟡 [ROOM_REPO] Created RoomModel, calling addRoom...');
     await _localDataSource.addRoom(roomModel);
+
+    final usb = _usbSerialRepository;
+    if (usb != null && usb.isConnected()) {
+      await usb.createRoomOnMicro(roomModel.toJson());
+    }
+
     print('🟡 [ROOM_REPO] Room added to data source successfully');
     return roomModel;
   }
@@ -88,12 +94,24 @@ class RoomRepositoryImpl implements RoomRepository {
     );
 
     await _localDataSource.updateRoom(roomModel);
+
+    final usb = _usbSerialRepository;
+    if (usb != null && usb.isConnected()) {
+      await usb.updateRoomOnMicro(roomModel.toJson());
+    }
+
     return roomModel;
   }
 
   @override
   Future<void> deleteRoom(String id) async {
     await Future.delayed(const Duration(milliseconds: 200));
+
+    final usb = _usbSerialRepository;
+    if (usb != null && usb.isConnected()) {
+      await usb.deleteRoomOnMicro(id);
+    }
+
     await _localDataSource.deleteRoom(id);
   }
 

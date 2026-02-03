@@ -8,6 +8,7 @@ import '../../domain/use_cases/scenario/create_scenario_use_case.dart';
 import '../../domain/use_cases/scenario/update_scenario_use_case.dart';
 import '../../domain/use_cases/scenario/delete_scenario_use_case.dart';
 import '../../domain/use_cases/scenario/execute_scenario_use_case.dart';
+import 'usb_serial_viewmodel.dart';
 
 /// Scenario ViewModel
 /// Manages all scenario-related state and operations
@@ -36,6 +37,7 @@ class ScenarioViewModel extends BaseViewModel {
   final UpdateScenarioUseCase _updateScenarioUseCase;
   final DeleteScenarioUseCase _deleteScenarioUseCase;
   final ExecuteScenarioUseCase _executeScenarioUseCase;
+  final UsbSerialViewModel? _usbSerialViewModel;
 
   List<ScenarioEntity> _scenarios = [];
   String? _executingScenarioId;
@@ -45,8 +47,9 @@ class ScenarioViewModel extends BaseViewModel {
     this._createScenarioUseCase,
     this._updateScenarioUseCase,
     this._deleteScenarioUseCase,
-    this._executeScenarioUseCase,
-  );
+    this._executeScenarioUseCase, [
+    this._usbSerialViewModel,
+  ]);
 
   // ==================== GETTERS ====================
 
@@ -294,16 +297,31 @@ class ScenarioViewModel extends BaseViewModel {
     }
   }
 
-  /// Execute a scenario
+  /// Execute a scenario (local state + send command to micro if USB connected)
   Future<void> executeScenario(String scenarioId) async {
     print('🟢 [SCENARIO_VM] executeScenario called: $scenarioId');
     try {
       _executingScenarioId = scenarioId;
       notifyListeners();
-      
+
       await _executeScenarioUseCase(scenarioId);
       print('🟢 [SCENARIO_VM] Scenario executed successfully');
-      
+
+      // Send scenario command to microcontroller if USB is connected
+      final usb = _usbSerialViewModel;
+      if (usb != null && usb.isUsbConnected) {
+        final scenario = getScenarioById(scenarioId);
+        final type = scenario?.roomId != null && scenario!.roomId!.isNotEmpty
+            ? 'place'
+            : 'general';
+        try {
+          await usb.sendScenarioCommand(scenarioId, type);
+          print('🟢 [SCENARIO_VM] Sent scenario command to micro: $type');
+        } catch (e) {
+          print('⚠️ [SCENARIO_VM] Failed to send scenario to micro: $e');
+        }
+      }
+
       // Reload scenarios to get updated lastExecuted time
       print('🟢 [SCENARIO_VM] Reloading scenarios after execution');
       await loadScenarios();

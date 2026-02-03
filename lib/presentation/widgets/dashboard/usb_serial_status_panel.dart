@@ -77,7 +77,7 @@ class _UsbSerialStatusPanelState extends State<UsbSerialStatusPanel>
           if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
-                content: Text('اتصال شبیه‌سازی شد (تست) – لیست اتاق از Mock'),
+                content: Text('اتصال شبیه‌سازی شد (بدون دستگاه USB فیزیکی)'),
                 backgroundColor: Colors.green,
               ),
             );

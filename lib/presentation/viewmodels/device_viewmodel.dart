@@ -6,6 +6,7 @@ import '../../domain/use_cases/device/get_devices_by_room_use_case.dart';
 import '../../domain/use_cases/device/update_device_use_case.dart';
 import '../../domain/use_cases/device/toggle_device_use_case.dart';
 import '../../domain/use_cases/device/get_device_by_id_use_case.dart';
+import 'usb_serial_viewmodel.dart';
 
 /// LED Preset data class
 class LEDPreset {
@@ -30,26 +31,26 @@ class ThermostatMode {
 
 /// Device ViewModel
 /// Manages all device-related state and operations
-/// 
+///
 /// Usage in widgets:
 /// ```dart
 /// final viewModel = context.watch<DeviceViewModel>();
 /// final devices = viewModel.devices;
-/// 
+///
 /// // Toggle a device
 /// await viewModel.toggleDevice('light_001');
-/// 
+///
 /// // Update device state
 /// await viewModel.updateDeviceState(
 ///   deviceId: 'light_001',
 ///   newState: LightState(isOn: true, brightness: 80, color: Colors.white),
 /// );
-/// 
+///
 /// // LED Control
 /// viewModel.updateLEDColor(Colors.blue);
 /// viewModel.updateLEDBrightness(80);
 /// viewModel.updateLEDPreset('Reading');
-/// 
+///
 /// // Thermostat Control
 /// viewModel.changeTemperature(1); // Increase by 1
 /// viewModel.updateThermostatMode('Cool');
@@ -60,6 +61,7 @@ class DeviceViewModel extends BaseViewModel {
   final UpdateDeviceUseCase _updateDeviceUseCase;
   final ToggleDeviceUseCase _toggleDeviceUseCase;
   final GetDeviceByIdUseCase _getDeviceByIdUseCase;
+  final UsbSerialViewModel? _usbSerialViewModel;
 
   List<DeviceEntity> _devices = [];
   String? _selectedRoomId;
@@ -69,8 +71,9 @@ class DeviceViewModel extends BaseViewModel {
     this._getDevicesByRoomUseCase,
     this._updateDeviceUseCase,
     this._toggleDeviceUseCase,
-    this._getDeviceByIdUseCase,
-  );
+    this._getDeviceByIdUseCase, [
+    this._usbSerialViewModel,
+  ]);
 
   // ==================== BASE GETTERS ====================
 
@@ -111,7 +114,9 @@ class DeviceViewModel extends BaseViewModel {
   DeviceEntity? get ledDevice {
     try {
       final devices = _selectedRoomId != null
-          ? _devices.where((d) => d.roomId == _selectedRoomId && d.type == DeviceType.light)
+          ? _devices.where(
+              (d) => d.roomId == _selectedRoomId && d.type == DeviceType.light,
+            )
           : _devices.where((d) => d.type == DeviceType.light);
       return devices.first;
     } catch (e) {
@@ -212,17 +217,37 @@ class DeviceViewModel extends BaseViewModel {
 
   /// Available thermostat modes
   static const List<ThermostatMode> thermostatModes = [
-    ThermostatMode(name: 'Cool', icon: Icons.ac_unit_rounded, color: Color(0xFF5AC8FA)),
-    ThermostatMode(name: 'Heat', icon: Icons.local_fire_department_rounded, color: Color(0xFFFF9500)),
-    ThermostatMode(name: 'Fan', icon: Icons.air_rounded, color: Color(0xFF8E8E93)),
-    ThermostatMode(name: 'Auto', icon: Icons.sync_rounded, color: Color(0xFF34C759)),
+    ThermostatMode(
+      name: 'Cool',
+      icon: Icons.ac_unit_rounded,
+      color: Color(0xFF5AC8FA),
+    ),
+    ThermostatMode(
+      name: 'Heat',
+      icon: Icons.local_fire_department_rounded,
+      color: Color(0xFFFF9500),
+    ),
+    ThermostatMode(
+      name: 'Fan',
+      icon: Icons.air_rounded,
+      color: Color(0xFF8E8E93),
+    ),
+    ThermostatMode(
+      name: 'Auto',
+      icon: Icons.sync_rounded,
+      color: Color(0xFF34C759),
+    ),
   ];
 
   /// Get the first thermostat device (filtered by selected room)
   DeviceEntity? get thermostatDevice {
     try {
       final devices = _selectedRoomId != null
-          ? _devices.where((d) => d.roomId == _selectedRoomId && d.type == DeviceType.thermostat)
+          ? _devices.where(
+              (d) =>
+                  d.roomId == _selectedRoomId &&
+                  d.type == DeviceType.thermostat,
+            )
           : _devices.where((d) => d.type == DeviceType.thermostat);
       return devices.first;
     } catch (e) {
@@ -231,7 +256,8 @@ class DeviceViewModel extends BaseViewModel {
   }
 
   /// Get thermostat state
-  ThermostatState? get thermostatState => thermostatDevice?.state as ThermostatState?;
+  ThermostatState? get thermostatState =>
+      thermostatDevice?.state as ThermostatState?;
 
   /// Get current temperature
   int get currentTemperature => thermostatState?.temperature ?? 22;
@@ -351,7 +377,9 @@ class DeviceViewModel extends BaseViewModel {
   DeviceEntity? get tabletChargerDevice {
     try {
       final devices = _selectedRoomId != null
-          ? _devices.where((d) => d.roomId == _selectedRoomId && d.type == DeviceType.socket)
+          ? _devices.where(
+              (d) => d.roomId == _selectedRoomId && d.type == DeviceType.socket,
+            )
           : _devices.where((d) => d.type == DeviceType.socket);
       return devices.first;
     } catch (e) {
@@ -360,7 +388,8 @@ class DeviceViewModel extends BaseViewModel {
   }
 
   /// Get tablet charger state
-  SimpleState? get tabletChargerState => tabletChargerDevice?.state as SimpleState?;
+  SimpleState? get tabletChargerState =>
+      tabletChargerDevice?.state as SimpleState?;
 
   /// Get tablet battery level (simulated, 0-100)
   int get tabletBatteryLevel {
@@ -445,7 +474,7 @@ class DeviceViewModel extends BaseViewModel {
     try {
       setLoading(true);
       clearError();
-      
+
       _devices = await _getAllDevicesUseCase();
       notifyListeners();
     } catch (e) {
@@ -458,7 +487,7 @@ class DeviceViewModel extends BaseViewModel {
   /// Set selected room and filter devices
   Future<void> selectRoom(String? roomId) async {
     if (_selectedRoomId == roomId) return;
-    
+
     _selectedRoomId = roomId;
     notifyListeners();
   }
@@ -474,12 +503,18 @@ class DeviceViewModel extends BaseViewModel {
       final device = await _getDeviceByIdUseCase(deviceId);
       final updatedDevice = await _toggleDeviceUseCase(deviceId);
       _updateDeviceInList(updatedDevice);
-      
+
+      _sendStateToMicro(deviceId, device.type, updatedDevice.state);
+
       // If in general room, apply changes to all similar devices in the house
       if (_selectedRoomId == 'room_general') {
-        await _applyToAllSimilarDevices(device.type, updatedDevice.state, deviceId);
+        await _applyToAllSimilarDevices(
+          device.type,
+          updatedDevice.state,
+          deviceId,
+        );
       }
-      
+
       notifyListeners();
     } catch (e) {
       setError('Failed to toggle device: ${e.toString()}');
@@ -496,12 +531,14 @@ class DeviceViewModel extends BaseViewModel {
       final updatedDevice = device.copyWith(state: newState);
       final result = await _updateDeviceUseCase(updatedDevice);
       _updateDeviceInList(result);
-      
+
+      _sendStateToMicro(deviceId, device.type, newState);
+
       // If in general room, apply changes to all similar devices in the house
       if (_selectedRoomId == 'room_general') {
         await _applyToAllSimilarDevices(device.type, newState, deviceId);
       }
-      
+
       notifyListeners();
     } catch (e) {
       setError('Failed to update device: ${e.toString()}');
@@ -532,17 +569,109 @@ class DeviceViewModel extends BaseViewModel {
     }
   }
 
+  /// Send current device state to microcontroller when USB is connected
+  void _sendStateToMicro(
+    String deviceId,
+    DeviceType deviceType,
+    DeviceState state,
+  ) {
+    final usb = _usbSerialViewModel;
+    if (usb == null || !usb.isUsbConnected) return;
+    try {
+      switch (deviceType) {
+        case DeviceType.light:
+          if (state is LightState) {
+            usb.sendLightCommand(deviceId, state.isOn);
+            usb.sendLEDBrightnessCommand(deviceId, state.brightness);
+            final hex =
+                '#${state.color.red.toRadixString(16).padLeft(2, '0')}${state.color.green.toRadixString(16).padLeft(2, '0')}${state.color.blue.toRadixString(16).padLeft(2, '0')}';
+            usb.sendLEDColorCommand(deviceId, hex);
+          }
+          break;
+        case DeviceType.curtain:
+          if (state is CurtainState) {
+            usb.sendCurtainPositionCommand(deviceId, state.position);
+          }
+          break;
+        case DeviceType.thermostat:
+          if (state is ThermostatState) {
+            usb.sendThermostatTemperatureCommand(
+              deviceId,
+              state.targetTemperature,
+            );
+            usb.sendThermostatModeCommand(deviceId, state.mode);
+          }
+          break;
+        case DeviceType.music:
+          if (state is MusicState) {
+            usb.sendMusicPlayPauseCommand(deviceId, state.isPlaying);
+            usb.sendMusicVolumeCommand(deviceId, state.volume);
+          }
+          break;
+        case DeviceType.security:
+          if (state is SecurityState) {
+            usb.sendSecurityCommand(deviceId, state.isActive);
+          }
+          break;
+        case DeviceType.elevator:
+          if (state is ElevatorState && state.targetFloor != null) {
+            usb.sendElevatorCallCommand(deviceId, state.targetFloor!);
+          }
+          break;
+        case DeviceType.doorLock:
+          if (state is DoorLockState) {
+            usb.sendDoorLockCommand(deviceId, state.isLocked);
+          }
+          break;
+        case DeviceType.iphone:
+          if (state is IPhoneState) {
+            usb.sendIPhoneCommand(deviceId, state.isActive);
+          }
+          break;
+        case DeviceType.socket:
+          if (state is SimpleState) {
+            usb.sendSocketCommand(deviceId, state.isOn);
+          }
+          break;
+        case DeviceType.tv:
+        case DeviceType.fan:
+        case DeviceType.camera:
+          if (state is SimpleState) {
+            usb.sendSocketCommand(deviceId, state.isOn);
+          }
+          break;
+        default:
+          if (state is SimpleState) {
+            usb.sendSocketCommand(deviceId, state.isOn);
+          }
+          break;
+      }
+    } catch (e) {
+      print('❌ [DEVICE_VM] Failed to send state to micro: $e');
+    }
+  }
+
   /// Apply state changes to all similar devices in the house (for general room)
-  Future<void> _applyToAllSimilarDevices(DeviceType deviceType, DeviceState newState, String excludeDeviceId) async {
+  Future<void> _applyToAllSimilarDevices(
+    DeviceType deviceType,
+    DeviceState newState,
+    String excludeDeviceId,
+  ) async {
     try {
       // Get all devices of the same type in the house (excluding the one we just updated)
-      final similarDevices = _devices.where((d) => 
-        d.type == deviceType && 
-        d.id != excludeDeviceId // Don't update the device we just updated
-      ).toList();
-      
-      print('🟢 [DEVICE_VM] Applying changes to ${similarDevices.length} similar devices of type $deviceType');
-      
+      final similarDevices = _devices
+          .where(
+            (d) =>
+                d.type == deviceType &&
+                d.id !=
+                    excludeDeviceId, // Don't update the device we just updated
+          )
+          .toList();
+
+      print(
+        '🟢 [DEVICE_VM] Applying changes to ${similarDevices.length} similar devices of type $deviceType',
+      );
+
       // Apply the same state to all similar devices
       for (final similarDevice in similarDevices) {
         try {
@@ -552,7 +681,9 @@ class DeviceViewModel extends BaseViewModel {
           print('🟢 [DEVICE_VM] Updated device ${similarDevice.id}');
         } catch (e) {
           // Continue with other devices even if one fails
-          print('🔴 [DEVICE_VM] Failed to update similar device ${similarDevice.id}: $e');
+          print(
+            '🔴 [DEVICE_VM] Failed to update similar device ${similarDevice.id}: $e',
+          );
         }
       }
     } catch (e) {
