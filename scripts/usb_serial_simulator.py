@@ -4,10 +4,10 @@
 
 سه حالت اجرا:
   1) شبیه‌ساز (پیش‌فرض): روی یک پورت گوش می‌دهد و به درخواست‌های اپ/کلاینت پاسخ می‌دهد.
-     python usb_serial_simulator.py COM3
+     python usb_serial_simulator.py COM5
 
   2) کلاینت تست: روی پورت دیگر (جفت مجازی) درخواست می‌فرستد و پاسخ شبیه‌ساز را چک می‌کند.
-     python usb_serial_simulator.py --test COM4
+     python usb_serial_simulator.py --test COM6
 
   3) لیست پورت‌ها: نمایش پورت‌های سریال موجود.
      python usb_serial_simulator.py --list
@@ -265,7 +265,7 @@ def run_simulator(port: str, baud: int = 9600):
         ser = serial.Serial(port, baud, timeout=0.1)
     except Exception as e:
         print(f"Error opening port: {e}")
-        print("Example: python usb_serial_simulator.py COM3")
+        print("Example: python usb_serial_simulator.py COM5")
         sys.exit(1)
 
     print(
@@ -347,7 +347,7 @@ def run_test_client(port: str, baud: int = 9600):
         ser = serial.Serial(port, baud, timeout=0.1)
     except Exception as e:
         print(f"Error: {e}")
-        print("Usage: python usb_serial_simulator.py --test COM4")
+        print("Usage: python usb_serial_simulator.py --test COM6")
         sys.exit(1)
 
     ok = 0
@@ -397,8 +397,8 @@ def list_serial_ports():
     for p in ports:
         desc = p.description or "(no description)"
         print(f"  {p.device}  -  {desc}")
-    print("\nSimulator: python usb_serial_simulator.py COM3")
-    print("Test:     python usb_serial_simulator.py --test COM4")
+    print("\nSimulator: python usb_serial_simulator.py COM5")
+    print("Test:     python usb_serial_simulator.py --test COM6")
 
 
 # --- main ---
@@ -411,10 +411,10 @@ def main():
         sys.exit(0)
     if args and args[0] == "--test":
         args.pop(0)
-        port = args[0] if args else "COM4"
+        port = args[0] if args else "COM6"
         run_test_client(port)
     else:
-        port = args[0] if args else "COM3"
+        port = args[0] if args else "COM5"
         run_simulator(port)
 
 
