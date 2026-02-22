@@ -78,6 +78,23 @@ class UsbSerialViewModel extends BaseViewModel {
     }
   }
 
+  /// Connect via TCP for debug (tablet connected to laptop, adb reverse tcp:9999 tcp:9999)
+  Future<void> connectTcpDebug({
+    String host = '127.0.0.1',
+    int port = 9999,
+  }) async {
+    setLoading(true);
+    clearError();
+
+    try {
+      await _usbSerialRepository.connectTcpDebug(host: host, port: port);
+    } catch (e) {
+      setError('اتصال دیباگ ناموفق: ${e.toString()}');
+    } finally {
+      setLoading(false);
+    }
+  }
+
   /// Disconnect from USB device
   Future<void> disconnect() async {
     await _connectUseCase.disconnect();
@@ -154,9 +171,23 @@ class UsbSerialViewModel extends BaseViewModel {
     return _usbSerialRepository.requestFloors();
   }
 
-  /// Request full rooms list from micro (@M_R). Returns parsed list or null.
-  Future<List<Map<String, dynamic>>?> requestRooms() async {
-    return _usbSerialRepository.requestRooms();
+  /// Request rooms list for [floorId] from micro (@M_R + floorId). Returns parsed list or null.
+  Future<List<Map<String, dynamic>>?> requestRooms(String floorId) async {
+    return _usbSerialRepository.requestRooms(floorId);
+  }
+
+  /// Request rooms for all floors: gets floors then requestRooms(floorId) per floor, merges. For debug UI.
+  Future<List<Map<String, dynamic>>?> requestAllRooms() async {
+    final floors = await _usbSerialRepository.requestFloors();
+    if (floors == null || floors.isEmpty) return null;
+    final List<Map<String, dynamic>> all = [];
+    for (final f in floors) {
+      final floorId = f['id'] as String?;
+      if (floorId == null) continue;
+      final rooms = await _usbSerialRepository.requestRooms(floorId);
+      if (rooms != null) all.addAll(rooms);
+    }
+    return all.isEmpty ? null : all;
   }
 
   /// Request a specific floor

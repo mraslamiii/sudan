@@ -105,6 +105,14 @@ class UsbSerialRepositoryImpl implements UsbSerialRepository {
   }
 
   @override
+  Future<void> connectTcpDebug({
+    String host = '127.0.0.1',
+    int port = 9999,
+  }) async {
+    await _usbSerialService.connectTcpDebug(host: host, port: port);
+  }
+
+  @override
   Future<void> disconnect() async {
     await _usbSerialService.disconnect();
   }
@@ -144,18 +152,50 @@ class UsbSerialRepositoryImpl implements UsbSerialRepository {
   Stream<String> get connectionStatusStream =>
       _usbSerialService.connectionStatusStream;
 
+  /// فقط وقتی پاسخ مربوط به لیست طبقات است complete کن (جلوگیری از قاطی شدن با requestRooms)
+  static bool _isFloorsResponse(String data) {
+    if (data.isEmpty) {
+      print('📋 [USB_SERIAL] _isFloorsResponse: data is empty');
+      return false;
+    }
+    final hasFloor = data.contains('floor_');
+    final hasFieldSep = data.contains(UsbSerialConstants.fieldSep);
+    print(
+      '📋 [USB_SERIAL] _isFloorsResponse: hasFloor=$hasFloor, hasFieldSep=$hasFieldSep, data=${data.substring(0, data.length > 100 ? 100 : data.length)}',
+    );
+    return hasFloor && hasFieldSep;
+  }
+
+  /// فقط وقتی پاسخ مربوط به لیست اتاق‌ها است complete کن
+  static bool _isRoomsResponse(String data) {
+    if (data.isEmpty) return false;
+    return data.contains('room_') && data.contains(UsbSerialConstants.fieldSep);
+  }
+
   @override
   Future<List<Map<String, dynamic>>?> requestFloors() async {
     if (!_usbSerialService.isConnected) return null;
+    print('📋 [USB_SERIAL] REQUEST requestFloors');
     try {
       final completer = Completer<String>();
       late StreamSubscription<UsbSerialMessage> sub;
+
+      // Create subscription BEFORE sending request to avoid missing the response
       sub = _usbSerialService.messageStream.listen((m) {
+        print(
+          '📋 [USB_SERIAL] messageStream received: type=${m.type}, data=${m.data.substring(0, m.data.length > 50 ? 50 : m.data.length)}...',
+        );
         if (m.type == UsbSerialConstants.msgTypeResponse &&
-            !completer.isCompleted) {
+            !completer.isCompleted &&
+            _isFloorsResponse(m.data)) {
+          print('📋 [USB_SERIAL] Completing with floors response');
           completer.complete(m.data);
         }
       });
+
+      // Small delay to ensure subscription is ready
+      await Future.delayed(const Duration(milliseconds: 50));
+
       try {
         await _usbSerialService.sendRequest(UsbSerialConstants.requestFloors);
         final responseData = await completer.future.timeout(
@@ -163,13 +203,16 @@ class UsbSerialRepositoryImpl implements UsbSerialRepository {
           onTimeout: () => throw TimeoutException('Floors response timeout'),
         );
         final list = _parseFloorsText(responseData);
+        print('📋 [USB_SERIAL] RESPONSE requestFloors count=${list.length}');
         return list.isNotEmpty ? list : null;
       } finally {
         await sub.cancel();
       }
     } on TimeoutException {
+      print('📋 [USB_SERIAL] requestFloors TIMEOUT');
       return null;
-    } catch (_) {
+    } catch (e) {
+      print('📋 [USB_SERIAL] requestFloors ERROR: $e');
       return null;
     }
   }
@@ -177,6 +220,7 @@ class UsbSerialRepositoryImpl implements UsbSerialRepository {
   @override
   Future<void> createFloorOnMicro(Map<String, dynamic> floor) async {
     if (!_usbSerialService.isConnected) return;
+    print('📋 [USB_SERIAL] REQUEST createFloorOnMicro id=${floor['id']}');
     try {
       final line = _floorToLine(floor);
       final data =
@@ -185,14 +229,16 @@ class UsbSerialRepositoryImpl implements UsbSerialRepository {
         messageType: UsbSerialConstants.msgTypeCommand,
         data: data,
       );
-    } catch (_) {
-      // ignore – micro may not be listening
+      print('📋 [USB_SERIAL] SENT createFloorOnMicro');
+    } catch (e) {
+      print('📋 [USB_SERIAL] createFloorOnMicro ERROR: $e');
     }
   }
 
   @override
   Future<void> updateFloorOnMicro(Map<String, dynamic> floor) async {
     if (!_usbSerialService.isConnected) return;
+    print('📋 [USB_SERIAL] REQUEST updateFloorOnMicro id=${floor['id']}');
     try {
       final line = _floorToLine(floor);
       final data =
@@ -201,14 +247,16 @@ class UsbSerialRepositoryImpl implements UsbSerialRepository {
         messageType: UsbSerialConstants.msgTypeCommand,
         data: data,
       );
-    } catch (_) {
-      // ignore
+      print('📋 [USB_SERIAL] SENT updateFloorOnMicro');
+    } catch (e) {
+      print('📋 [USB_SERIAL] updateFloorOnMicro ERROR: $e');
     }
   }
 
   @override
   Future<void> deleteFloorOnMicro(String floorId) async {
     if (!_usbSerialService.isConnected) return;
+    print('📋 [USB_SERIAL] REQUEST deleteFloorOnMicro floorId=$floorId');
     try {
       final data =
           '${UsbSerialConstants.commandDeleteFloor}${UsbSerialConstants.recordSep}$floorId';
@@ -216,37 +264,45 @@ class UsbSerialRepositoryImpl implements UsbSerialRepository {
         messageType: UsbSerialConstants.msgTypeCommand,
         data: data,
       );
-    } catch (_) {
-      // ignore
+      print('📋 [USB_SERIAL] SENT deleteFloorOnMicro');
+    } catch (e) {
+      print('📋 [USB_SERIAL] deleteFloorOnMicro ERROR: $e');
     }
   }
 
   @override
-  Future<List<Map<String, dynamic>>?> requestRooms() async {
+  Future<List<Map<String, dynamic>>?> requestRooms(String floorId) async {
     if (!_usbSerialService.isConnected) return null;
+    print('📋 [USB_SERIAL] REQUEST requestRooms floorId=$floorId');
     try {
       final completer = Completer<String>();
       late StreamSubscription<UsbSerialMessage> sub;
       sub = _usbSerialService.messageStream.listen((m) {
         if (m.type == UsbSerialConstants.msgTypeResponse &&
-            !completer.isCompleted) {
+            !completer.isCompleted &&
+            _isRoomsResponse(m.data)) {
           completer.complete(m.data);
         }
       });
       try {
-        await _usbSerialService.sendRequest(UsbSerialConstants.requestRooms);
+        final requestData =
+            '${UsbSerialConstants.requestRoomsPrefix}$floorId';
+        await _usbSerialService.sendRequest(requestData);
         final responseData = await completer.future.timeout(
           const Duration(milliseconds: UsbSerialConstants.connectionTimeout),
           onTimeout: () => throw TimeoutException('Rooms response timeout'),
         );
         final list = _parseRoomsText(responseData);
+        print('📋 [USB_SERIAL] RESPONSE requestRooms count=${list.length}');
         return list.isNotEmpty ? list : null;
       } finally {
         await sub.cancel();
       }
     } on TimeoutException {
+      print('📋 [USB_SERIAL] requestRooms TIMEOUT');
       return null;
-    } catch (_) {
+    } catch (e) {
+      print('📋 [USB_SERIAL] requestRooms ERROR: $e');
       return null;
     }
   }
@@ -254,6 +310,7 @@ class UsbSerialRepositoryImpl implements UsbSerialRepository {
   @override
   Future<void> createRoomOnMicro(Map<String, dynamic> room) async {
     if (!_usbSerialService.isConnected) return;
+    print('📋 [USB_SERIAL] REQUEST createRoomOnMicro id=${room['id']}');
     try {
       final line = _roomToLine(room);
       final data =
@@ -262,14 +319,16 @@ class UsbSerialRepositoryImpl implements UsbSerialRepository {
         messageType: UsbSerialConstants.msgTypeCommand,
         data: data,
       );
-    } catch (_) {
-      // ignore
+      print('📋 [USB_SERIAL] SENT createRoomOnMicro');
+    } catch (e) {
+      print('📋 [USB_SERIAL] createRoomOnMicro ERROR: $e');
     }
   }
 
   @override
   Future<void> updateRoomOnMicro(Map<String, dynamic> room) async {
     if (!_usbSerialService.isConnected) return;
+    print('📋 [USB_SERIAL] REQUEST updateRoomOnMicro id=${room['id']}');
     try {
       final line = _roomToLine(room);
       final data =
@@ -278,14 +337,16 @@ class UsbSerialRepositoryImpl implements UsbSerialRepository {
         messageType: UsbSerialConstants.msgTypeCommand,
         data: data,
       );
-    } catch (_) {
-      // ignore
+      print('📋 [USB_SERIAL] SENT updateRoomOnMicro');
+    } catch (e) {
+      print('📋 [USB_SERIAL] updateRoomOnMicro ERROR: $e');
     }
   }
 
   @override
   Future<void> deleteRoomOnMicro(String roomId) async {
     if (!_usbSerialService.isConnected) return;
+    print('📋 [USB_SERIAL] REQUEST deleteRoomOnMicro roomId=$roomId');
     try {
       final data =
           '${UsbSerialConstants.commandDeleteRoom}${UsbSerialConstants.recordSep}$roomId';
@@ -293,8 +354,9 @@ class UsbSerialRepositoryImpl implements UsbSerialRepository {
         messageType: UsbSerialConstants.msgTypeCommand,
         data: data,
       );
-    } catch (_) {
-      // ignore
+      print('📋 [USB_SERIAL] SENT deleteRoomOnMicro');
+    } catch (e) {
+      print('📋 [USB_SERIAL] deleteRoomOnMicro ERROR: $e');
     }
   }
 }

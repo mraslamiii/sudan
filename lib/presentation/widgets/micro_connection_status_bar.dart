@@ -14,17 +14,24 @@ class MicroConnectionStatusBar extends StatelessWidget {
   /// قرارگیری نوار: بالا یا پایین
   final bool atTop;
 
+  /// کلید Navigator برای push (زمانی که نوار داخل builderِ MaterialApp است)
+  final GlobalKey<NavigatorState>? navigatorKey;
+
   const MicroConnectionStatusBar({
     super.key,
     this.height = 32,
     this.atTop = true,
+    this.navigatorKey,
   });
 
   void _openConnectionScreen(BuildContext context) {
     HapticFeedback.lightImpact();
-    Navigator.of(
-      context,
-    ).push(MaterialPageRoute(builder: (_) => const SocketConnectionView()));
+    final navigator = navigatorKey?.currentState ?? Navigator.maybeOf(context);
+    if (navigator != null) {
+      navigator.push(
+        MaterialPageRoute(builder: (_) => const SocketConnectionView()),
+      );
+    }
   }
 
   @override

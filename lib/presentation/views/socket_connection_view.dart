@@ -3,6 +3,8 @@ import 'package:flutter/foundation.dart';
 import 'package:provider/provider.dart';
 import 'package:usb_serial/usb_serial.dart';
 import '../viewmodels/usb_serial_viewmodel.dart';
+import '../viewmodels/floor_viewmodel.dart';
+import '../viewmodels/room_viewmodel.dart';
 import '../../core/di/injection_container.dart';
 import '../../core/constants/usb_serial_constants.dart';
 import '../../core/localization/app_localizations.dart';
@@ -167,7 +169,7 @@ class _SocketConnectionViewState extends State<SocketConnectionView> {
                   ],
 
                   // دکمه‌های اتصال / قطع
-                  if (!isConnected)
+                  if (!isConnected) ...[
                     ElevatedButton.icon(
                       onPressed: viewModel.isLoading
                           ? null
@@ -183,19 +185,112 @@ class _SocketConnectionViewState extends State<SocketConnectionView> {
                             )
                           : const Icon(Icons.usb),
                       label: Text(l10n.connect),
-                    )
-                  else
-                    Row(
-                      children: [
-                        Expanded(
-                          child: OutlinedButton.icon(
-                            onPressed: () async {
-                              await _handleDisconnect();
-                              setState(() {});
+                    ),
+                    const SizedBox(height: 12),
+                    // اتصال دیباگ: تبلت با یک کابل به لپ‌تاپ، شبیه‌ساز با --tcp 9999 و adb reverse
+                    OutlinedButton.icon(
+                      onPressed: viewModel.isLoading
+                          ? null
+                          : () async {
+                              await viewModel.connectTcpDebug(
+                                host: '127.0.0.1',
+                                port: 9999,
+                              );
+                              if (mounted) setState(() {});
                             },
-                            icon: const Icon(Icons.link_off),
-                            label: Text(l10n.disconnect),
+                      icon: const Icon(Icons.developer_mode),
+                      label: const Text('اتصال دیباگ (دستگاه + adb reverse)'),
+                    ),
+                    const SizedBox(height: 8),
+                    // امولاتور: 127.0.0.1 روی امولاتور به خودش اشاره می‌کند؛ برای رسیدن به لپ‌تاپ از 10.0.2.2 استفاده کنید
+                    OutlinedButton.icon(
+                      onPressed: viewModel.isLoading
+                          ? null
+                          : () async {
+                              await viewModel.connectTcpDebug(
+                                host: '10.0.2.2',
+                                port: 9999,
+                              );
+                              if (mounted) setState(() {});
+                            },
+                      icon: const Icon(Icons.smartphone),
+                      label: const Text('اتصال دیباگ (امولاتور → لپ‌تاپ)'),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'دستگاه فیزیکی: adb reverse tcp:9999 tcp:9999 و سپس دکمه اول. امولاتور: شبیه‌ساز با --tcp 9999 روی لپ‌تاپ و دکمه دوم.',
+                      style: Theme.of(
+                        context,
+                      ).textTheme.bodySmall?.copyWith(color: Colors.grey),
+                    ),
+                  ] else
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Row(
+                          children: [
+                            Expanded(
+                              child: OutlinedButton.icon(
+                                onPressed: () async {
+                                  await _handleDisconnect();
+                                  setState(() {});
+                                },
+                                icon: const Icon(Icons.link_off),
+                                label: Text(l10n.disconnect),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 12),
+                        // بعد از اتصال، با این دکمه لیست طبقات و اتاق‌ها از میکرو گرفته و در اپ به‌روز می‌شود
+                        ElevatedButton.icon(
+                          onPressed: viewModel.isLoading
+                              ? null
+                              : () async {
+                                  try {
+                                    final floorVM = context
+                                        .read<FloorViewModel>();
+                                    final roomVM = context
+                                        .read<RoomViewModel>();
+                                    await floorVM.loadFloors();
+                                    await roomVM.loadRooms();
+                                    if (!mounted) return;
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                          'لیست طبقات و اتاق‌ها از میکرو بروزرسانی شد (${floorVM.floors.length} طبقه)',
+                                        ),
+                                        backgroundColor: Colors.green,
+                                      ),
+                                    );
+                                    setState(() {});
+                                    // برگشت به صفحهٔ اصلی تا لیست طبقات به‌روز دیده شود
+                                    Navigator.of(context).pop();
+                                  } catch (e) {
+                                    if (!mounted) return;
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text('خطا در بروزرسانی: $e'),
+                                        backgroundColor: Colors.red,
+                                      ),
+                                    );
+                                  }
+                                },
+                          icon: const Icon(Icons.sync),
+                          label: const Text(
+                            'بروزرسانی لیست طبقات و اتاق‌ها از میکرو',
                           ),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.green.shade700,
+                            foregroundColor: Colors.white,
+                          ),
+                        ),
+                        const SizedBox(height: 6),
+                        Text(
+                          'بعد از اتصال این دکمه را بزنید تا لیست طبقات در صفحهٔ اصلی به‌روز شود.',
+                          style: Theme.of(
+                            context,
+                          ).textTheme.bodySmall?.copyWith(color: Colors.grey),
                         ),
                       ],
                     ),
@@ -277,7 +372,7 @@ class _SocketConnectionViewState extends State<SocketConnectionView> {
                     icon: Icons.door_front_door,
                     label: l10n.requestRoomsList,
                     onPressed: () async {
-                      final list = await viewModel.requestRooms();
+                      final list = await viewModel.requestAllRooms();
                       if (!context.mounted) return;
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(

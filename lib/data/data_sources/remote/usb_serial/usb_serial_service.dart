@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io' show Socket;
 import 'dart:typed_data';
 import 'package:usb_serial/usb_serial.dart';
 import '../../../../core/constants/usb_serial_constants.dart';
@@ -14,6 +15,7 @@ class UsbSerialService {
   static UsbSerialService get instance => _instance;
 
   UsbPort? _port;
+  Socket? _tcpSocket;
   bool _isConnected = false;
   Timer? _heartbeatTimer;
   Timer? _ackTimeoutTimer;
@@ -46,6 +48,35 @@ class UsbSerialService {
     }
   }
 
+  /// Connect via TCP (for debug: tablet connected to laptop, adb reverse tcp:9999 tcp:9999)
+  /// App on tablet connects to 127.0.0.1:port so traffic is forwarded to laptop simulator.
+  Future<void> connectTcpDebug({
+    String host = '127.0.0.1',
+    int port = 9999,
+  }) async {
+    try {
+      if (_isConnected) await disconnect();
+
+      print('📋 [USB_SERIAL] Connecting to TCP $host:$port...');
+      final socket = await Socket.connect(host, port);
+      print('📋 [USB_SERIAL] TCP connected successfully');
+      _tcpSocket = socket;
+      _port = null;
+      _isConnected = true;
+      _connectionStatusController.add('connected');
+
+      _startListeningTcp();
+      print('📋 [USB_SERIAL] TCP listener started');
+      _startHeartbeat();
+      print('📋 [USB_SERIAL] Heartbeat started');
+    } catch (e) {
+      print('📋 [USB_SERIAL] TCP connection failed: $e');
+      _isConnected = false;
+      _connectionStatusController.add('error');
+      throw UsbSerialException('TCP debug connection failed: $e');
+    }
+  }
+
   /// Connect to a USB device
   /// Note: For Android, you may need to request USB permission first
   Future<void> connect({
@@ -57,6 +88,8 @@ class UsbSerialService {
       if (_isConnected) {
         await disconnect();
       }
+
+      _tcpSocket = null;
 
       List<UsbDevice> devices;
       if (device != null) {
@@ -120,11 +153,12 @@ class UsbSerialService {
     }
   }
 
-  /// Start listening to incoming data
+  /// Start listening to incoming data (USB)
   void _startListening() {
     _inputStreamSubscription?.cancel();
     _inputStreamSubscription = _port?.inputStream?.listen(
       (List<int> data) {
+        print('📥 [USB_SERIAL] Raw data received: ${data.length} bytes');
         _buffer.addAll(data);
         _processBuffer();
       },
@@ -135,12 +169,63 @@ class UsbSerialService {
     );
   }
 
+  /// Start listening to incoming data (TCP debug)
+  void _startListeningTcp() {
+    _inputStreamSubscription?.cancel();
+    final socket = _tcpSocket;
+    if (socket == null) {
+      print('📋 [USB_SERIAL] _startListeningTcp: socket is null');
+      return;
+    }
+    print('📋 [USB_SERIAL] _startListeningTcp: Setting up listener');
+    _inputStreamSubscription = socket.listen(
+      (List<int> data) {
+        print(
+          '📥 [USB_SERIAL] TCP raw data received: ${data.length} bytes, first bytes: ${data.take(20).toList()}',
+        );
+        _buffer.addAll(data);
+        _processBuffer();
+      },
+      onError: (error) {
+        print('📴 [USB_SERIAL] TCP error: $error');
+        _onError('TCP receive error: $error');
+      },
+      onDone: () {
+        _isConnected = false;
+        _connectionStatusController.add('disconnected');
+        print('📴 [USB_SERIAL] TCP connection closed (onDone)');
+      },
+      cancelOnError: false,
+    );
+    print('📋 [USB_SERIAL] _startListeningTcp: Listener setup complete');
+  }
+
   /// Process received data buffer
   void _processBuffer() {
-    while (UsbSerialProtocol.hasCompleteFrame(_buffer)) {
+    print('📋 [USB_SERIAL] _processBuffer: buffer length=${_buffer.length}');
+
+    // If buffer is too large (more than 10KB), clear it to prevent memory issues
+    if (_buffer.length > 10000) {
+      print(
+        '📋 [USB_SERIAL] Buffer too large (${_buffer.length} bytes), clearing',
+      );
+      _buffer.clear();
+      return;
+    }
+
+    int decodeAttempts = 0;
+    const maxDecodeAttempts = 100; // Prevent infinite loop
+
+    while (UsbSerialProtocol.hasCompleteFrame(_buffer) &&
+        decodeAttempts < maxDecodeAttempts) {
+      decodeAttempts++;
+      print('📋 [USB_SERIAL] Found complete frame, decoding...');
       final message = UsbSerialProtocol.decodeMessage(_buffer);
 
       if (message != null) {
+        print(
+          '📋 [USB_SERIAL] Message decoded: type=${message.type}, isAck=${message.isAck}, isNack=${message.isNack}, isHeartbeat=${message.isHeartbeat}',
+        );
         // Remove processed frame from buffer
         int startIdx = _buffer.indexOf(UsbSerialConstants.frameStart);
         int endIdx = _buffer.indexOf(UsbSerialConstants.frameEnd, startIdx);
@@ -150,6 +235,7 @@ class UsbSerialService {
 
         // Handle ACK/NACK
         if (message.isAck || message.isNack) {
+          print('📋 [USB_SERIAL] Received ACK/NACK');
           _ackTimeoutTimer?.cancel();
           _ackTimeoutTimer = null;
           if (_pendingMessage != null) {
@@ -167,43 +253,84 @@ class UsbSerialService {
 
           // Handle heartbeat - no need to emit, just ACK was sent above
           if (message.isHeartbeat) {
+            print('📋 [USB_SERIAL] Received heartbeat');
             // Heartbeat acknowledged, no further action needed
           } else {
+            final typeStr = message.type == UsbSerialConstants.msgTypeResponse
+                ? 'RESPONSE'
+                : message.type == UsbSerialConstants.msgTypeCommand
+                ? 'COMMAND'
+                : 'type=${message.type}';
+            final dataPreview = message.data.length > 80
+                ? '${message.data.substring(0, 80)}...'
+                : message.data;
+            print('📥 [USB_SERIAL] RX $typeStr data=$dataPreview');
             // Emit non-heartbeat messages
             _dataStreamController.add(message.data.codeUnits);
             _messageStreamController.add(message);
+            print('📋 [USB_SERIAL] Message emitted to messageStream');
           }
         }
       } else {
-        // Invalid frame, try to find next STX
-        int startIdx = _buffer.indexOf(UsbSerialConstants.frameStart);
-        if (startIdx > 0) {
-          _buffer.removeRange(0, startIdx);
-        } else if (startIdx == -1) {
-          _buffer.clear(); // No valid frame start found
+        print(
+          '📋 [USB_SERIAL] Failed to decode message, buffer length=${_buffer.length}',
+        );
+        // Invalid frame, remove the first byte and try again
+        // This handles corrupted data or partial frames
+        if (_buffer.isNotEmpty) {
+          print('📋 [USB_SERIAL] Removing first byte and retrying');
+          _buffer.removeAt(0);
+          // Continue loop to try again
+          continue;
         } else {
-          break; // Wait for more data
+          print('📋 [USB_SERIAL] Buffer is empty, breaking');
+          break;
         }
       }
+    }
+
+    if (decodeAttempts >= maxDecodeAttempts) {
+      print('📋 [USB_SERIAL] Max decode attempts reached, clearing buffer');
+      _buffer.clear();
     }
   }
 
   /// Send raw bytes
   void _sendRaw(List<int> data) {
-    if (!_isConnected || _port == null) {
+    if (!_isConnected) {
+      print('📋 [USB_SERIAL] _sendRaw: Not connected');
       return;
     }
 
     try {
-      _port!.write(Uint8List.fromList(data));
+      if (_tcpSocket != null) {
+        print('📋 [USB_SERIAL] _sendRaw: Sending ${data.length} bytes via TCP');
+        _tcpSocket!.add(Uint8List.fromList(data));
+        // Flush so data is sent immediately; otherwise it may be buffered
+        unawaited(_tcpSocket!.flush());
+      } else if (_port != null) {
+        print('📋 [USB_SERIAL] _sendRaw: Sending ${data.length} bytes via USB');
+        _port!.write(Uint8List.fromList(data));
+      } else {
+        print('📋 [USB_SERIAL] _sendRaw: No connection available');
+      }
     } catch (e) {
-      _onError('Send error: $e');
+      print('📴 [USB_SERIAL] Send failed: $e');
+      // اگر socket بسته شده، onDone را trigger نکن - فقط خطا را لاگ کن
+      // چون onDone خودش از stream می‌آید
+      if (_tcpSocket != null) {
+        // اگر socket بسته شده، اتصال را قطع کن
+        _isConnected = false;
+        _connectionStatusController.add('disconnected');
+      } else {
+        _onError('Send error: $e');
+      }
     }
   }
 
   /// Send a message with protocol framing
   Future<void> send({required int messageType, required String data}) async {
-    if (!_isConnected || _port == null) {
+    if (!_isConnected || (_port == null && _tcpSocket == null)) {
       throw const UsbSerialException('USB Serial is not connected');
     }
 
@@ -213,6 +340,21 @@ class UsbSerialService {
     );
 
     _pendingMessage = UsbSerialMessage(type: messageType, data: data);
+
+    // لاگ برای همهٔ درخواست/دستور (heartbeat لاگ نمی‌شود تا کنسول شلوغ نشود)
+    if (messageType != UsbSerialConstants.msgTypeHeartbeat) {
+      final typeStr = messageType == UsbSerialConstants.msgTypeRequest
+          ? 'REQUEST'
+          : messageType == UsbSerialConstants.msgTypeCommand
+          ? 'COMMAND'
+          : messageType == UsbSerialConstants.msgTypeResponse
+          ? 'RESPONSE'
+          : 'type=$messageType';
+      final dataPreview = data.length > 80
+          ? '${data.substring(0, 80)}...'
+          : data;
+      print('📤 [USB_SERIAL] TX $typeStr data=$dataPreview');
+    }
 
     // Set ACK timeout
     _ackTimeoutTimer?.cancel();
@@ -266,18 +408,19 @@ class UsbSerialService {
     throw UsbSerialException(error);
   }
 
-  /// Disconnect from USB device
+  /// Disconnect from USB device or TCP
   Future<void> disconnect() async {
     _stopHeartbeat();
     _ackTimeoutTimer?.cancel();
     _ackTimeoutTimer = null;
 
-    // Cancel input stream subscription
     await _inputStreamSubscription?.cancel();
     _inputStreamSubscription = null;
 
     await _port?.close();
     _port = null;
+    await _tcpSocket?.close();
+    _tcpSocket = null;
     _isConnected = false;
     _buffer.clear();
     _pendingMessage = null;

@@ -5,6 +5,7 @@ import '../../core/theme/theme_colors.dart';
 import '../../core/localization/app_localizations.dart';
 import '../../domain/entities/floor_entity.dart';
 import '../viewmodels/floor_viewmodel.dart';
+import '../viewmodels/room_viewmodel.dart';
 import '../widgets/floor/floor_card.dart';
 import '../widgets/floor/add_floor_dialog.dart';
 import '../widgets/floor/settings_panel.dart';
@@ -19,12 +20,14 @@ class FloorSelectionView extends StatefulWidget {
   final Function(ThemeMode)? onThemeChanged;
   final Function(String)? onLanguageChanged;
   final String? selectedFloorId;
+  final RouteObserver<ModalRoute<void>>? routeObserver;
 
   const FloorSelectionView({
     super.key,
     this.onThemeChanged,
     this.onLanguageChanged,
     this.selectedFloorId,
+    this.routeObserver,
   });
 
   @override
@@ -32,7 +35,7 @@ class FloorSelectionView extends StatefulWidget {
 }
 
 class _FloorSelectionViewState extends State<FloorSelectionView>
-    with TickerProviderStateMixin {
+    with TickerProviderStateMixin, RouteAware {
   late AnimationController _fadeController;
   late AnimationController _slideController;
 
@@ -52,7 +55,7 @@ class _FloorSelectionViewState extends State<FloorSelectionView>
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _fadeController.forward();
       _slideController.forward();
-      
+
       // Set selected floor if provided
       if (widget.selectedFloorId != null) {
         final floorVM = context.read<FloorViewModel>();
@@ -62,10 +65,27 @@ class _FloorSelectionViewState extends State<FloorSelectionView>
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final route = ModalRoute.of(context);
+    if (route is PageRoute && widget.routeObserver != null) {
+      widget.routeObserver!.subscribe(this, route);
+    }
+  }
+
+  @override
   void dispose() {
+    widget.routeObserver?.unsubscribe(this);
     _fadeController.dispose();
     _slideController.dispose();
     super.dispose();
+  }
+
+  @override
+  void didPopNext() {
+    // وقتی از صفحهٔ اتصال برمی‌گردیم، لیست طبقات را دوباره بارگذاری کن
+    context.read<FloorViewModel>().loadFloors();
+    context.read<RoomViewModel>().loadRooms();
   }
 
   void _handleFloorTap(FloorEntity floor) {
@@ -81,22 +101,19 @@ class _FloorSelectionViewState extends State<FloorSelectionView>
   }
 
   void _handleAddFloor() {
-    AddFloorDialog.show(
-      context,
-      (name, icon) async {
-        final viewModel = context.read<FloorViewModel>();
-        await viewModel.createFloor(name: name, icon: icon);
-        if (mounted && viewModel.hasError) {
-          final l10n = AppLocalizations.of(context)!;
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(viewModel.errorMessage ?? l10n.failedToCreateFloor),
-              backgroundColor: ThemeColors.errorRed,
-            ),
-          );
-        }
-      },
-    );
+    AddFloorDialog.show(context, (name, icon) async {
+      final viewModel = context.read<FloorViewModel>();
+      await viewModel.createFloor(name: name, icon: icon);
+      if (mounted && viewModel.hasError) {
+        final l10n = AppLocalizations.of(context)!;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(viewModel.errorMessage ?? l10n.failedToCreateFloor),
+            backgroundColor: ThemeColors.errorRed,
+          ),
+        );
+      }
+    });
   }
 
   void _handleDeleteFloor(FloorEntity floor) {
@@ -113,8 +130,9 @@ class _FloorSelectionViewState extends State<FloorSelectionView>
               gradient: AppTheme.getSectionGradient(isDark),
               borderRadius: BorderRadius.circular(24),
               border: Border.all(
-                color: AppTheme.getSectionBorderColor(isDark)
-                    .withOpacity(isDark ? 0.7 : 0.55),
+                color: AppTheme.getSectionBorderColor(
+                  isDark,
+                ).withOpacity(isDark ? 0.7 : 0.55),
                 width: 1.2,
               ),
             ),
@@ -162,7 +180,8 @@ class _FloorSelectionViewState extends State<FloorSelectionView>
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text(
-                                viewModel.errorMessage ?? l10n.failedToCreateFloor,
+                                viewModel.errorMessage ??
+                                    l10n.failedToCreateFloor,
                               ),
                               backgroundColor: ThemeColors.errorRed,
                             ),
@@ -224,7 +243,10 @@ class _FloorSelectionViewState extends State<FloorSelectionView>
             if (mounted) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text(viewModel.errorMessage ?? AppLocalizations.of(context)!.anErrorOccurred),
+                  content: Text(
+                    viewModel.errorMessage ??
+                        AppLocalizations.of(context)!.anErrorOccurred,
+                  ),
                   backgroundColor: ThemeColors.errorRed,
                   duration: const Duration(seconds: 3),
                 ),
@@ -264,15 +286,13 @@ class _FloorSelectionViewState extends State<FloorSelectionView>
 
   Widget _buildHeader(bool isDark) {
     return SlideTransition(
-      position: Tween<Offset>(
-        begin: const Offset(0, -0.3),
-        end: Offset.zero,
-      ).animate(
-        CurvedAnimation(
-          parent: _slideController,
-          curve: Curves.easeOutCubic,
-        ),
-      ),
+      position: Tween<Offset>(begin: const Offset(0, -0.3), end: Offset.zero)
+          .animate(
+            CurvedAnimation(
+              parent: _slideController,
+              curve: Curves.easeOutCubic,
+            ),
+          ),
       child: FadeTransition(
         opacity: _slideController,
         child: Row(
@@ -292,7 +312,11 @@ class _FloorSelectionViewState extends State<FloorSelectionView>
                   ),
                 ],
               ),
-              child: const Icon(Icons.home_rounded, size: 22, color: Colors.white),
+              child: const Icon(
+                Icons.home_rounded,
+                size: 22,
+                color: Colors.white,
+              ),
             ),
             const SizedBox(width: 14),
             Column(
@@ -324,6 +348,9 @@ class _FloorSelectionViewState extends State<FloorSelectionView>
             const Spacer(),
             // Settings Button
             _buildSettingsButton(isDark),
+            const SizedBox(width: 12),
+            // Refresh Button
+            _buildRefreshButton(isDark),
             const SizedBox(width: 12),
             // Add Floor Button
             _buildAddButton(isDark),
@@ -358,8 +385,9 @@ class _FloorSelectionViewState extends State<FloorSelectionView>
           ),
           borderRadius: BorderRadius.circular(14),
           border: Border.all(
-            color: AppTheme.getSectionBorderColor(isDark)
-                .withOpacity(isDark ? 0.4 : 0.3),
+            color: AppTheme.getSectionBorderColor(
+              isDark,
+            ).withOpacity(isDark ? 0.4 : 0.3),
             width: 1,
           ),
           boxShadow: [
@@ -376,6 +404,64 @@ class _FloorSelectionViewState extends State<FloorSelectionView>
           size: 20,
         ),
       ),
+    );
+  }
+
+  Widget _buildRefreshButton(bool isDark) {
+    return Consumer<FloorViewModel>(
+      builder: (context, viewModel, _) {
+        return GestureDetector(
+          onTap: () async {
+            await viewModel.refresh();
+          },
+          child: Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: isDark
+                    ? [
+                        Colors.white.withOpacity(0.08),
+                        Colors.white.withOpacity(0.04),
+                      ]
+                    : [
+                        Colors.black.withOpacity(0.05),
+                        Colors.black.withOpacity(0.02),
+                      ],
+              ),
+              borderRadius: BorderRadius.circular(14),
+              border: Border.all(
+                color: AppTheme.getSectionBorderColor(
+                  isDark,
+                ).withOpacity(isDark ? 0.4 : 0.3),
+                width: 1,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(isDark ? 0.2 : 0.1),
+                  blurRadius: 12,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: viewModel.isLoading
+                ? SizedBox(
+                    width: 20,
+                    height: 20,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      color: AppTheme.getTextColor1(isDark),
+                    ),
+                  )
+                : Icon(
+                    Icons.refresh_rounded,
+                    color: AppTheme.getTextColor1(isDark),
+                    size: 20,
+                  ),
+          ),
+        );
+      },
     );
   }
 
@@ -443,11 +529,11 @@ class _FloorSelectionViewState extends State<FloorSelectionView>
           final crossAxisCount = constraints.maxWidth > 1200
               ? 4
               : constraints.maxWidth > 800
-                  ? 3
-                  : 2;
+              ? 3
+              : 2;
           final spacing = 20.0;
-          final itemWidth = (constraints.maxWidth -
-                  spacing * (crossAxisCount - 1)) /
+          final itemWidth =
+              (constraints.maxWidth - spacing * (crossAxisCount - 1)) /
               crossAxisCount;
           final itemHeight = itemWidth * 0.75; // 4:3 aspect ratio
 
@@ -468,10 +554,7 @@ class _FloorSelectionViewState extends State<FloorSelectionView>
                   return Opacity(
                     opacity: _fadeController.value,
                     child: Transform.translate(
-                      offset: Offset(
-                        0,
-                        20 * (1 - _fadeController.value),
-                      ),
+                      offset: Offset(0, 20 * (1 - _fadeController.value)),
                       child: child,
                     ),
                   );
@@ -490,4 +573,3 @@ class _FloorSelectionViewState extends State<FloorSelectionView>
     );
   }
 }
-

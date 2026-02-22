@@ -20,17 +20,26 @@ class RoomRepositoryImpl implements RoomRepository {
 
   @override
   Future<List<RoomEntity>> getAllRooms() async {
-    // When USB is connected, try to get room list from microcontroller
+    // When USB is connected, get floors from micro then request rooms per floor
     final usb = _usbSerialRepository;
     if (usb != null && usb.isConnected()) {
-      final fromMicro = await usb.requestRooms();
-      if (fromMicro != null && fromMicro.isNotEmpty) {
-        final rooms = fromMicro
-            .map((e) => RoomModel.fromJson(Map<String, dynamic>.from(e)))
-            .toList();
-        await _localDataSource.setRoomsFromMicro(rooms);
-        rooms.sort((a, b) => a.order.compareTo(b.order));
-        return rooms;
+      final floors = await usb.requestFloors();
+      if (floors != null && floors.isNotEmpty) {
+        final List<Map<String, dynamic>> fromMicro = [];
+        for (final f in floors) {
+          final floorId = f['id'] as String?;
+          if (floorId == null) continue;
+          final rooms = await usb.requestRooms(floorId);
+          if (rooms != null) fromMicro.addAll(rooms);
+        }
+        if (fromMicro.isNotEmpty) {
+          final rooms = fromMicro
+              .map((e) => RoomModel.fromJson(Map<String, dynamic>.from(e)))
+              .toList();
+          await _localDataSource.setRoomsFromMicro(rooms);
+          rooms.sort((a, b) => a.order.compareTo(b.order));
+          return rooms;
+        }
       }
     }
     final rooms = await _localDataSource.getCachedRooms();

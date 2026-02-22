@@ -9,13 +9,13 @@ import '../../domain/use_cases/floor/delete_floor_use_case.dart';
 
 /// Floor ViewModel
 /// Manages floor selection and floor-related state
-/// 
+///
 /// Usage in widgets:
 /// ```dart
 /// final viewModel = context.watch<FloorViewModel>();
 /// final floors = viewModel.floors;
 /// final selectedFloor = viewModel.selectedFloor;
-/// 
+///
 /// // Switch to a different floor
 /// await viewModel.selectFloor('floor_1');
 /// ```
@@ -29,6 +29,7 @@ class FloorViewModel extends BaseViewModel {
   List<FloorEntity> _floors = [];
   String? _selectedFloorId;
   FloorEntity? _selectedFloor;
+  bool _loadFloorsInProgress = false;
 
   FloorViewModel(
     this._getAllFloorsUseCase,
@@ -51,12 +52,14 @@ class FloorViewModel extends BaseViewModel {
 
   /// Load all floors
   Future<void> loadFloors() async {
+    if (_loadFloorsInProgress) return;
+    _loadFloorsInProgress = true;
     try {
       setLoading(true);
       clearError();
-      
+
       _floors = await _getAllFloorsUseCase();
-      
+
       // Select first floor by default if none selected
       if (_selectedFloorId == null && _floors.isNotEmpty) {
         _selectedFloorId = _floors.first.id;
@@ -64,9 +67,7 @@ class FloorViewModel extends BaseViewModel {
       } else if (_selectedFloorId != null && _floors.isNotEmpty) {
         // Update selected floor object if it changed
         try {
-          _selectedFloor = _floors.firstWhere(
-            (f) => f.id == _selectedFloorId,
-          );
+          _selectedFloor = _floors.firstWhere((f) => f.id == _selectedFloorId);
         } catch (e) {
           // If selected floor not found, select first available
           _selectedFloorId = _floors.first.id;
@@ -77,19 +78,20 @@ class FloorViewModel extends BaseViewModel {
         _selectedFloorId = null;
         _selectedFloor = null;
       }
-      
+
       notifyListeners();
     } catch (e) {
       setError('Failed to load floors: ${e.toString()}');
     } finally {
       setLoading(false);
+      _loadFloorsInProgress = false;
     }
   }
 
   /// Select a floor
   Future<void> selectFloor(String floorId) async {
     if (_selectedFloorId == floorId) return;
-    
+
     try {
       _selectedFloorId = floorId;
       _selectedFloor = await _getFloorByIdUseCase(floorId);
@@ -107,7 +109,7 @@ class FloorViewModel extends BaseViewModel {
     try {
       setLoading(true);
       clearError();
-      
+
       final newFloor = FloorEntity(
         id: 'floor_${DateTime.now().millisecondsSinceEpoch}',
         name: name,
@@ -115,10 +117,10 @@ class FloorViewModel extends BaseViewModel {
         roomIds: [],
         order: _floors.length,
       );
-      
+
       final createdFloor = await _createFloorUseCase(newFloor);
       await loadFloors(); // Reload to get updated list
-      
+
       notifyListeners();
       return createdFloor;
     } catch (e) {
@@ -134,10 +136,10 @@ class FloorViewModel extends BaseViewModel {
     try {
       setLoading(true);
       clearError();
-      
+
       await _updateFloorUseCase(floor);
       await loadFloors(); // Reload to get updated list
-      
+
       notifyListeners();
       return true;
     } catch (e) {
@@ -153,17 +155,17 @@ class FloorViewModel extends BaseViewModel {
     try {
       setLoading(true);
       clearError();
-      
+
       await _deleteFloorUseCase(floorId);
-      
+
       // If deleted floor was selected, select first available
       if (_selectedFloorId == floorId) {
         _selectedFloorId = null;
         _selectedFloor = null;
       }
-      
+
       await loadFloors(); // Reload to get updated list
-      
+
       notifyListeners();
       return true;
     } catch (e) {
@@ -194,4 +196,3 @@ class FloorViewModel extends BaseViewModel {
     await loadFloors();
   }
 }
-

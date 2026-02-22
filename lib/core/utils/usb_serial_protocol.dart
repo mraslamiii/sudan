@@ -36,7 +36,10 @@ class UsbSerialProtocol {
   /// Returns null if frame is invalid
   /// Handles both standard messages and ACK/NACK frames
   static UsbSerialMessage? decodeMessage(List<int> bytes) {
-    if (bytes.isEmpty) return null;
+    if (bytes.isEmpty) {
+      print('📋 [PROTOCOL] decodeMessage: bytes is empty');
+      return null;
+    }
 
     // Find STX
     int startIdx = -1;
@@ -47,7 +50,10 @@ class UsbSerialProtocol {
       }
     }
 
-    if (startIdx == -1) return null;
+    if (startIdx == -1) {
+      print('📋 [PROTOCOL] decodeMessage: STX not found');
+      return null;
+    }
 
     // Find ETX
     int endIdx = -1;
@@ -58,10 +64,18 @@ class UsbSerialProtocol {
       }
     }
 
-    if (endIdx == -1) return null;
+    if (endIdx == -1) {
+      print(
+        '📋 [PROTOCOL] decodeMessage: ETX not found after STX at index $startIdx',
+      );
+      return null;
+    }
 
     // Extract frame data (between STX and ETX)
     final frameData = bytes.sublist(startIdx + 1, endIdx);
+    print(
+      '📋 [PROTOCOL] decodeMessage: frameData length=${frameData.length}, startIdx=$startIdx, endIdx=$endIdx',
+    );
 
     // Check if this is an ACK/NACK frame (format: [STX, ACK/NACK, ETX])
     // ACK/NACK frames are 3 bytes total: [STX, control_byte, ETX]
@@ -69,16 +83,24 @@ class UsbSerialProtocol {
     if (frameData.length == 1) {
       final controlByte = frameData[0];
       if (controlByte == UsbSerialConstants.frameAck) {
+        print('📋 [PROTOCOL] decodeMessage: ACK frame');
         return UsbSerialMessage(type: UsbSerialConstants.frameAck, data: '');
       } else if (controlByte == UsbSerialConstants.frameNack) {
+        print('📋 [PROTOCOL] decodeMessage: NACK frame');
         return UsbSerialMessage(type: UsbSerialConstants.frameNack, data: '');
       }
       // If it's not ACK/NACK but only 1 byte, it's invalid
+      print(
+        '📋 [PROTOCOL] decodeMessage: Invalid 1-byte frame, controlByte=$controlByte',
+      );
       return null;
     }
 
     // Standard message format: [STX][Type][Length][Data...][Checksum][ETX]
     if (frameData.length < 3) {
+      print(
+        '📋 [PROTOCOL] decodeMessage: Frame too short, length=${frameData.length}',
+      );
       return null; // Need at least [Type][Length][Checksum]
     }
 
@@ -86,8 +108,17 @@ class UsbSerialProtocol {
     final length = frameData[1];
     final checksum = frameData[frameData.length - 1];
 
+    print(
+      '📋 [PROTOCOL] decodeMessage: messageType=$messageType, length=$length, checksum=$checksum, frameData.length=${frameData.length}',
+    );
+
     // Extract data
-    if (frameData.length < 3 + length) return null;
+    if (frameData.length < 3 + length) {
+      print(
+        '📋 [PROTOCOL] decodeMessage: Frame too short for data, need ${3 + length} bytes but have ${frameData.length}',
+      );
+      return null;
+    }
     final dataBytes = frameData.sublist(2, 2 + length);
 
     // Verify checksum
@@ -97,11 +128,19 @@ class UsbSerialProtocol {
     }
     calculatedChecksum = calculatedChecksum & 0xFF;
 
+    print(
+      '📋 [PROTOCOL] decodeMessage: calculatedChecksum=$calculatedChecksum, receivedChecksum=$checksum',
+    );
+
     if (calculatedChecksum != checksum) {
+      print('📋 [PROTOCOL] decodeMessage: Invalid checksum!');
       return null; // Invalid checksum
     }
 
     final data = String.fromCharCodes(dataBytes);
+    print(
+      '📋 [PROTOCOL] decodeMessage: Success! type=$messageType, data length=${data.length}',
+    );
 
     return UsbSerialMessage(type: messageType, data: data);
   }

@@ -10,6 +10,9 @@ abstract class UsbSerialRepository {
   /// context: Android context for USB permission (optional)
   Future<void> connect({UsbDevice? device, int? baudRate, dynamic context});
 
+  /// Connect via TCP for debug (tablet->laptop, adb reverse). host usually 127.0.0.1, port 9999.
+  Future<void> connectTcpDebug({String host = '127.0.0.1', int port = 9999});
+
   /// Disconnect from USB device
   Future<void> disconnect();
 
@@ -52,11 +55,11 @@ abstract class UsbSerialRepository {
   /// Send delete-floor command to microcontroller (floor id).
   Future<void> deleteFloorOnMicro(String floorId);
 
-  /// Request room list from microcontroller via USB.
-  /// Sends request and waits for response (text lines, no JSON).
+  /// Request room list for [floorId] from microcontroller via USB.
+  /// Sends @M_R + floorId; micro returns only rooms of that floor.
   /// Returns parsed list of room maps, or null on timeout/failure/disconnect.
   /// Expected response: one line per room, format id|name|order|floorId|icon|deviceIds|isGeneral.
-  Future<List<Map<String, dynamic>>?> requestRooms();
+  Future<List<Map<String, dynamic>>?> requestRooms(String floorId);
 
   /// Send create-room command to microcontroller.
   Future<void> createRoomOnMicro(Map<String, dynamic> room);

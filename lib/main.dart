@@ -65,6 +65,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   ThemeMode _themeMode = ThemeMode.system;
   Locale _locale = const Locale('en', 'US');
   PreferencesService? _preferencesService;
+  final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
+  final RouteObserver<ModalRoute<void>> _routeObserver =
+      RouteObserver<ModalRoute<void>>();
 
   @override
   void initState() {
@@ -199,6 +202,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         ),
       ],
       child: MaterialApp(
+        navigatorKey: _navigatorKey,
+        navigatorObservers: [_routeObserver],
         title: 'Smart Home',
         debugShowCheckedModeBanner: false,
         theme: AppTheme.getLightTheme(),
@@ -217,12 +222,16 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         home: FloorSelectionView(
           onThemeChanged: changeThemeMode,
           onLanguageChanged: changeLanguage,
+          routeObserver: _routeObserver,
         ),
 
         builder: (context, child) {
           return Column(
             children: [
-              const MicroConnectionStatusBar(atTop: true),
+              MicroConnectionStatusBar(
+                atTop: true,
+                navigatorKey: _navigatorKey,
+              ),
               Expanded(child: child ?? const SizedBox.shrink()),
             ],
           );

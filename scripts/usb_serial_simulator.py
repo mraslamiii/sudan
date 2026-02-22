@@ -12,6 +12,11 @@
   3) لیست پورت‌ها: نمایش پورت‌های سریال موجود.
      python usb_serial_simulator.py --list
 
+  4) شبیه‌ساز TCP (برای دیباگ تبلت با یک کابل به لپ‌تاپ + adb reverse):
+     python usb_serial_simulator.py --tcp 9999
+     سپس روی لپ‌تاپ: adb reverse tcp:9999 tcp:9999
+     در اپ روی تبلت گزینه «اتصال دیباگ» را بزنید.
+
 فرمت متن (بدون JSON): جداکننده فیلد | ، هر رکورد یک خط.
 - طبقات: هر خط = id|name|order|roomIds (roomIds با کاما)
 - اتاق‌ها: هر خط = id|name|order|floorId|icon|deviceIds|isGeneral
@@ -19,6 +24,7 @@
 نیاز: pip install pyserial
 """
 
+import socket
 import sys
 import time
 
@@ -36,6 +42,7 @@ ACK = 0x06
 MSG_TYPE_COMMAND = 0x01
 MSG_TYPE_REQUEST = 0x02
 MSG_TYPE_RESPONSE = 0x03
+MSG_TYPE_HEARTBEAT = 0x04
 REQUEST_FLOORS = "@M_F_A"
 REQUEST_FLOORS_COUNT = "@M_F_C"
 REQUEST_ROOMS = "@M_R"
@@ -85,6 +92,7 @@ ROOMS_LIST = [
     {"id": "room_general", "name": "عمومی", "order": -1, "floorId": "", "icon": "home", "deviceIds": [], "isGeneral": True},
     {"id": "room_living", "name": "اتاق نشیمن", "order": 0, "floorId": "floor_1", "icon": "living", "deviceIds": [], "isGeneral": False},
     {"id": "room_kitchen", "name": "آشپزخانه", "order": 1, "floorId": "floor_1", "icon": "kitchen", "deviceIds": [], "isGeneral": False},
+    {"id": "room_bathroom", "name": "سرویس بهداشتی", "order": 2, "floorId": "floor_1", "icon": "bathroom", "deviceIds": [], "isGeneral": False},
     {"id": "room_bedroom", "name": "اتاق خواب", "order": 0, "floorId": "floor_2", "icon": "bedroom", "deviceIds": [], "isGeneral": False},
 ]
 
@@ -178,20 +186,43 @@ def _parse_room_line(line: str):
 
 
 def _handle_command(ser, data: str):
-    if RECORD_SEP not in data:
-        print(f"Command (no newline): {data[:60]}...")
-        return
-    first_line, rest = data.split(RECORD_SEP, 1)
-    payload = rest.strip()
+    # Handle commands with or without newline separator
+    if RECORD_SEP in data:
+        first_line, rest = data.split(RECORD_SEP, 1)
+        payload = rest.strip()
+    else:
+        # Try to parse command without newline (legacy format or malformed)
+        data_stripped = data.strip()
+        if data_stripped.startswith(COMMAND_CREATE_FLOOR):
+            first_line = COMMAND_CREATE_FLOOR
+            payload = data_stripped[len(COMMAND_CREATE_FLOOR):].strip()
+        elif data_stripped.startswith(COMMAND_UPDATE_FLOOR):
+            first_line = COMMAND_UPDATE_FLOOR
+            payload = data_stripped[len(COMMAND_UPDATE_FLOOR):].strip()
+        elif data_stripped.startswith(COMMAND_DELETE_FLOOR):
+            first_line = COMMAND_DELETE_FLOOR
+            payload = data_stripped[len(COMMAND_DELETE_FLOOR):].strip()
+        elif data_stripped.startswith(COMMAND_CREATE_ROOM):
+            first_line = COMMAND_CREATE_ROOM
+            payload = data_stripped[len(COMMAND_CREATE_ROOM):].strip()
+        elif data_stripped.startswith(COMMAND_UPDATE_ROOM):
+            first_line = COMMAND_UPDATE_ROOM
+            payload = data_stripped[len(COMMAND_UPDATE_ROOM):].strip()
+        elif data_stripped.startswith(COMMAND_DELETE_ROOM):
+            first_line = COMMAND_DELETE_ROOM
+            payload = data_stripped[len(COMMAND_DELETE_ROOM):].strip()
+        else:
+            print(f"[SIM] COMMAND (unknown format): {data[:60]}...")
+            return
 
     if first_line.strip() == COMMAND_CREATE_FLOOR and payload:
         f = _parse_floor_line(payload)
         if f:
             FLOORS_LIST.append(f)
             FLOORS_LIST.sort(key=lambda x: x.get("order", 0))
-            print(f"Create floor: id={f['id']} name={f['name']} order={f['order']} roomIds={f['roomIds']}")
+            print(f"[SIM] COMMAND createFloor id={f['id']} name={f['name']} order={f['order']} roomIds={f['roomIds']}")
         else:
-            print(f"Command: {data[:80]}...")
+            print(f"[SIM] COMMAND: {data[:80]}...")
     elif first_line.strip() == COMMAND_UPDATE_FLOOR and payload:
         f = _parse_floor_line(payload)
         if f:
@@ -199,29 +230,29 @@ def _handle_command(ser, data: str):
                 if existing.get("id") == f["id"]:
                     FLOORS_LIST[i] = f
                     FLOORS_LIST.sort(key=lambda x: x.get("order", 0))
-                    print(f"Update floor: id={f['id']} name={f['name']}")
+                    print(f"[SIM] COMMAND updateFloor id={f['id']} name={f['name']}")
                     return
             FLOORS_LIST.append(f)
             FLOORS_LIST.sort(key=lambda x: x.get("order", 0))
-            print(f"Update floor (new): id={f['id']}")
+            print(f"[SIM] COMMAND updateFloor (new) id={f['id']}")
         else:
-            print(f"Command: {data[:80]}...")
+            print(f"[SIM] COMMAND: {data[:80]}...")
     elif first_line.strip() == COMMAND_DELETE_FLOOR and payload:
-        floor_id = payload.strip().split()[0] if payload.strip() else ""
+        floor_id = payload.strip()  # floorId is sent as a single line, no need to split
         before = len(FLOORS_LIST)
         FLOORS_LIST[:] = [x for x in FLOORS_LIST if x.get("id") != floor_id]
         if len(FLOORS_LIST) < before:
-            print(f"Delete floor: {floor_id}")
+            print(f"[SIM] COMMAND deleteFloor floorId={floor_id}")
         else:
-            print(f"Delete floor (not found): {floor_id}")
+            print(f"[SIM] COMMAND deleteFloor (not found) floorId={floor_id}")
     elif first_line.strip() == COMMAND_CREATE_ROOM and payload:
         r = _parse_room_line(payload)
         if r:
             ROOMS_LIST.append(r)
             ROOMS_LIST.sort(key=lambda x: (x.get("floorId") or "", x.get("order", 0)))
-            print(f"Create room: id={r['id']} name={r['name']} floorId={r['floorId']}")
+            print(f"[SIM] COMMAND createRoom id={r['id']} name={r['name']} floorId={r['floorId']}")
         else:
-            print(f"Command: {data[:80]}...")
+            print(f"[SIM] COMMAND: {data[:80]}...")
     elif first_line.strip() == COMMAND_UPDATE_ROOM and payload:
         r = _parse_room_line(payload)
         if r:
@@ -229,34 +260,144 @@ def _handle_command(ser, data: str):
                 if existing.get("id") == r["id"]:
                     ROOMS_LIST[i] = r
                     ROOMS_LIST.sort(key=lambda x: (x.get("floorId") or "", x.get("order", 0)))
-                    print(f"Update room: id={r['id']} name={r['name']}")
+                    print(f"[SIM] COMMAND updateRoom id={r['id']} name={r['name']}")
                     return
             ROOMS_LIST.append(r)
             ROOMS_LIST.sort(key=lambda x: (x.get("floorId") or "", x.get("order", 0)))
-            print(f"Update room (new): id={r['id']}")
+            print(f"[SIM] COMMAND updateRoom (new) id={r['id']}")
         else:
-            print(f"Command: {data[:80]}...")
+            print(f"[SIM] COMMAND: {data[:80]}...")
     elif first_line.strip() == COMMAND_DELETE_ROOM and payload:
-        room_id = payload.strip().split()[0] if payload.strip() else ""
+        room_id = payload.strip()  # roomId is sent as a single line, no need to split
         before = len(ROOMS_LIST)
         ROOMS_LIST[:] = [x for x in ROOMS_LIST if x.get("id") != room_id]
         if len(ROOMS_LIST) < before:
-            print(f"Delete room: {room_id}")
+            print(f"[SIM] COMMAND deleteRoom roomId={room_id}")
         else:
-            print(f"Delete room (not found): {room_id}")
-    elif first_line.strip().startswith(COMMAND_CREATE_FLOOR) or (FIELD_SEP in data and data.strip().startswith("floor_")):
-        # Legacy create floor
-        line = payload if payload else data.strip()
-        if FIELD_SEP in line:
-            parts = line.split(FIELD_SEP)
-            if len(parts) >= 4:
-                print(f"Create floor (legacy): id={parts[0]} name={parts[1]} order={parts[2]} roomIds={parts[3]}")
-            else:
-                print(f"Command: {data[:80]}...")
-        else:
-            print(f"Command: {data[:80]}...")
+            print(f"[SIM] COMMAND deleteRoom (not found) roomId={room_id}")
     else:
-        print(f"Command: {data[:80]}...")
+        print(f"[SIM] COMMAND (unknown): {data[:80]}...")
+
+
+class _TcpTransport:
+    """Minimal write/read interface so TCP socket can be used like serial in the simulator loop."""
+
+    def __init__(self, sock):
+        self._sock = sock
+
+    def write(self, data: bytes):
+        try:
+            self._sock.sendall(data)
+        except (ConnectionResetError, BrokenPipeError, OSError) as e:
+            print(f"[SIM] ⚠️ Write failed (connection closed?): {e}")
+            raise  # دوباره raise کن تا loop بدونه اتصال بسته شده
+
+    def read(self, size: int = 256) -> bytes:
+        try:
+            self._sock.settimeout(0.1)
+            return self._sock.recv(size)
+        except socket.timeout:
+            return b""
+        except (ConnectionResetError, BrokenPipeError, OSError) as e:
+            print(f"[SIM] ⚠️ Read failed (connection closed?): {e}")
+            raise  # دوباره raise کن تا loop بدونه اتصال بسته شده
+        except Exception as e:
+            print(f"[SIM] ⚠️ Read error: {e}")
+            return b""
+
+
+def _req_name(data: str) -> str:
+    """Return a short readable name for the request/command for logging."""
+    if data == REQUEST_FLOORS:
+        return "REQUEST_FLOORS"
+    if data == REQUEST_FLOORS_COUNT:
+        return "REQUEST_FLOORS_COUNT"
+    if data == REQUEST_ROOMS:
+        return "REQUEST_ROOMS"
+    if data.startswith(COMMAND_CREATE_FLOOR):
+        return "COMMAND_CREATE_FLOOR"
+    if data.startswith(COMMAND_UPDATE_FLOOR):
+        return "COMMAND_UPDATE_FLOOR"
+    if data.startswith(COMMAND_DELETE_FLOOR):
+        return "COMMAND_DELETE_FLOOR"
+    if data.startswith(COMMAND_CREATE_ROOM):
+        return "COMMAND_CREATE_ROOM"
+    if data.startswith(COMMAND_UPDATE_ROOM):
+        return "COMMAND_UPDATE_ROOM"
+    if data.startswith(COMMAND_DELETE_ROOM):
+        return "COMMAND_DELETE_ROOM"
+    return data[:40] if len(data) > 40 else data
+
+
+def _run_simulator_loop(transport, label="Serial"):
+    """Shared loop: read from transport, handle frames, write responses. transport must have write(data) and read(size)."""
+    buf = bytearray()
+    try:
+        while True:
+            try:
+                chunk = transport.read(256)
+                if chunk:
+                    buf.extend(chunk)
+                while True:
+                    result, buf = find_frame(buf)
+                    if result is None:
+                        break
+                    msg_type, data = result
+                    if msg_type == "ack":
+                        continue
+                    type_name = {
+                        MSG_TYPE_REQUEST: "REQUEST",
+                        MSG_TYPE_COMMAND: "COMMAND",
+                        MSG_TYPE_RESPONSE: "RESPONSE",
+                        MSG_TYPE_HEARTBEAT: "HEARTBEAT",
+                    }.get(msg_type, str(msg_type))
+                    name = _req_name(data)
+                    preview = f"{data[:60]}{'...' if len(data) > 60 else ''}"
+                    if msg_type != MSG_TYPE_HEARTBEAT:
+                        print(f"[SIM] 📥 RX {type_name} {name} | {preview}")
+                try:
+                    if msg_type == MSG_TYPE_HEARTBEAT:
+                        send_ack(transport)
+                        # بدون لاگ تا ترمینال شلوغ نشود؛ اتصال زنده می‌ماند
+                    elif msg_type == MSG_TYPE_REQUEST and data == REQUEST_FLOORS:
+                        send_ack(transport)
+                        body = get_floors_text()
+                        transport.write(encode_frame(MSG_TYPE_RESPONSE, body))
+                        lines = body.strip().split(RECORD_SEP) if body.strip() else []
+                        print(f"[SIM] 📤 TX RESPONSE requestFloors count={len(lines)} | {body[:50]}...")
+                    elif msg_type == MSG_TYPE_REQUEST and data == REQUEST_FLOORS_COUNT:
+                        send_ack(transport)
+                        body = str(len(FLOORS_LIST))
+                        transport.write(encode_frame(MSG_TYPE_RESPONSE, body))
+                        print(f"[SIM] 📤 TX RESPONSE requestFloorsCount value={body}")
+                    elif msg_type == MSG_TYPE_REQUEST and data == REQUEST_ROOMS:
+                        send_ack(transport)
+                        body = get_rooms_text()
+                        transport.write(encode_frame(MSG_TYPE_RESPONSE, body))
+                        lines = body.strip().split(RECORD_SEP) if body.strip() else []
+                        print(f"[SIM] 📤 TX RESPONSE requestRooms count={len(lines)} | {body[:50]}...")
+                    elif msg_type == MSG_TYPE_COMMAND:
+                        send_ack(transport)
+                        print(f"[SIM] 📤 TX ACK command")
+                        _handle_command(transport, data)
+                    elif msg_type == MSG_TYPE_REQUEST:
+                        send_ack(transport)
+                        print(f"[SIM] 📤 TX ACK only (unknown request)")
+                except (ConnectionResetError, BrokenPipeError, OSError) as e:
+                    # اگر نوشتن شکست خورد (مثلاً socket بسته شده)، loop را exit کن
+                    print(f"[SIM] ⚠️ Write failed, connection closed: {e}")
+                    raise
+            except Exception as e:
+                # خطاهای جزئی (مثلاً parsing) را لاگ کن ولی اتصال را نگه دار
+                print(f"[SIM] ⚠️ Error in loop (continuing): {e}")
+                time.sleep(0.1)
+            time.sleep(0.02)
+    except (ConnectionResetError, BrokenPipeError, OSError) as e:
+        print(f"\n[SIM] Client disconnected: {e}")
+        raise  # دوباره raise کن تا run_simulator_tcp بدونه اتصال بسته شده
+    except KeyboardInterrupt:
+        print("\n[SIM] Exiting.")
+        raise
 
 
 def run_simulator(port: str, baud: int = 9600):
@@ -272,50 +413,61 @@ def run_simulator(port: str, baud: int = 9600):
         "Simulator running. @M_F_A=floors, @M_R=rooms | &M_F_N/U/D=floor create/update/delete | &M_R_N/U/D=room create/update/delete. Ctrl+C to exit."
     )
     print("--- Data exchange log (RX = received, TX = sent) ---\n")
-    buf = bytearray()
     try:
-        while True:
-            chunk = ser.read(256)
-            if chunk:
-                buf.extend(chunk)
-            while True:
-                result, buf = find_frame(buf)
-                if result is None:
-                    break
-                msg_type, data = result
-                if msg_type == "ack":
-                    continue
-                # Log received (RX)
-                type_name = {MSG_TYPE_REQUEST: "REQUEST", MSG_TYPE_COMMAND: "COMMAND", MSG_TYPE_RESPONSE: "RESPONSE"}.get(msg_type, str(msg_type))
-                print(f"[RX] {type_name}: {data[:80]}{'...' if len(data) > 80 else ''}")
-                if msg_type == MSG_TYPE_REQUEST and data == REQUEST_FLOORS:
-                    send_ack(ser)
-                    body = get_floors_text()
-                    ser.write(encode_frame(MSG_TYPE_RESPONSE, body))
-                    lines = body.strip().split(RECORD_SEP) if body.strip() else []
-                    print(f"[TX] RESPONSE (floors, {len(lines)} lines): {body[:60]}...")
-                elif msg_type == MSG_TYPE_REQUEST and data == REQUEST_FLOORS_COUNT:
-                    send_ack(ser)
-                    body = str(len(FLOORS_LIST))
-                    ser.write(encode_frame(MSG_TYPE_RESPONSE, body))
-                    print(f"[TX] RESPONSE (floors count): {body}")
-                elif msg_type == MSG_TYPE_REQUEST and data == REQUEST_ROOMS:
-                    send_ack(ser)
-                    body = get_rooms_text()
-                    ser.write(encode_frame(MSG_TYPE_RESPONSE, body))
-                    lines = body.strip().split(RECORD_SEP) if body.strip() else []
-                    print(f"[TX] RESPONSE (rooms, {len(lines)} lines): {body[:60]}...")
-                elif msg_type == MSG_TYPE_COMMAND:
-                    send_ack(ser)
-                    _handle_command(ser, data)
-                elif msg_type == MSG_TYPE_REQUEST:
-                    send_ack(ser)
-                    print(f"[TX] ACK only (unknown request)")
-            time.sleep(0.02)
-    except KeyboardInterrupt:
-        print("\nExiting.")
+        _run_simulator_loop(ser)
     finally:
         ser.close()
+
+
+def run_simulator_tcp(tcp_port: int = 9999):
+    """Run simulator over TCP. One client. For tablet debug: adb reverse tcp:9999 tcp:9999, then app connects to 127.0.0.1:9999."""
+    server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    try:
+        server.bind(("0.0.0.0", tcp_port))
+        server.listen(1)
+        server.settimeout(1.0)
+    except Exception as e:
+        print(f"Error binding TCP port {tcp_port}: {e}")
+        sys.exit(1)
+
+    print(f"TCP simulator listening on 0.0.0.0:{tcp_port}")
+    print("On laptop run: adb reverse tcp:9999 tcp:9999")
+    print("Then in the app on tablet use 'Debug connection (tablet->laptop)'.")
+    print("--- Data exchange log (RX = received, TX = sent) ---\n")
+
+    try:
+        while True:
+            try:
+                conn, addr = server.accept()
+            except socket.timeout:
+                continue
+            # فعال کردن keepalive برای جلوگیری از timeout
+            conn.setsockopt(socket.SOL_SOCKET, socket.SO_KEEPALIVE, 1)
+            # در ویندوز TCP_KEEPIDLE و TCP_KEEPINTVL ممکن است موجود نباشد
+            try:
+                # Linux: TCP_KEEPIDLE = 20, TCP_KEEPINTVL = 3
+                if hasattr(socket, 'TCP_KEEPIDLE'):
+                    conn.setsockopt(socket.IPPROTO_TCP, socket.TCP_KEEPIDLE, 20)
+                if hasattr(socket, 'TCP_KEEPINTVL'):
+                    conn.setsockopt(socket.IPPROTO_TCP, socket.TCP_KEEPINTVL, 3)
+            except Exception:
+                pass  # در ویندوز ممکن است موجود نباشد
+            print(f"[SIM] Client connected from {addr}")
+            try:
+                _run_simulator_loop(_TcpTransport(conn))
+            except Exception as e:
+                print(f"[SIM] Error in simulator loop: {e}")
+            finally:
+                try:
+                    conn.close()
+                    print("[SIM] Connection closed, waiting for next client...")
+                except Exception:
+                    pass
+    except KeyboardInterrupt:
+        print("\n[SIM] Exiting.")
+    finally:
+        server.close()
 
 
 # --- حالت ۲: کلاینت تست ---
@@ -413,6 +565,10 @@ def main():
         args.pop(0)
         port = args[0] if args else "COM6"
         run_test_client(port)
+    elif args and args[0] == "--tcp":
+        args.pop(0)
+        tcp_port = int(args[0]) if args else 9999
+        run_simulator_tcp(tcp_port)
     else:
         port = args[0] if args else "COM5"
         run_simulator(port)

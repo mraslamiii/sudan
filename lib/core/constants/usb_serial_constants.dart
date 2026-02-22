@@ -69,8 +69,9 @@ class UsbSerialConstants {
   /// Delete floor command: send floor id (e.g. &M_F_D\nfloor_1 or &M_F_Dfloor_1)
   static const String commandDeleteFloor = '${command + mode}_F_D';
 
-  /// Request room list (response: text lines, each line id|name|order|floorId|icon|deviceIds|isGeneral)
-  static const String requestRooms = '${request + mode}_R';
+  /// Request room list for a floor: send this prefix + floorId (e.g. requestRoomsPrefix + 'floor_1').
+  /// Micro returns only rooms of that floor (same line format).
+  static const String requestRoomsPrefix = '${request + mode}_R';
 
   /// Create room command: send one line id|name|order|floorId|icon|deviceIds|isGeneral
   static const String commandCreateRoom = '${command + mode}_R_N';
